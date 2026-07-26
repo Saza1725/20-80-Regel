@@ -7,75 +7,88 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 :root{
-  --ink:#1F2A3D; --muted:#5B6472; --border:#C9CABF; --bg:#EDEEE7; --card:#F7F7F3;
-  --accent:#8B2635; --green:#3F6B4F; --amber:#B5762A; --red:#8B2635;
+  --ink:#2E2417; --muted:#8C7A64; --border:#E6D6BB; --bg:#FAF1E2; --bg2:#F3E6CF; --card:#FFFCF5;
+  --accent:#C1622E; --accent-soft:#F4E0CE; --green:#4F7A5B; --amber:#B9822F; --red:#B0503A;
 }
 *{box-sizing:border-box;}
-body{margin:0;background:var(--bg);font-family:'IBM Plex Sans',sans-serif;color:var(--ink);}
-.wrap{max-width:680px;margin:0 auto;padding:36px 20px 60px;}
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px;}
-h1{font-family:'Fraunces',serif;font-weight:700;font-size:28px;margin:0;}
-h2{font-family:'Fraunces',serif;font-weight:700;font-size:24px;margin:0 0 16px 0;}
-h3{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:6px 0 20px 0;line-height:1.35;}
-h4{font-family:'Fraunces',serif;font-weight:600;font-size:16.5px;margin:0 0 8px 0;}
-.sub{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:2px;}
-.section-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.06em;margin:6px 0 10px 0;}
-.breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
-.breadcrumb .sep{color:#9A9C90;}
-.breadcrumb button{background:none;border:none;padding:0;color:var(--muted);cursor:pointer;text-decoration:underline;font:inherit;}
+body{
+  margin:0;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(193,98,46,0.07), transparent 40%),
+    radial-gradient(circle at 90% 0%, rgba(79,122,91,0.05), transparent 35%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  min-height:100vh;
+}
+.wrap{max-width:700px;margin:0 auto;padding:48px 22px 70px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px;font-weight:600;}
+h1{font-family:'Fraunces',serif;font-weight:700;font-size:32px;margin:0;letter-spacing:-.01em;}
+h2{font-family:'Fraunces',serif;font-weight:700;font-size:25px;margin:0 0 18px 0;}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:19.5px;margin:6px 0 22px 0;line-height:1.4;}
+h4{font-family:'Fraunces',serif;font-weight:600;font-size:16.5px;margin:0 0 8px 0;color:var(--ink);}
+.sub{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:4px;}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);letter-spacing:.08em;margin:24px 0 12px 0;text-transform:uppercase;}
+.breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:22px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+.breadcrumb .sep{color:var(--border);}
+.breadcrumb button{background:none;border:none;padding:0;color:var(--muted);cursor:pointer;text-decoration:none;border-bottom:1px dotted var(--muted);font:inherit;}
+.breadcrumb button:hover{color:var(--accent);border-color:var(--accent);}
 .breadcrumb .current{color:var(--ink);font-weight:600;}
-.tile{position:relative;text-align:left;width:100%;padding:16px 16px 14px;border-radius:3px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;margin-bottom:12px;}
-.tile.gross{padding:22px;font-size:18px;}
-.tile.akzent{border-color:var(--accent);}
-.tile.dashed{border:1.5px dashed var(--border);background:transparent;cursor:default;color:#9A9C90;}
-.tile:hover:not(.dashed){box-shadow:0 2px 6px rgba(31,42,61,0.10);}
-.tile .tab{position:absolute;top:-8px;left:16px;width:34px;height:8px;background:var(--border);border-radius:3px 3px 0 0;}
+.tile{position:relative;text-align:left;width:100%;padding:18px 20px 16px;border-radius:14px;border:1px solid var(--border);background:var(--card);cursor:pointer;margin-bottom:14px;box-shadow:0 1px 2px rgba(46,36,23,0.04);transition:box-shadow .15s ease, transform .15s ease, border-color .15s ease;}
+.tile.gross{padding:24px 26px 22px;font-size:18px;}
+.tile.akzent{border-color:var(--accent);background:linear-gradient(180deg, var(--card), var(--accent-soft) 220%);}
+.tile.dashed{border:1.5px dashed var(--border);background:transparent;cursor:default;color:#B3A48C;box-shadow:none;}
+.tile:hover:not(.dashed){box-shadow:0 6px 16px rgba(46,36,23,0.09);transform:translateY(-1px);border-color:#D8C39E;}
+.tile .tab{position:absolute;top:-7px;left:20px;width:30px;height:9px;background:var(--border);border-radius:5px 5px 0 0;}
 .tile.akzent .tab{background:var(--accent);}
-.tile.dashed .tab{background:var(--bg);}
-.tile .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin-bottom:4px;}
-.tile.gross .ttl{font-size:18px;}
+.tile.dashed .tab{background:transparent;border:1.5px dashed var(--border);border-bottom:none;}
+.tile .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:15.5px;margin-bottom:5px;color:var(--ink);}
+.tile.gross .ttl{font-size:18.5px;}
 .tile .meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);}
 .tile.akzent .meta{color:var(--accent);}
-.card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:18px 20px;margin-bottom:12px;}
-.num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.06em;margin-bottom:6px;}
-.body-text{margin:0;font-size:14.5px;color:#3A4152;line-height:1.6;}
-.karte{background:var(--card);border:1px solid var(--border);border-left:none;border-radius:4px;padding:28px 30px 26px 34px;position:relative;box-shadow:0 1px 2px rgba(31,42,61,.06);margin-bottom:16px;}
-.karte .perf{position:absolute;left:0;top:0;bottom:0;width:14px;border-left:2px dashed var(--border);}
-.karte .toprow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
-.opt{display:block;width:100%;text-align:left;padding:11px 14px;border-radius:3px;border:1.5px solid var(--border);background:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);cursor:pointer;margin-bottom:9px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(46,36,23,0.04);}
+.num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:7px;font-weight:600;}
+.body-text{margin:0;font-size:14.5px;color:#4A3E2C;line-height:1.65;}
+.karte{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px 32px 28px;position:relative;box-shadow:0 4px 14px rgba(46,36,23,0.06);margin-bottom:18px;}
+.karte .perf{display:none;}
+.karte .toprow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
+.opt{display:block;width:100%;text-align:left;padding:12px 16px;border-radius:10px;border:1.5px solid var(--border);background:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);cursor:pointer;margin-bottom:10px;transition:border-color .12s ease, background .12s ease;}
+.opt:hover:not([disabled]){border-color:var(--accent);}
 .opt.selected{border-color:var(--ink);background:var(--bg);}
 .opt.correct{border-color:var(--green);background:#EAF1EB;}
-.opt.wrong{border-color:var(--red);background:#F6E9EA;}
+.opt.wrong{border-color:var(--red);background:#F7EAE5;}
 .opt[disabled]{cursor:default;}
-textarea{width:100%;border:1.5px solid var(--border);border-radius:3px;padding:10px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);resize:vertical;box-sizing:border-box;outline:none;}
+textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);resize:vertical;box-sizing:border-box;outline:none;background:#fff;}
+textarea:focus{border-color:var(--accent);}
 textarea[disabled]{background:var(--bg);}
-button.primary{background:var(--ink);color:var(--card);border:none;padding:9px 20px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.03em;cursor:pointer;}
+button.primary{background:var(--ink);color:var(--card);border:none;padding:10px 22px;border-radius:9px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.03em;cursor:pointer;}
+button.primary:hover:not(:disabled){background:#443622;}
 button.primary:disabled{background:var(--border);cursor:default;}
-button.ghost{background:transparent;border:1px solid var(--border);color:var(--ink);padding:8px 16px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;}
+button.ghost{background:transparent;border:1.5px solid var(--border);color:var(--ink);padding:9px 18px;border-radius:9px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;}
+button.ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
 button.ghost:disabled{color:var(--border);cursor:default;}
-button.danger{background:var(--accent);color:var(--card);border:none;padding:11px 26px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.04em;cursor:pointer;}
-.stamp{display:inline-block;border:3px solid var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.12em;padding:4px 14px;border-radius:3px;transform:rotate(-3deg);font-size:13px;}
+button.danger{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:9px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.04em;cursor:pointer;}
+button.danger:hover{background:#A85224;}
+.stamp{display:inline-block;border:3px solid var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.12em;padding:5px 16px;border-radius:6px;transform:rotate(-3deg);font-size:13px;}
 .stamp.richtig{border-color:var(--green);color:var(--green);}
 .stamp.teilweise{border-color:var(--amber);color:var(--amber);}
 .stamp.falsch{border-color:var(--red);color:var(--red);}
-.solution{margin-top:20px;border-top:1px solid var(--border);padding-top:18px;}
-.solution-box{background:var(--bg);border-left:3px solid var(--ink);padding:12px 14px;border-radius:2px;}
-.solution-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:5px;}
-.progressbar{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;}
-.progressbar span{width:22px;height:6px;border-radius:3px;background:var(--border);cursor:pointer;opacity:.55;}
+.solution{margin-top:22px;border-top:1px dashed var(--border);padding-top:20px;}
+.solution-box{background:var(--bg);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 10px 10px 0;}
+.solution-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:6px;font-weight:600;}
+.progressbar{display:flex;gap:5px;margin-bottom:20px;flex-wrap:wrap;}
+.progressbar span{width:22px;height:6px;border-radius:4px;background:var(--border);cursor:pointer;opacity:.6;}
 .progressbar span.active{opacity:1;}
 .progressbar span.richtig{background:var(--green);}
 .progressbar span.teilweise{background:var(--amber);}
 .progressbar span.falsch{background:var(--red);}
-.navrow{display:flex;justify-content:space-between;margin-top:20px;}
-.center-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:26px;text-align:center;}
+.navrow{display:flex;justify-content:space-between;margin-top:22px;}
+.center-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;text-align:center;box-shadow:0 4px 14px rgba(46,36,23,0.06);}
 .self-grade{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
-.self-grade button{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 12px;border-radius:3px;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+.self-grade button{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 14px;border-radius:8px;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
 .self-grade button.richtig-btn{border-color:var(--green);color:var(--green);}
 .self-grade button.teilweise-btn{border-color:var(--amber);color:var(--amber);}
 .self-grade button.falsch-btn{border-color:var(--red);color:var(--red);}
 .hinweis{font-size:13px;color:var(--muted);margin:0 0 18px 0;font-style:italic;}
-select{border:1.5px solid var(--border);border-radius:3px;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
+select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
 </style>
 </head>
 <body>
@@ -458,8 +471,92 @@ const TOPICS_AVR = [
   },
 ];
 
+/* ------------------------------------------------------------------
+   Zusatzordner innerhalb KLR: Grundlagen des Rechnungswesens
+   (unabhängig von den bisherigen Prüfungs-Themen TOPICS_KLR).
+   Aus den hochgeladenen Skripten/Übungsblättern zusammengestellt:
+   Abgrenzung der Begriffspaare, Bilanz & Inventar, doppelte
+   Buchführung, Grundlagen der KLR.
+------------------------------------------------------------------- */
+const TOPICS_KLR_GRUNDLAGEN = [
+  {
+    id: "begriffspaare",
+    titel: "Abgrenzung der Begriffspaare",
+    kurz: "Begriffspaare",
+    nachschlagen: [
+      { h: "Die vier Begriffsebenen", t: "Auszahlungen/Einzahlungen betreffen die Liquidität (Kasse, Bank). Ausgaben/Einnahmen betreffen das Geldvermögen (liquide Mittel + Forderungen − Verbindlichkeiten). Aufwendungen/Erträge betreffen das Eigenkapital und sind Begriffe der Finanzbuchhaltung (Fibu). Kosten/Leistungen betreffen den betriebsbedingten Werteverzehr bzw. -zugang und sind Begriffe der Kosten- und Leistungsrechnung (KLR)." },
+      { h: "Ausgabe ohne Einzahlung/Auszahlung", t: "Eine Ausgabe entsteht bereits, wenn sich das Geldvermögen mindert – das ist auch ohne sofortigen Zahlungsfluss der Fall, z. B. beim Kauf auf Ziel (Rechnung noch offen): Die Verbindlichkeit mindert das Geldvermögen sofort, die Auszahlung folgt erst später bei Begleichung." },
+      { h: "Aufwand, aber keine Auszahlung / Auszahlung, aber kein Aufwand", t: "Abschreibungen für in Vorjahren angeschaffte Güter sind Aufwand ohne aktuelle Auszahlung. Umgekehrt sind Gehaltsauszahlungen für das kommende Jahr oder die Tilgung von Krediten Auszahlungen ohne Aufwand – bei der Kredittilgung sinken liquide Mittel und Verbindlichkeiten gleichermaßen, das Geldvermögen bleibt unverändert." },
+      { h: "Kosten, aber kein Aufwand: Zusatzkosten", t: "Zusatzkosten sind kalkulatorische Kosten, denen kein Aufwand in der Fibu gegenübersteht – typische Beispiele: kalkulatorische Wagnisse, kalkulatorische Zinsen (auf Eigenkapital), kalkulatorischer Unternehmerlohn." },
+      { h: "Aufwand, der nicht kostengleich ist: neutraler Aufwand", t: "Neutraler Aufwand fließt nicht in die Kostenrechnung ein, weil er betriebsfremd (z. B. geleistete Spende), periodenfremd (z. B. unerwartete Steuernachzahlung aus Vorjahren) oder außerordentlich (z. B. Totalschaden) ist." },
+      { h: "Einzahlung/Ertrag und Leistung/Ertrag", t: "Eine Einzahlung ohne Ertrag ist z. B. die Aufnahme von Krediten (reiner Zahlungsmittelzufluss, keine Eigenkapitalveränderung). Ein Ertrag ohne Einzahlung ist z. B. eine Zuschreibung oder die Auflösung von Rückstellungen. Eine Leistung ohne Ertrag (Zusatzleistung) liegt vor, wenn selbst erstellte Güter höher bewertet werden, als sie hergestellt wurden. Ein Ertrag ohne Leistung (neutraler Ertrag) ist z. B. eine unerwartete Steuerrückzahlung aus Vorjahren." },
+    ],
+    fragen: [
+      { id: "bp-01", typ: "mc", frage: "Die Stadtkasse überweist die fällige Stromrechnung. Welche Begriffe treffen zu?", optionen: ["Nur Auszahlung, kein Aufwand", "Ausgabe, Auszahlung, Aufwand und Kosten liegen insgesamt vor", "Nur Kosten, keine Auszahlung", "Weder Ausgabe noch Aufwand"], loesung: 1, erlaeuterung: "Wie bei der Versicherungsprämie gilt: Mit der Überweisung findet eine Auszahlung statt, die Verbindlichkeit bestand bereits vorher (Ausgabe), der Werteverzehr ist betriebsbezogen (Aufwand und Kosten)." },
+      { id: "bp-02", typ: "freitext", frage: "Die Stadt tilgt ein Darlehen bei der Hausbank. Warum liegt hier ausschließlich eine Auszahlung vor – keine Ausgabe, kein Aufwand, keine Kosten?", musterloesung: "Bei der Tilgung handelt es sich um die reine Rückzahlung geliehener liquider Mittel. Die liquiden Mittel sinken (Auszahlung), aber die Verbindlichkeiten sinken im gleichen Maß, sodass das Geldvermögen unverändert bleibt (keine Ausgabe). Ein Werteverzehr findet nicht statt, also entstehen weder Aufwand noch Kosten." },
+      { id: "bp-03", typ: "mc", frage: "Kauf von Kopierpapier für den Bürobetrieb gegen Barzahlung, Verbrauch wird sofort unterstellt (Fiktion des sofortigen Verbrauchs). Welche Aussage ist richtig?", optionen: ["Es liegt nur eine Liquiditätsänderung vor, sonst nichts", "Es liegen Auszahlung, Ausgabe, Aufwand und Kosten gleichzeitig vor", "Es liegt nur Aufwand vor, aber keine Auszahlung", "Es liegen ausschließlich Kosten vor, kein Aufwand"], loesung: 1, erlaeuterung: "Beim Barkauf sinkt die Kasse (Auszahlung) und das Geldvermögen (Ausgabe); da bei kleineren Mengen sofortiger Verbrauch unterstellt wird, entstehen zugleich Aufwand und Kosten." },
+      { id: "bp-04", typ: "freitext", frage: "Die Kommune nimmt einen Kredit auf, das Geld wird dem Bankkonto gutgeschrieben. Ordne den Vorgang den vier Begriffsebenen zu und begründe kurz.", musterloesung: "Einzahlung: Das Bankkonto nimmt zu. Keine Einnahme: Die Zunahme der liquiden Mittel wird durch die gleichzeitig entstehende Verbindlichkeit ausgeglichen, das Geldvermögen ändert sich nicht. Kein Ertrag: Das Eigenkapital wird nicht berührt, es handelt sich um eine Zunahme des Fremdkapitals. Keine Leistung: Es wird kein betrieblicher Wert verbraucht oder erbracht." },
+      { id: "bp-05", typ: "mc", frage: "Welches Begriffspaar wird ausschließlich in der Kosten- und Leistungsrechnung (internes Rechnungswesen) verwendet?", optionen: ["Auszahlung/Einzahlung", "Ausgabe/Einnahme", "Aufwand/Ertrag", "Kosten/Leistung"], loesung: 3, erlaeuterung: "Kosten und Leistungen ermitteln den betriebsbedingten Werteverzehr bzw. -zugang und sind Begriffe der KLR (internes Rechnungswesen). Aufwand/Ertrag gehören zur Finanzbuchhaltung (externes Rechnungswesen)." },
+    ],
+  },
+  {
+    id: "bilanz-inventar",
+    titel: "Bilanz & Inventar",
+    kurz: "Bilanz/Inventar",
+    nachschlagen: [
+      { h: "Vom Inventar zur Bilanz", t: "Die Inventur (körperliche Bestandsaufnahme oder Buchinventur) liefert die Grundlage für das Inventar: eine ausführliche, detaillierte Auflistung aller Vermögens- und Schuldenwerte. Die Bilanz ist die verdichtete Kurzform des Inventars – eine kurz gefasste Übersicht, die jährlich aufzustellen ist." },
+      { h: "Aufbau der Bilanz", t: "Aktiva (linke Seite) zeigen die Mittelverwendung: Anlagevermögen (z. B. Grundstücke, Gebäude, Fahrzeuge, Betriebs- und Geschäftsausstattung, Finanzanlagen) und Umlaufvermögen (Vorräte, Forderungen, liquide Mittel). Passiva (rechte Seite) zeigen die Mittelherkunft: Eigenkapital und Fremdkapital (Kreditverbindlichkeiten, Verbindlichkeiten a. LL). Die Bilanzsummen beider Seiten sind immer gleich." },
+      { h: "Eigenkapital-Ermittlung", t: "Eigenkapital = Summe des Vermögens − Summe der Schulden. Das Eigenkapital wird also rechnerisch als Restgröße (Reinvermögen) ermittelt." },
+      { h: "Festwert-Bewertung", t: "Gegenstände mit nachrangiger Bedeutung, die regelmäßig ersetzt werden und deren Bestand sich in Größe, Wert und Zusammensetzung kaum verändert (z. B. Papiervorräte, ein Stadtwald mit gleichbleibendem Baumbestand), können mit einem gleichbleibenden Festwert bewertet werden. Das vereinfacht die Inventur, da diese Positionen nicht jährlich neu erfasst werden müssen." },
+    ],
+    fragen: [
+      { id: "bi-01", typ: "freitext", frage: "Was ist der grundlegende Unterschied zwischen Inventar und Bilanz?", musterloesung: "Das Inventar ist die ausführliche, detaillierte Auflistung aller einzelnen Vermögens- und Schuldenpositionen. Die Bilanz ist die verdichtete Kurzform davon – eine kurz gefasste, aggregierte Übersicht in Kontoform (Aktiva/Passiva)." },
+      { id: "bi-02", typ: "mc", frage: "Eine Kommune hat Vermögenswerte von insgesamt 35.000.000 € und Schulden von 14.800.000 €. Wie hoch ist das Eigenkapital?", optionen: ["14.800.000 €", "20.200.000 €", "35.000.000 €", "49.800.000 €"], loesung: 1, erlaeuterung: "Eigenkapital = Summe des Vermögens − Summe der Schulden = 35.000.000 € − 14.800.000 € = 20.200.000 €." },
+      { id: "bi-03", typ: "mc", frage: "Auf welcher Bilanzseite steht das Anlagevermögen?", optionen: ["Aktiva", "Passiva", "Weder noch, es steht nur im Inventar", "Auf beiden Seiten je zur Hälfte"], loesung: 0, erlaeuterung: "Das Anlagevermögen gehört zum Vermögen und steht damit auf der Aktivseite (Mittelverwendung)." },
+      { id: "bi-04", typ: "freitext", frage: "Welche Voraussetzungen müssen vorliegen, damit ein Vermögensgegenstand mit einem Festwert bewertet werden darf?", musterloesung: "Der Gegenstand muss von nachrangiger Bedeutung für das Gesamtvermögen sein, regelmäßig ersetzt werden, und sein Bestand darf sich in Größe, Wert und Zusammensetzung nur unwesentlich verändern." },
+      { id: "bi-05", typ: "mc", frage: "Welche Aussage beschreibt zutreffend die Passivseite der Bilanz?", optionen: ["Sie zeigt, wie die Mittel eines Unternehmens verwendet werden, wo sie investiert sind", "Sie zeigt, woher die zur Finanzierung benötigten Mittel stammen", "Sie enthält ausschließlich das Umlaufvermögen", "Sie wird nur bei Eigenbetrieben geführt"], loesung: 1, erlaeuterung: "Die Passivseite (Kapital) zeigt die Mittelherkunft – also woher das Geld stammt, mit dem das Vermögen der Aktivseite finanziert wurde (Eigen- und Fremdkapital)." },
+    ],
+  },
+  {
+    id: "doppelte-buchfuehrung",
+    titel: "Grundlagen der doppelten Buchführung",
+    kurz: "Doppelte Buchführung",
+    nachschlagen: [
+      { h: "Die vier Grundfälle der Bilanzveränderung", t: "Aktivtausch: Zwei Posten auf der Aktivseite verändern sich gegenläufig um denselben Betrag, die Bilanzsumme bleibt gleich (z. B. Verkauf eines Schreibtisches gegen Bankgutschrift). Passivtausch: Zwei Posten auf der Passivseite tauschen sich (z. B. Umwandlung einer Verbindlichkeit in ein Darlehen). Aktiv-Passiv-Mehrung: Ein Aktiv- und ein Passivposten nehmen gleichzeitig zu, die Bilanzsumme steigt (z. B. Kauf eines Computers auf Ziel). Aktiv-Passiv-Minderung: Ein Aktiv- und ein Passivposten nehmen gleichzeitig ab, die Bilanzsumme sinkt (z. B. Darlehensrückzahlung per Überweisung)." },
+      { h: "Erfolgsneutral vs. erfolgswirksam", t: "Alle vier Grundfälle können erfolgsneutral sein, wenn das Eigenkapital unverändert bleibt (ein Aktivtausch ist immer erfolgsneutral). Passivtausch, Aktiv-Passiv-Mehrung und -Minderung können aber auch erfolgswirksam sein, wenn sich das Eigenkapital durch Aufwendungen oder Erträge verändert." },
+      { h: "Aufwendungen und Erträge verändern das Eigenkapital", t: "Aufwendungen (Soll-Seite des Eigenkapitalkontos) lassen das Eigenkapital sinken – 'Abgänge'. Erträge (Haben-Seite) lassen es steigen – 'Zugänge'. Ein negativer Erfolg (Verlust bzw. Jahresfehlbetrag) entsteht bei Überwiegen der Aufwendungen, ein positiver Erfolg (Gewinn bzw. Jahresüberschuss) beim Überwiegen der Erträge." },
+      { h: "Die zwei Kontenkreise der doppelten Buchführung", t: "Bilanzkonten (Bestandskonten) gliedern sich in Aktivkonten und Passivkonten und bilden das Schlussbilanzkonto. Erfolgskonten gliedern sich in Aufwandskonten und Ertragskonten und münden im Ergebnisrechnungskonto. Der Saldo des Ergebnisrechnungskontos (Jahresüberschuss oder -fehlbetrag) verändert wiederum das Eigenkapitalkonto und zeigt, ob der Haushaltsausgleich gelungen ist." },
+    ],
+    fragen: [
+      { id: "db-01", typ: "mc", frage: "Dieter Krause zahlt die angeforderte Hundesteuer bar bei der Stadtkasse ein (die Forderung war bereits gebucht). Um welchen Grundfall der Bilanzveränderung handelt es sich?", optionen: ["Aktivtausch", "Passivtausch", "Aktiv-Passiv-Mehrung", "Aktiv-Passiv-Minderung"], loesung: 0, erlaeuterung: "Der Kassenbestand steigt, die öffentlich-rechtliche Forderung sinkt im gleichen Umfang – zwei Aktivposten tauschen sich, die Bilanzsumme bleibt unverändert: Aktivtausch." },
+      { id: "db-02", typ: "mc", frage: "Die Stadt kauft Streugut für den Winterdienst; laut Rechnung besteht ein Zahlungsziel von vier Wochen. Welcher Grundfall liegt vor?", optionen: ["Aktivtausch", "Passivtausch", "Aktiv-Passiv-Mehrung", "Aktiv-Passiv-Minderung"], loesung: 2, erlaeuterung: "Die Vorräte (Aktivposten) nehmen zu, gleichzeitig entsteht eine Verbindlichkeit (Passivposten) in gleicher Höhe – beide Seiten wachsen: Aktiv-Passiv-Mehrung." },
+      { id: "db-03", typ: "mc", frage: "Die Stadt tilgt einen Landeskredit durch Banküberweisung. Welcher Grundfall liegt vor?", optionen: ["Aktivtausch", "Passivtausch", "Aktiv-Passiv-Mehrung", "Aktiv-Passiv-Minderung"], loesung: 3, erlaeuterung: "Das Bankguthaben (Aktivposten) sinkt, die Kreditverbindlichkeit (Passivposten) sinkt im gleichen Umfang – beide Seiten schrumpfen: Aktiv-Passiv-Minderung." },
+      { id: "db-04", typ: "freitext", frage: "Warum ist ein Aktivtausch immer erfolgsneutral, während eine Aktiv-Passiv-Mehrung auch erfolgswirksam sein kann?", musterloesung: "Beim Aktivtausch verändert sich nur die Zusammensetzung des Vermögens, das Eigenkapital bleibt zwangsläufig unberührt. Bei einer Aktiv-Passiv-Mehrung entsteht dagegen ein neuer Passivposten – wird dieser durch einen Aufwand (statt einer reinen Verbindlichkeit) ausgelöst, sinkt zugleich das Eigenkapital, der Vorgang ist dann erfolgswirksam." },
+      { id: "db-05", typ: "freitext", frage: "Nenne die beiden Kontenkreise der doppelten Buchführung und je zwei zugehörige Kontoarten.", musterloesung: "Bilanzkonten (Bestandskonten): Aktivkonten und Passivkonten. Erfolgskonten: Aufwandskonten und Ertragskonten." },
+    ],
+  },
+  {
+    id: "klr-grundlagen",
+    titel: "Grundlagen der KLR (Fibu vs. KLR)",
+    kurz: "KLR-Grundlagen",
+    nachschlagen: [
+      { h: "Finanzbuchhaltung (Fibu) – externes Rechnungswesen", t: "Die Fibu erfasst Geschäftsvorfälle im Grundbuch und Hauptbuch und zeigt in der Bilanz die Vermögens- und Kapitalverhältnisse; die Ergebnisrechnung stellt fest, ob ein Jahresüberschuss oder -fehlbetrag entstanden ist. Sie richtet sich vor allem an externe Adressaten (politische Gremien, Öffentlichkeit) und unterliegt strengen rechtlichen Regelungen (HGB, Steuerrecht, GemHVO, KAG, EigBetrVO)." },
+      { h: "Kosten- und Leistungsrechnung (KLR) – internes Rechnungswesen", t: "Die KLR ist nur teilweise rechtlich geregelt (z. B. bei Benutzungsgebühren) und dient vor allem der betriebswirtschaftlichen Analyse und Verwaltungssteuerung (Controlling). Basisgrößen sind der betriebsbedingte, tatsächliche Ressourcenverbrauch (Kosten) und Wertezuwachs (Leistungen). Damit lassen sich Kosten kalkulieren sowie Kosten- und Wirtschaftlichkeitsvergleiche durchführen." },
+      { h: "Die Begriffskette in vier Ebenen", t: "Einzahlungen/Auszahlungen → verändern die Liquidität. Einnahmen/Ausgaben → verändern das Geldvermögen (liquide Mittel + Forderungen − Verbindlichkeiten). Aufwendungen/Erträge → verändern das Eigenkapital (Fibu-Begriffe). Kosten/Leistungen → betriebsbedingter Wertezugang/-verzehr (KLR-Begriffe)." },
+      { h: "Durchgängiges Beispiel: Kauf von Druckerpapier gegen Barzahlung", t: "Dieser eine Vorgang berührt alle vier Ebenen gleichzeitig: Auszahlung (Kassenbestand sinkt), Ausgabe (Geldvermögen sinkt), Aufwand (Büromaterial ist Fibu-Aufwand) und Kosten (betriebsbedingter Werteverzehr)." },
+      { h: "Gegenbeispiel: Kauf einer Maschine auf Ziel", t: "Hier liegt ausschließlich eine Geldvermögensänderung (Ausgabe) vor: Keine Liquiditätsänderung, da noch nicht gezahlt wurde. Kein Aufwand, da sich das Eigenkapital nicht ändert. Keine Kosten, da noch kein Werteverzehr stattfindet – dieser entsteht erst später durch die Abschreibung bei Nutzung der Maschine." },
+    ],
+    fragen: [
+      { id: "kg-01", typ: "freitext", frage: "Nenne zwei zentrale Unterschiede zwischen Finanzbuchhaltung (Fibu) und Kosten- und Leistungsrechnung (KLR).", musterloesung: "Z. B.: (1) Die Fibu ist externes, die KLR internes Rechnungswesen. (2) Die Fibu unterliegt strengen rechtlichen Regelungen (HGB, Steuerrecht, GemHVO u. a.), die KLR ist nur teilweise rechtlich geregelt. (3) Die Fibu weist Aufwand/Ertrag aus, die KLR ermittelt Kosten/Leistungen als betriebsbedingten Werteverzehr/-zugang." },
+      { id: "kg-02", typ: "mc", frage: "Der Kauf einer Maschine auf Ziel (Zahlung erfolgt erst später) löst ausschließlich aus:", optionen: ["Eine Auszahlung", "Eine Ausgabe", "Einen Aufwand", "Kosten"], loesung: 1, erlaeuterung: "Da noch keine Zahlung erfolgt ist, gibt es keine Liquiditätsänderung. Da sich das Eigenkapital nicht ändert, liegt kein Aufwand vor. Werteverzehr (Kosten) entsteht erst später durch Abschreibung. Es liegt nur eine Ausgabe vor, da das Geldvermögen durch die neue Verbindlichkeit sinkt." },
+      { id: "kg-03", typ: "freitext", frage: "Warum berührt der Barkauf von Druckerpapier für den Bürobedarf alle vier Begriffsebenen gleichzeitig?", musterloesung: "Weil die Bezahlung sofort in bar erfolgt (Auszahlung, Kassenbestand sinkt) und dadurch auch das Geldvermögen sofort sinkt (Ausgabe). Da Büromaterial in der Fibu als Aufwand gilt und zugleich betriebsbedingt verbraucht wird, entstehen gleichzeitig Aufwand und Kosten." },
+      { id: "kg-04", typ: "mc", frage: "Warum bezeichnet man die KLR auch als 'internes Rechnungswesen'?", optionen: ["Weil sie ausschließlich von externen Prüfern durchgeführt wird", "Weil sie vorrangig von der und für die Verwaltung selbst als Steuerungsinstrument dient", "Weil sie gesetzlich strenger geregelt ist als die Fibu", "Weil sie nur die Liquidität einer Kommune misst"], loesung: 1, erlaeuterung: "Die KLR dient primär der internen betriebswirtschaftlichen Analyse und Steuerung (Controlling) der Verwaltung selbst, nicht der externen Berichterstattung – daher 'internes Rechnungswesen'." },
+    ],
+  },
+];
+
 const SUBJECTS = [
-  { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR },
+  { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR, extra: TOPICS_KLR_GRUNDLAGEN },
   { id: "sgb2", kurz: "SGB II", titel: "Grundsicherung für Arbeitsuchende (SGB II)", az: "SGB II", topics: TOPICS_SGB2 },
   { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
   { id: "avr", kurz: "Auslegung", titel: "Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)", az: "R2", topics: TOPICS_AVR },
@@ -511,7 +608,8 @@ const state = {
 function aktuellesFach() { return SUBJECTS.find(s => s.id === state.fach); }
 function aktuellesThema() {
   const f = aktuellesFach();
-  return f ? f.topics.find(t => t.id === state.themaId) : null;
+  if (!f) return null;
+  return f.topics.find(t => t.id === state.themaId) || (f.extra ? f.extra.find(t => t.id === state.themaId) : null);
 }
 function ergebnisKey() { return state.fach + ":" + state.themaId; }
 function ergebnisseFuerThema() { return state.ergebnisse[ergebnisKey()] || {}; }
@@ -727,6 +825,13 @@ function renderSubject() {
   f.topics.forEach(t => {
     html += ordnerkachel(t.titel, `${t.fragen.length} Übungsfragen`, `gehezuThema('${t.id}')`);
   });
+  if (f.extra && f.extra.length) {
+    html += `<div class="section-label" style="margin-top:22px;">EXTRA-ORDNER · GRUNDLAGEN DES RECHNUNGSWESENS</div>
+      <p class="hinweis" style="margin-top:-4px;">Unabhängig von den Prüfungs-Themen oben – reine Nachschlage- und Übungsordner, nicht Teil des gemischten Prüfungsmodus.</p>`;
+    f.extra.forEach(t => {
+      html += ordnerkachel(t.titel, `${t.fragen.length} Übungsfragen`, `gehezuThema('${t.id}')`);
+    });
+  }
   return html;
 }
 
