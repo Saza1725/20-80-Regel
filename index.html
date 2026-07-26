@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -94,11 +94,11 @@ select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-
 <body>
 <div class="wrap"><div id="app"></div></div>
 <script>
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: Kosten- und Leistungsrechnung (KLR) – Modul Vfal90
 ------------------------------------------------------------------- */
-
+ 
 const TOPICS_KLR = [
   {
     id: "grundbegriffe",
@@ -179,7 +179,7 @@ const TOPICS_KLR = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: SGB II – Grundsicherung für Arbeitsuchende (Bürgergeld)
 ------------------------------------------------------------------- */
@@ -262,7 +262,7 @@ const TOPICS_SGB2 = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: Recht der Gefahrenabwehr NRW
 ------------------------------------------------------------------- */
@@ -370,7 +370,7 @@ const TOPICS_GA = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: Auslegungsmethoden – Allgemeines Verwaltungsrecht (R2)
 ------------------------------------------------------------------- */
@@ -470,7 +470,7 @@ const TOPICS_AVR = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Zusatzordner innerhalb KLR: Grundlagen des Rechnungswesens
    (unabhängig von den bisherigen Prüfungs-Themen TOPICS_KLR).
@@ -554,16 +554,246 @@ const TOPICS_KLR_GRUNDLAGEN = [
     ],
   },
 ];
-
+ 
+/* ==================================================================
+   FACH: Kommunales Haushaltsrecht (KHR)
+   Zweistufige Struktur: Fach -> Kapitel (eigener Ordner, eigene
+   Prüfung) -> Themen (Nachschlagen + Übungsfragen).
+   Aus den hochgeladenen KHR-Skripten und Übungsaufgaben (Tobias
+   Röbbecke) zusammengestellt.
+================================================================== */
+ 
+/* ---------------- Kapitel 1: Allgemeine Systematik und Ziele der kommunalen Finanzwirtschaft ---------------- */
+const KHR_K1_TOPICS = [
+  {
+    id: "khr-k1-rechtsgrundlagen",
+    titel: "Rechtsgrundlagen, Normenpyramide & Finanzhoheit",
+    kurz: "Rechtsgrundlagen",
+    nachschlagen: [
+      { h: "Rechtsquellen des KHR/NKF", t: "Verfassungsrecht: Art. 28 Abs. 2, Art. 104a GG sowie Art. 78 Abs. 2/3, Art. 79 LVerf NRW (Selbstverwaltungsgarantie, Finanzhoheit, Konnexitätsprinzip, eigene Steuerquellen). Bundesrecht: § 16 i. V. m. § 1 Stabilitäts- und Wachstumsgesetz (gesamtwirtschaftliches Gleichgewicht, 'Magisches Viereck': Preisstabilität, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht, stetiges Wirtschaftswachstum), Haushaltsgrundsätzegesetz. Landesrecht: GO NRW (8. Teil, §§ 75 ff.), KomHVO NRW, VV Muster zur GO und KomHVO NRW." },
+      { h: "Normenpyramide im Haushaltsrecht", t: "Von oben nach unten (Geltungsvorrang): Europarecht → Grundgesetz/Landesverfassung NRW → (formelle) Gesetze von Bund/Land (z. B. GO NRW) → Rechtsverordnungen (z. B. KomHVO NRW, Ermächtigung § 133 Abs. 1 GO NRW) → Satzungen (z. B. Haushaltssatzung, Ermächtigung § 78 Abs. 1 GO NRW) → Verwaltungsvorschriften (z. B. VV Muster, Ermächtigung § 133 Abs. 3 GO NRW). Ab den Satzungen greift zusätzlich der Anwendungsvorrang." },
+      { h: "Selbstverwaltungsgarantie und Finanzhoheit", t: "Art. 28 Abs. 2 GG garantiert Gemeinden das Recht, alle Angelegenheiten der örtlichen Gemeinschaft in eigener Verantwortung zu regeln; dazu gehört die finanzielle Eigenverantwortung mit einer wirtschaftskraftbezogenen Steuerquelle samt Hebesatzrecht. Die Finanzhoheit ist neben Satzungs-, Gebiets-, Organisations- und Personalhoheit ein Bestandteil der kommunalen Selbstverwaltung. Bund/Länder regeln jedoch die Ausführung der Haushaltswirtschaft (Eingriffsvorbehalt, z. B. GO NRW, KomHVO NRW). Das Budgetrecht liegt beim Rat/Kreistag." },
+      { h: "Aufgaben der Kommunalverwaltung", t: "§ 1 GO NRW: Die Gemeinden fördern das Wohl der Einwohner in freier Selbstverwaltung (Bedarfsdeckungsfunktion) und handeln in Verantwortung für zukünftige Generationen; es besteht eine Allzuständigkeit des Rates (§§ 1, 41 Abs. 1 GO NRW). Eigener Wirkungskreis (Kommune agiert im eigenen Namen): freiwillige Selbstverwaltungsaufgaben ('Ob' und 'Wie' überlassen, z. B. Sportplätze), pflichtige Selbstverwaltungsaufgaben ('Ob' vorgegeben, 'Wie' überlassen, z. B. Schulträgerschaft), Pflichtaufgaben zur Erfüllung nach Weisung ('Ob' und 'Wie' vorgegeben, z. B. Bauaufsicht). Übertragener Wirkungskreis (Kommune agiert in fremdem Namen): Auftragsangelegenheiten von Bund/Land (z. B. Wahlen) und Organleihe (z. B. Landrat als Kreispolizeibehörde)." },
+      { h: "Konnexitätsprinzip", t: "Grundsatz aus dem Staatsrecht: Aufgabenverantwortung (Kommunen) und Finanzverantwortung (Bund/Länder) gehören zusammen – 'Wer die Musik bestellt, muss sie auch bezahlen'. Rechtsgrundlagen: Art. 104a GG, Art. 78 Abs. 3 LVerf NRW; zu beachten ist das Durchgriffsverbot von Bund auf Kommunen (Art. 84 Abs. 1 S. 7 bzw. Art. 85 Abs. 1 S. 2 GG)." },
+    ],
+    fragen: [
+      { id: "khrk1-01", typ: "mc", frage: "Was gehört laut Art. 28 Abs. 2 GG zur Gewährleistung der kommunalen Selbstverwaltung?", optionen: ["Nur die Organisationshoheit", "Auch die Grundlagen der finanziellen Eigenverantwortung samt einer wirtschaftskraftbezogenen Steuerquelle mit Hebesatzrecht", "Ausschließlich die Personalhoheit", "Nur die Satzungshoheit"], loesung: 1, erlaeuterung: "Art. 28 Abs. 2 GG stellt ausdrücklich klar, dass die Selbstverwaltungsgarantie auch die finanzielle Eigenverantwortung umfasst, zu der eine den Gemeinden mit Hebesatzrecht zustehende wirtschaftskraftbezogene Steuerquelle gehört." },
+      { id: "khrk1-02", typ: "freitext", frage: "Nenne die Reihenfolge der Normenpyramide im Haushaltsrecht von oben (höchster Rang) nach unten.", musterloesung: "Europarecht → Grundgesetz/Landesverfassung NRW → (formelle) Gesetze von Bund/Land (z. B. GO NRW) → Rechtsverordnungen (z. B. KomHVO NRW) → Satzungen (z. B. Haushaltssatzung) → Verwaltungsvorschriften (z. B. VV Muster)." },
+      { id: "khrk1-03", typ: "mc", frage: "Die Bauaufsicht ist ein Beispiel für welche Aufgabenkategorie?", optionen: ["Freiwillige Selbstverwaltungsaufgabe", "Pflichtige Selbstverwaltungsaufgabe", "Pflichtaufgabe zur Erfüllung nach Weisung", "Organleihe"], loesung: 2, erlaeuterung: "Bei der Bauaufsicht sind sowohl das 'Ob' als auch das 'Wie' staatlich vorgegeben – das ist typisch für eine Pflichtaufgabe zur Erfüllung nach Weisung." },
+      { id: "khrk1-04", typ: "freitext", frage: "Erkläre das Konnexitätsprinzip in eigenen Worten und nenne die Kernaussage in einem Satz.", musterloesung: "Das Konnexitätsprinzip besagt, dass Aufgaben- und Finanzverantwortung zusammengehören müssen: Wer einer Kommune eine Aufgabe überträgt, muss auch für die dafür notwendigen Finanzmittel sorgen. Kurzformel: 'Wer die Musik bestellt, muss sie auch bezahlen.'" },
+      { id: "khrk1-05", typ: "mc", frage: "Welche Rechtsgrundlage regelt vorrangig die konkrete Durchführungsbestimmung der kommunalen Haushaltswirtschaft (Rechtsverordnung, unterhalb der GO NRW)?", optionen: ["Grundgesetz", "KomHVO NRW", "Landesverfassung NRW", "VV Muster"], loesung: 1, erlaeuterung: "Die Kommunalhaushaltsverordnung NRW (KomHVO NRW) ist die Rechtsverordnung, die auf Grundlage von § 133 Abs. 1 GO NRW die Durchführungsbestimmungen zur Haushaltswirtschaft enthält." },
+    ],
+  },
+  {
+    id: "khr-k1-einnahmen",
+    titel: "Kommunale Einnahmen & Rangfolge der Finanzmittelbeschaffung",
+    kurz: "Einnahmen & Rangfolge",
+    nachschlagen: [
+      { h: "Rangfolge der Finanzmittelbeschaffung (§ 77 GO NRW)", t: "Nach § 77 Abs. 2 GO NRW gilt eine strikte Rangfolge: 1. sonstige Finanzmittel, 2. selbst bestimmte Entgelte (Gebühren/Beiträge), 3. Steuern (nur soweit vertretbar/geboten bzw. im Übrigen), 4. Kredite (§ 77 Abs. 4 GO NRW – nur wenn andere Finanzierung nicht möglich oder wirtschaftlich unzweckmäßig ist). Zusätzlich ist auf die wirtschaftlichen Kräfte der Abgabepflichtigen Rücksicht zu nehmen (§ 77 Abs. 3 GO NRW)." },
+      { h: "Sonstige Finanzmittel (Rang 1)", t: "Keine Legaldefinition, negative Abgrenzung: alles, was keine selbst bestimmten Entgelte, Steuern oder Kredite sind. Können öffentlich-rechtlich oder privatrechtlich sein. Beispiele: Vermietung und Verpachtung, Zins-/Kapitalerträge, Schlüssel- oder bedarfsbezogene Zuweisungen des Landes, Verwarn- und Bußgelder." },
+      { h: "Selbst bestimmte Entgelte (Rang 2): Gebühren und Beiträge", t: "Gebühren (§ 4 Abs. 2 KAG NRW) sind Geldleistungen als Gegenleistung für eine besondere Verwaltungsleistung oder für die Inanspruchnahme öffentlicher Einrichtungen. Verwaltungsgebühren (§ 5 KAG NRW, z. B. Baugenehmigung, Beglaubigung) dürfen nur für beantragte/begünstigende Leistungen erhoben werden. Benutzungsgebühren (§ 6 KAG NRW, z. B. Abfall-, Abwasser-, Parkgebühren) setzen voraus, dass eine Einrichtung überwiegend dem Vorteil einer einzelnen Person dient. Beiträge (§ 8 Abs. 2 KAG NRW) dienen dem Ersatz des Aufwands für Herstellung/Anschaffung/Erweiterung öffentlicher Einrichtungen, z. B. Erschließungsbeiträge nach dem BauGB (Straßenausbaubeiträge sind in NRW abgeschafft)." },
+      { h: "Steuern (Rang 3)", t: "Steuern (§ 3 AO) sind Geldleistungen ohne Gegenleistung für eine besondere Leistung, die von einem öffentlich-rechtlichen Gemeinwesen zur Einkünfteerzielung allen auferlegt werden, bei denen der gesetzliche Tatbestand zutrifft. Klassische kommunale Steuern: Gewerbesteuer, Grundsteuer, Hundesteuer, Zweitwohnungssteuer, Vergnügungssteuer. Steuererhebung ist subsidiär – erst wenn vorrangige Finanzmittel nicht ausreichen." },
+      { h: "Kredite (Rang 4) und Kreditarten", t: "Drei Kreditarten im kommunalen Haushaltsrecht: Investitionskredite (Anschaffung/Herstellung/Ersatz/Erweiterung/Modernisierung von Anlagevermögen, §§ 86 Abs. 1, 77 Abs. 4 GO NRW – nur wenn andere Finanzierung nicht möglich oder unzweckmäßig ist), Liquiditätskredite/Kassenkredite (Sicherung der Zahlungsfähigkeit für laufende Auszahlungen, Höchstbetrag durch Rat in der Haushaltssatzung festgelegt, § 89 Abs. 2 GO NRW – von der Rangfolge des § 77 ausgenommen), Umschuldungskredite (Ablösung alter durch neue Kredite, z. B. wegen günstigerer Konditionen). Die Kreditaufnahme ist grundsätzlich subsidiär gegenüber anderen Finanzmitteln." },
+    ],
+    fragen: [
+      { id: "khrk1-06", typ: "freitext", frage: "Nenne die Rangfolge der Finanzmittelbeschaffung nach § 77 Abs. 2, 4 GO NRW.", musterloesung: "1. sonstige Finanzmittel, 2. selbst bestimmte Entgelte, 3. Steuern, 4. Kredite." },
+      { id: "khrk1-07", typ: "freitext", frage: "Erkläre den Unterschied zwischen Verwaltungsgebühren und Benutzungsgebühren und nenne je ein Beispiel.", musterloesung: "Verwaltungsgebühren (§ 5 KAG NRW) werden für beantragte oder begünstigende Verwaltungsleistungen erhoben, z. B. die Erteilung einer Baugenehmigung oder die Beglaubigung einer Fotokopie. Benutzungsgebühren (§ 6 KAG NRW) werden erhoben, wenn eine kommunale Einrichtung überwiegend dem Vorteil einer einzelnen Person dient, z. B. Abfall- oder Parkgebühren." },
+      { id: "khrk1-08", typ: "mc", frage: "Ratsherr Dirk Dunstlos schlägt vor, vorsorglich Kredite aufzunehmen, 'für schlechte Zeiten', weil das Land ohnehin einen Altschuldenschnitt plane. Ist das rechtlich zulässig?", optionen: ["Ja, da Kredite jederzeit vorsorglich aufgenommen werden dürfen", "Nein, weil weder eine konkrete Investition/Umschuldung noch laufende Auszahlungen zugrunde liegen und die Kreditaufnahme subsidiär ist", "Ja, solange der Rat zustimmt", "Nein, weil Kredite in NRW generell verboten sind"], loesung: 1, erlaeuterung: "Investitionskredite dürfen nur für konkrete Investitions-/Umschuldungszwecke und nur subsidiär aufgenommen werden (§§ 86 Abs. 1, 77 Abs. 4 GO NRW); Liquiditätskredite nur zur Sicherung laufender Zahlungsfähigkeit (§ 89 Abs. 2 GO NRW). Eine Kreditaufnahme 'auf Vorrat' erfüllt keine dieser Voraussetzungen." },
+      { id: "khrk1-09", typ: "mc", frage: "Welche der drei Kreditarten ist von der Rangfolge des § 77 Abs. 2 GO NRW ausgenommen und stattdessen speziell in § 89 Abs. 2 GO NRW geregelt?", optionen: ["Investitionskredite", "Umschuldungskredite", "Liquiditätskredite (Kassenkredite)", "Alle drei Kreditarten gleichermaßen"], loesung: 2, erlaeuterung: "Liquiditätskredite dienen der kurzfristigen Sicherung der Zahlungsfähigkeit und unterliegen einer eigenen Regelung mit vom Rat festgelegtem Höchstbetrag (§ 89 Abs. 2 GO NRW), nicht der allgemeinen Rangfolge des § 77." },
+      { id: "khrk1-10", typ: "freitext", frage: "Nenne zwei Beispiele für 'sonstige Finanzmittel' im Sinne des § 77 Abs. 2 GO NRW.", musterloesung: "Z. B. Einnahmen aus Vermietung und Verpachtung, Zins- und Kapitalerträge aus Finanzanlagen, Schlüsselzuweisungen oder bedarfsbezogene Zuweisungen des Landes, sowie Verwarn- und Bußgelder." },
+    ],
+  },
+];
+ 
+/* ---------------- Kapitel 2: Ermittlung der Grund- und Gewerbesteuer ---------------- */
+const KHR_K2_TOPICS = [
+  {
+    id: "khr-k2-steuern-grundlagen",
+    titel: "Steuern: Grundlagen und Verteilung",
+    kurz: "Steuer-Grundlagen",
+    nachschlagen: [
+      { h: "Gesetzgebungskompetenz (Art. 105 GG)", t: "Im Steuerwesen besteht im Wesentlichen eine konkurrierende, vorrangige Gesetzgebung des Bundes (Abs. 2). Den Ländern verbleibt nur die Gesetzgebungskompetenz für örtliche Verbrauchs- und Aufwandssteuern (Abs. 2a). In NRW ermächtigt Art. 79 LVerf NRW i. V. m. § 1 KAG NRW die Kommunen, eigene Steuern zu erheben – unter Beachtung des Gleichartigkeitsverbots (Art. 105 Abs. 2a GG), des Gesetzesvorbehalts (§ 1 Abs. 1 KAG NRW) und ggf. einer Genehmigung durch das Kommunal- und Finanzministerium bei erstmaliger, neuartiger Erhebung." },
+      { h: "Verteilung des Steueraufkommens (Art. 106 GG)", t: "Trennsystem: bestimmte Steuerarten stehen ausschließlich Bund, Ländern oder Kommunen zu (Art. 106 Abs. 1, 2, 6 GG). Verbundsystem: andere Steuern werden zwischen Bund, Ländern und Kommunen aufgeteilt (Art. 106 Abs. 3–5a GG). Für Kommunen gilt: Beteiligung an Einkommensteuer (Abs. 5) und Umsatzsteuer (Abs. 5a); alleiniges Aufkommen aus Grundsteuer, Gewerbesteuer und örtlichen Aufwands-/Verbrauchssteuern (Abs. 6) – jedoch mit Beteiligung von Bund und Land am Gewerbesteueraufkommen (Gewerbesteuerumlage, Abs. 6 S. 4)." },
+      { h: "Örtliche Verbrauchs- und Aufwandssteuern", t: "Erfordern einen 'örtlich bestimmbaren' Steuergegenstand innerhalb der Gemeindegrenzen. Verbrauchssteuern belasten den Ver- oder Gebrauch bestimmter Waren (z. B. Getränke-, Verpackungssteuer). Aufwandssteuern belasten den Aufwand für die persönliche Lebensführung, z. B. Hundesteuer, Zweitwohnungssteuer, Vergnügungssteuer, Wettbürosteuer." },
+    ],
+    fragen: [
+      { id: "khrk2-01", typ: "mc", frage: "Welche Steuerart-Gesetzgebungskompetenz verbleibt den Ländern nach Art. 105 Abs. 2a GG (und wird in NRW an die Kommunen weitergegeben)?", optionen: ["Einkommensteuer", "Umsatzsteuer", "Örtliche Verbrauchs- und Aufwandssteuern", "Körperschaftsteuer"], loesung: 2, erlaeuterung: "Den Ländern verbleibt gemäß Art. 105 Abs. 2a GG die Gesetzgebungskompetenz für örtliche Verbrauchs- und Aufwandssteuern; in NRW wird diese über Art. 79 LVerf NRW i. V. m. § 1 KAG NRW an die Kommunen weitergereicht." },
+      { id: "khrk2-02", typ: "freitext", frage: "Was bedeutet 'Gewerbesteuerumlage' und wo ist sie verfassungsrechtlich verankert?", musterloesung: "Obwohl das Gewerbesteueraufkommen grundsätzlich den Kommunen zusteht, ermächtigt Art. 106 Abs. 6 S. 4 GG Bund und Länder, an diesem Aufkommen beteiligt zu werden – diese Beteiligung nennt man Gewerbesteuerumlage." },
+      { id: "khrk2-03", typ: "mc", frage: "Was ist ein Beispiel für eine örtliche Aufwandssteuer?", optionen: ["Umsatzsteuer", "Einkommensteuer", "Hundesteuer", "Körperschaftsteuer"], loesung: 2, erlaeuterung: "Die Hundesteuer belastet den Aufwand für die persönliche Lebensführung und ist eine klassische örtliche Aufwandssteuer, die von den Kommunen erhoben wird." },
+    ],
+  },
+  {
+    id: "khr-k2-grundsteuer",
+    titel: "Grundsteuer: Grundlagen & Ermittlung",
+    kurz: "Grundsteuer",
+    nachschlagen: [
+      { h: "Steuergegenstand und Grundsteuer A/B", t: "Steuergegenstand (§ 2 GrStG): Betriebe der Land- und Forstwirtschaft (Abs. 1, gesamtes Betriebsvermögen) → Grundsteuer A; Grundstücke (Abs. 2) → Grundsteuer B. Steuerbefreiungsprüfung obliegt grundsätzlich den Finanzämtern; auch kommunale Grundstücke können steuerpflichtig sein, wenn sie nicht dem 'öffentlichen Gebrauch' dienen (z. B. Lagerflächen, Baubetriebshöfe)." },
+      { h: "Steuerschuldner, Haftung, Zerlegung", t: "Steuerschuldner ist grundsätzlich der Eigentümer, bei mehreren Eigentümern besteht Gesamtschuldnerhaftung (persönliche Haftung). Die Grundsteuer gilt zusätzlich als öffentliche Last, sodass auch in das Grundstück vollstreckt werden kann (dingliche Haftung). Erstreckt sich der Steuergegenstand über mehrere Gemeinden, wird der Steuermessbetrag anteilig zerlegt (Bagatellgrenze: Beträge unter 25 € werden der Gemeinde mit dem größten Anteil zugeschlagen)." },
+      { h: "Ermittlungsschema der Grundsteuer", t: "Grundsteuerwert (durch das Finanzamt festgestellt, Hauptfeststellung alle 7 Jahre) × Steuermesszahl (je nach Nutzungsart, z. B. 0,34 ‰ unbebaute Grundstücke, 0,31 ‰ Wohngrundstücke, 0,34 ‰ Gewerbegrundstücke, 0,55 ‰ Land-/Forstwirtschaft) = Steuermessbetrag × Hebesatz (von der Gemeinde per Haushaltssatzung festgelegt, einheitlich im Gemeindegebiet) = (jährliche) Steuer. Ermäßigungen der Steuermesszahl sind auf Antrag möglich (z. B. sozialer Wohnungsbau 25 %, Denkmalschutz 10 %)." },
+      { h: "Hebesatz-Regeln", t: "Der Hebesatz wird durch Ratsbeschluss in der Haushaltssatzung festgelegt (§ 25 Abs. 1 GrStG, § 78 Abs. 2 Nr. 4 GO NRW), gilt einheitlich im gesamten Gemeindegebiet (§ 25 Abs. 4 GrStG) und für ein oder mehrere Kalenderjahre, nicht für einzelne Monate. Rückwirkende Festsetzung zum 1.1. ist bis zum 30.6. möglich ('unechte Rückwirkung'); danach ist nur ein kleinerer oder gleicher Hebesatz wie im Vorjahr zulässig (§ 25 Abs. 3 GrStG)." },
+    ],
+    fragen: [
+      { id: "khrk2-04", typ: "freitext", frage: "Nenne die vollständige Ermittlungsformel der Grundsteuer.", musterloesung: "Grundsteuerwert × Steuermesszahl = Steuermessbetrag × Hebesatz = (jährliche) Grundsteuer." },
+      { id: "khrk2-05", typ: "freitext", frage: "Für ein Zweifamilienhaus (Wohngrundstück) hat das Finanzamt einen Grundsteuerwert von 300.000 € festgesetzt. Die Steuermesszahl für Wohngrundstücke beträgt 0,31 ‰, der Hebesatz für Grundsteuer B liegt bei 900 v. H. Ermittle die Jahressteuer.", musterloesung: "Steuermessbetrag = 300.000 € × 0,00031 = 93,00 €. Jahressteuer = 93,00 € × (900/100) = 93,00 € × 9 = 837,00 €." },
+      { id: "khrk2-06", typ: "mc", frage: "Ratsfrau A schlägt vor, im Ortsteil 'Reichenbach' wegen der 'gut betuchten' Bewohner einen höheren Grundsteuer-Hebesatz zu beschließen. Ist das zulässig?", optionen: ["Ja, Hebesätze können pro Stadtteil unterschiedlich festgelegt werden", "Nein, der Hebesatz muss gemäß § 25 Abs. 4 GrStG einheitlich im gesamten Gemeindegebiet gelten", "Ja, wenn der Rat einstimmig zustimmt", "Nein, weil die Grundsteuer generell keinen Hebesatz kennt"], loesung: 1, erlaeuterung: "Der Hebesatz muss einheitlich für das gesamte Gemeindegebiet festgesetzt werden (§ 25 Abs. 4 GrStG) – eine Differenzierung nach Ortsteilen oder Einkommen der Bewohner ist unzulässig." },
+      { id: "khrk2-07", typ: "freitext", frage: "Ratsherr B meint, wegen 'Vertrauensschutzes' könne die Grundsteuer im laufenden Haushaltsjahr nicht mehr erhöht werden. Trifft das zu?", musterloesung: "Nein, nicht uneingeschränkt: Eine Erhöhung des Hebesatzes ist bis zum 30.06. des Jahres rückwirkend zum 01.01. möglich ('unechte Rückwirkung', § 25 Abs. 2/3 GrStG). Erst danach ist im laufenden Jahr nur noch ein kleinerer oder gleicher Hebesatz als im Vorjahr zulässig." },
+      { id: "khrk2-08", typ: "mc", frage: "Ratsfrau C möchte die Grundsteuer monatlich zum 1. eines Monats zahlen. Ist das nach dem gesetzlichen Regelfall vorgesehen?", optionen: ["Ja, das ist der gesetzliche Regelfall", "Nein, die Fälligkeit liegt grundsätzlich jeweils zur Quartalsmitte (15.02., 15.05., 15.08., 15.11.)", "Nein, die Grundsteuer wird nur einmal jährlich am 01.01. fällig", "Ja, sofern die Kommune zustimmt, ist jede beliebige Fälligkeit möglich"], loesung: 1, erlaeuterung: "Die Grundsteuer wird grundsätzlich vierteljährlich zur Quartalsmitte fällig (§§ 28 Abs. 1, 29 GrStG), nicht monatlich." },
+    ],
+  },
+  {
+    id: "khr-k2-gewerbesteuer",
+    titel: "Gewerbesteuer: Grundlagen & Ermittlung",
+    kurz: "Gewerbesteuer",
+    nachschlagen: [
+      { h: "Steuergegenstand: Gewerbebetrieb", t: "Ein Gewerbebetrieb (§ 2 GewStG) liegt vor kraft gewerblicher Tätigkeit (stehender Betrieb im Inland, nachhaltige selbstständige Betätigung mit Gewinnabsicht und Beteiligung am allgemeinen Wirtschaftsverkehr – ohne Land-/Forstwirtschaft, freie Berufe oder private Vermögensverwaltung), kraft Rechtsform (Kapitalgesellschaften wie AG, GmbH) oder kraft wirtschaftlichen Geschäftsbetriebs (z. B. Vereine/Stiftungen, sofern wirtschaftlich tätig). Auch Reisegewerbe mit Reisegewerbekarte fällt darunter." },
+      { h: "Ermittlungsschema der Gewerbesteuer", t: "(Maßgebender) Gewerbeertrag (durch das Finanzamt ermittelt, Abrundung auf volle 100 €) − ggf. Freibetrag (24.500 € für natürliche Personen/Personengesellschaften, 5.000 € für sonstige Unternehmensformen und juristische Personen des öffentlichen Rechts, höchstens jedoch bis auf 0 €) = verbleibender Gewerbeertrag × Steuermesszahl (einheitlich 3,5 %, Ausnahme 1,96 % bei Heimarbeit) = Steuermessbetrag × Hebesatz (mindestens 200 %, einheitlich im Gemeindegebiet, von der Gemeinde festgelegt) = (jährliche) Steuer." },
+      { h: "Fälligkeit und Zerlegung", t: "Die Gewerbesteuer wird als Vorauszahlung jeweils zur Quartalsmitte fällig (§ 19 Abs. 1 GewStG), Höhe: ein Viertel der Jahressteuer der letzten Veranlagung; nach Ablauf des Kalenderjahres erfolgt eine Abrechnung. Bei Betriebsstätten in mehreren Gemeinden wird der Steuermessbetrag nach dem Verhältnis der Arbeitslöhne zerlegt (§ 29 GewStG), abgerundet auf volle 1.000 €; Zerlegungsanteile bis 10 € werden der Gemeinde mit dem größten Anteil zugeschlagen." },
+    ],
+    fragen: [
+      { id: "khrk2-09", typ: "freitext", frage: "Nenne die vollständige Ermittlungsformel der Gewerbesteuer.", musterloesung: "(Maßgebender) Gewerbeertrag − ggf. Freibetrag = verbleibender Gewerbeertrag × Steuermesszahl = Steuermessbetrag × Hebesatz = (jährliche) Gewerbesteuer." },
+      { id: "khrk2-10", typ: "freitext", frage: "Ein Einzelunternehmer (natürliche Person) hat einen maßgebenden Gewerbeertrag von 137.691 €. Der Hebesatz beträgt 500 v. H. Ermittle die Jahressteuer (Steuermesszahl 3,5 %, Freibetrag 24.500 €).", musterloesung: "Abrundung auf volle 100 €: 137.600 €. − Freibetrag 24.500 € = 113.100 € verbleibender Gewerbeertrag. Steuermessbetrag = 113.100 € × 3,5 % = 3.958,50 €. Jahressteuer = 3.958,50 € × (500/100) = 3.958,50 € × 5 = 19.792,50 €." },
+      { id: "khrk2-11", typ: "mc", frage: "Wie hoch ist der Freibetrag bei der Gewerbesteuer für eine GmbH (Kapitalgesellschaft)?", optionen: ["24.500 €, wie bei natürlichen Personen", "5.000 €", "Kapitalgesellschaften erhalten grundsätzlich keinen Freibetrag", "50.000 €"], loesung: 1, erlaeuterung: "Der Freibetrag von 24.500 € gilt nur für natürliche Personen und Personengesellschaften. Für sonstige Unternehmensformen wie Kapitalgesellschaften (z. B. GmbH) sowie juristische Personen des öffentlichen Rechts gilt ein Freibetrag von 5.000 €." },
+      { id: "khrk2-12", typ: "mc", frage: "Wie hoch ist der gesetzlich vorgeschriebene Mindest-Hebesatz für die Gewerbesteuer?", optionen: ["100 %", "200 %", "300 %", "Es gibt keinen Mindest-Hebesatz"], loesung: 1, erlaeuterung: "Nach § 16 Abs. 4 S. 2 GewStG muss der Hebesatz für die Gewerbesteuer mindestens 200 % betragen." },
+    ],
+  },
+];
+ 
+/* ---------------- Kapitel 3: Begriffspaare des Rechnungswesens ----------------
+   Inhaltlich identisch mit dem Thema "Begriffspaare" im KLR-Zusatzordner
+   (Abgrenzung der Begriffspaare) – hier als eigenes Kapitel im Fach KHR
+   geführt, da im KHR-Kontext eigenständig geprüft. */
+const KHR_K3_TOPICS = [
+  {
+    id: "khr-k3-begriffspaare",
+    titel: "Abgrenzung der Begriffspaare",
+    kurz: "Begriffspaare",
+    nachschlagen: [
+      { h: "Die vier Begriffsebenen", t: "Auszahlungen/Einzahlungen betreffen die Liquidität (Kasse, Bank). Ausgaben/Einnahmen betreffen das Geldvermögen (liquide Mittel + Forderungen − Verbindlichkeiten). Aufwendungen/Erträge betreffen das Eigenkapital und sind Begriffe der Finanzbuchhaltung (Fibu). Kosten/Leistungen betreffen den betriebsbedingten Werteverzehr bzw. -zugang und sind Begriffe der Kosten- und Leistungsrechnung (KLR)." },
+      { h: "Ausgabe ohne Einzahlung/Auszahlung", t: "Eine Ausgabe entsteht bereits, wenn sich das Geldvermögen mindert – das ist auch ohne sofortigen Zahlungsfluss der Fall, z. B. beim Kauf auf Ziel (Rechnung noch offen): Die Verbindlichkeit mindert das Geldvermögen sofort, die Auszahlung folgt erst später bei Begleichung." },
+      { h: "Aufwand, aber keine Auszahlung / Auszahlung, aber kein Aufwand", t: "Abschreibungen für in Vorjahren angeschaffte Güter sind Aufwand ohne aktuelle Auszahlung. Umgekehrt sind Gehaltsauszahlungen für das kommende Jahr oder die Tilgung von Krediten Auszahlungen ohne Aufwand – bei der Kredittilgung sinken liquide Mittel und Verbindlichkeiten gleichermaßen, das Geldvermögen bleibt unverändert." },
+      { h: "Kosten, aber kein Aufwand: Zusatzkosten", t: "Zusatzkosten sind kalkulatorische Kosten, denen kein Aufwand in der Fibu gegenübersteht – typische Beispiele: kalkulatorische Wagnisse, kalkulatorische Zinsen (auf Eigenkapital), kalkulatorischer Unternehmerlohn." },
+      { h: "Aufwand, der nicht kostengleich ist: neutraler Aufwand", t: "Neutraler Aufwand fließt nicht in die Kostenrechnung ein, weil er betriebsfremd (z. B. geleistete Spende), periodenfremd (z. B. unerwartete Steuernachzahlung aus Vorjahren) oder außerordentlich (z. B. Totalschaden) ist." },
+    ],
+    fragen: [
+      { id: "khrk3-01", typ: "mc", frage: "Die Stadtkasse überweist die fällige Stromrechnung. Welche Begriffe treffen zu?", optionen: ["Nur Auszahlung, kein Aufwand", "Ausgabe, Auszahlung, Aufwand und Kosten liegen insgesamt vor", "Nur Kosten, keine Auszahlung", "Weder Ausgabe noch Aufwand"], loesung: 1, erlaeuterung: "Mit der Überweisung findet eine Auszahlung statt, die Verbindlichkeit bestand bereits vorher (Ausgabe), der Werteverzehr ist betriebsbezogen (Aufwand und Kosten)." },
+      { id: "khrk3-02", typ: "freitext", frage: "Die Stadt tilgt ein Darlehen bei der Hausbank. Warum liegt hier ausschließlich eine Auszahlung vor – keine Ausgabe, kein Aufwand, keine Kosten?", musterloesung: "Bei der Tilgung handelt es sich um die reine Rückzahlung geliehener liquider Mittel. Die liquiden Mittel sinken (Auszahlung), aber die Verbindlichkeiten sinken im gleichen Maß, sodass das Geldvermögen unverändert bleibt (keine Ausgabe). Ein Werteverzehr findet nicht statt, also entstehen weder Aufwand noch Kosten." },
+      { id: "khrk3-03", typ: "mc", frage: "Kauf von Kopierpapier für den Bürobetrieb gegen Barzahlung, Verbrauch wird sofort unterstellt. Welche Aussage ist richtig?", optionen: ["Es liegt nur eine Liquiditätsänderung vor, sonst nichts", "Es liegen Auszahlung, Ausgabe, Aufwand und Kosten gleichzeitig vor", "Es liegt nur Aufwand vor, aber keine Auszahlung", "Es liegen ausschließlich Kosten vor, kein Aufwand"], loesung: 1, erlaeuterung: "Beim Barkauf sinkt die Kasse (Auszahlung) und das Geldvermögen (Ausgabe); da bei kleineren Mengen sofortiger Verbrauch unterstellt wird, entstehen zugleich Aufwand und Kosten." },
+      { id: "khrk3-04", typ: "freitext", frage: "Die Kommune nimmt einen Kredit auf, das Geld wird dem Bankkonto gutgeschrieben. Ordne den Vorgang den vier Begriffsebenen zu und begründe kurz.", musterloesung: "Einzahlung: Das Bankkonto nimmt zu. Keine Einnahme: Die Zunahme der liquiden Mittel wird durch die gleichzeitig entstehende Verbindlichkeit ausgeglichen, das Geldvermögen ändert sich nicht. Kein Ertrag: Das Eigenkapital wird nicht berührt, es handelt sich um eine Zunahme des Fremdkapitals. Keine Leistung: Es wird kein betrieblicher Wert verbraucht oder erbracht." },
+      { id: "khrk3-05", typ: "mc", frage: "Welches Begriffspaar wird ausschließlich in der Kosten- und Leistungsrechnung (internes Rechnungswesen) verwendet?", optionen: ["Auszahlung/Einzahlung", "Ausgabe/Einnahme", "Aufwand/Ertrag", "Kosten/Leistung"], loesung: 3, erlaeuterung: "Kosten und Leistungen ermitteln den betriebsbedingten Werteverzehr bzw. -zugang und sind Begriffe der KLR (internes Rechnungswesen). Aufwand/Ertrag gehören zur Finanzbuchhaltung (externes Rechnungswesen)." },
+    ],
+  },
+];
+ 
+/* ---------------- Kapitel 4: Haushaltssatzung, Haushaltsplan & Haushaltskreislauf ----------------
+   Hinweis: Aus dem aktuellen Upload liegt bislang nur Material zu den
+   Grundlagen der Haushaltssatzung vor. Inhalte zu Haushaltsplan und
+   Haushaltskreislauf im Detail folgen, sobald entsprechende Skripte
+   hochgeladen werden. */
+const KHR_K4_TOPICS = [
+  {
+    id: "khr-k4-haushaltssatzung",
+    titel: "Grundlagen der Haushaltssatzung",
+    kurz: "Haushaltssatzung",
+    nachschlagen: [
+      { h: "Pflicht zum Erlass (§ 78 Abs. 1 GO NRW)", t: "Die Gemeinde hat für jedes Haushaltsjahr eine Haushaltssatzung zu erlassen – es handelt sich um eine Verpflichtung, keine Ermessensvorschrift. Die Haushaltssatzung ist somit eine Pflichtsatzung; auf ihren Erlass kann nicht verzichtet werden." },
+      { h: "Haushaltsjahr und Doppelhaushalt", t: "Das Haushaltsjahr ist grundsätzlich das Kalenderjahr (§ 78 Abs. 4 GO NRW), sodass grundsätzlich jährlich eine neue Haushaltssatzung erforderlich ist. Eine Ausnahme bildet der sogenannte 'Doppelhaushalt': Gemäß § 78 Abs. 3 S. 2 GO NRW kann eine Haushaltssatzung für zwei Haushaltsjahre aufgestellt werden – eine Aufstellung nur alle fünf Jahre (eine Wahlperiode) ist dagegen nicht zulässig." },
+      { h: "Ausschließliche Zuständigkeit des Rates", t: "Nach § 41 Abs. 1 S. 1 GO NRW ist der Rat grundsätzlich für alle Angelegenheiten der Gemeindeverwaltung zuständig (sogenannte 'Allzuständigkeit'). Bestimmte Angelegenheiten kann der Rat auf Ausschüsse oder den Bürgermeister übertragen (§ 41 Abs. 2 S. 1 GO NRW) – dies gilt jedoch nicht für Angelegenheiten der ausschließlichen Zuständigkeit des Rates (§ 41 Abs. 1 S. 2 GO NRW). Der Erlass der Haushaltssatzung gehört gemäß § 41 Abs. 1 S. 2 h) GO NRW zur ausschließlichen Zuständigkeit des Rates und kann daher nicht auf den Bürgermeister oder einen Ausschuss übertragen werden." },
+    ],
+    fragen: [
+      { id: "khrk4-01", typ: "mc", frage: "Ratsfrau A meint, man könne grundsätzlich auf den Erlass einer Haushaltssatzung verzichten, da die Verwaltung ohnehin gute Arbeit leiste. Ist das rechtlich möglich?", optionen: ["Ja, wenn der Rat der Verwaltung vertraut", "Nein, § 78 Abs. 1 GO NRW verpflichtet zum jährlichen Erlass einer Haushaltssatzung – es handelt sich um eine Pflichtsatzung", "Ja, sofern es sich um eine kleine Gemeinde handelt", "Nein, aber nur bei Gemeinden mit Haushaltssicherungskonzept"], loesung: 1, erlaeuterung: "§ 78 Abs. 1 GO NRW ist eine Verpflichtung, keine Ermessensvorschrift – die Gemeinde muss für jedes Haushaltsjahr eine Haushaltssatzung erlassen. Ein Verzicht ist rechtlich nicht möglich." },
+      { id: "khrk4-02", typ: "freitext", frage: "Darf eine Gemeinde die Haushaltssatzung nur alle fünf Jahre (eine Wahlperiode) aufstellen? Welche Ausnahme vom jährlichen Grundsatz gibt es stattdessen?", musterloesung: "Nein, das Haushaltsjahr ist grundsätzlich das Kalenderjahr (§ 78 Abs. 4 GO NRW), sodass die Haushaltssatzung grundsätzlich jährlich aufzustellen ist. Die einzige Ausnahme ist der Doppelhaushalt: Eine Haushaltssatzung kann gemäß § 78 Abs. 3 S. 2 GO NRW für zwei Haushaltsjahre aufgestellt werden – nicht aber für eine ganze Wahlperiode von fünf Jahren." },
+      { id: "khrk4-03", typ: "mc", frage: "Kann der Rat die Entscheidung über den Erlass der Haushaltssatzung auf den Bürgermeister übertragen?", optionen: ["Ja, im Rahmen der allgemeinen Übertragungsmöglichkeit nach § 41 Abs. 2 GO NRW", "Nein, der Erlass der Haushaltssatzung unterliegt der ausschließlichen Zuständigkeit des Rates (§ 41 Abs. 1 S. 2 h) GO NRW) und ist nicht übertragbar", "Ja, aber nur mit Zustimmung der Kommunalaufsicht", "Nein, nur eine Übertragung auf einen Ausschuss ist möglich"], loesung: 1, erlaeuterung: "Der Erlass der Haushaltssatzung gehört zur ausschließlichen Zuständigkeit des Rates (§ 41 Abs. 1 S. 2 h) GO NRW) und kann daher nicht auf den Bürgermeister oder einen Ausschuss übertragen werden – anders als sonstige, nicht ausschließliche Angelegenheiten." },
+      { id: "khrk4-04", typ: "freitext", frage: "Was versteht man unter der 'Allzuständigkeit des Rates' und wo findet sich ihre gesetzliche Grenze?", musterloesung: "Die Allzuständigkeit des Rates (§ 41 Abs. 1 S. 1 GO NRW) besagt, dass der Rat grundsätzlich für alle Angelegenheiten der Gemeindeverwaltung zuständig ist. Ihre Grenze findet sie darin, dass bestimmte Angelegenheiten zwar auf Ausschüsse oder den Bürgermeister übertragen werden dürfen (§ 41 Abs. 2 S. 1 GO NRW), dies aber nicht für Angelegenheiten der ausschließlichen Zuständigkeit des Rates gilt (§ 41 Abs. 1 S. 2 GO NRW), zu denen u. a. der Erlass der Haushaltssatzung zählt." },
+    ],
+  },
+];
+ 
+const KHR_TOPICS_ALL = [...KHR_K1_TOPICS, ...KHR_K2_TOPICS, ...KHR_K3_TOPICS, ...KHR_K4_TOPICS];
+ 
+/* Zusätzliche Fragen aus der Präsentation, um die Themen ausführlicher abzudecken */
+KHR_TOPICS_ALL.find(t => t.id === "khr-k1-rechtsgrundlagen").fragen.push(
+  { id: "khrk1-11", typ: "freitext", frage: "Nenne die vier Komponenten des 'Magischen Vierecks' aus § 1 Stabilitäts- und Wachstumsgesetz.", musterloesung: "Preisstabilität, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht und stetiges Wirtschaftswachstum." },
+  { id: "khrk1-12", typ: "mc", frage: "Was unterscheidet EU-Verordnungen von EU-Richtlinien in der Normenpyramide?", optionen: ["Kein Unterschied, beide wirken identisch", "EU-Verordnungen wirken unmittelbar, EU-Richtlinien müssen erst in nationales Recht umgesetzt werden", "EU-Richtlinien wirken unmittelbar, EU-Verordnungen müssen erst umgesetzt werden", "Beide müssen erst in Landesrecht umgesetzt werden"], loesung: 1, erlaeuterung: "EU-Verordnungen entfalten unmittelbare Wirkung in den Mitgliedstaaten, während EU-Richtlinien erst durch nationale Gesetze umgesetzt werden müssen." },
+  { id: "khrk1-13", typ: "freitext", frage: "Nenne die fünf Bestandteile der kommunalen Selbstverwaltung ('Hoheiten').", musterloesung: "Satzungshoheit, Gebietshoheit, Organisationshoheit, Personalhoheit und Finanzhoheit." }
+);
+KHR_TOPICS_ALL.find(t => t.id === "khr-k1-einnahmen").fragen.push(
+  { id: "khrk1-14", typ: "mc", frage: "In welche zwei Hauptkategorien gliedern sich Deckungsmittel?", optionen: ["Steuern und Gebühren", "Öffentlich-rechtlich und privatrechtlich", "Freiwillig und pflichtig", "Investiv und konsumtiv"], loesung: 1, erlaeuterung: "Deckungsmittel gliedern sich in öffentlich-rechtliche (Abgaben wie Steuern/Gebühren/Beiträge sowie sonstige öffentlich-rechtliche Mittel wie Finanzzuwendungen, Buß-/Zwangsgelder, Kostenersätze) und privatrechtliche Deckungsmittel (Mieten/Pachten, Verkaufserlöse, Kredite)." },
+  { id: "khrk1-15", typ: "freitext", frage: "Was versteht man unter der kameralistischen Buchführung und wann wurde sie in NRW verpflichtend durch die doppelte Buchführung ersetzt?", musterloesung: "Die Kameralistik (von lat. 'camera' = Schatzkammer) war das traditionelle Buchhaltungssystem deutscher Verwaltungen. In NRW wurde die Umstellung auf die doppelte Buchführung ('Doppik') zum 01.01.2009 im Rahmen des Neuen Steuerungsmodells verpflichtend." },
+  { id: "khrk1-16", typ: "mc", frage: "Was unterscheidet einen 'bestellten' von einem 'beauftragten' Kämmerer?", optionen: ["Es gibt keinen Unterschied", "Nur der 'bestellte' Kämmerer darf per Gesetz zugewiesene besondere Aufgaben wahrnehmen (z. B. Haushaltssperre); die Bestellung erfolgt durch den Rat, die Beauftragung durch den Bürgermeister", "Der 'beauftragte' Kämmerer hat mehr Befugnisse als der 'bestellte'", "Nur kreisfreie Städte haben einen 'bestellten' Kämmerer"], loesung: 1, erlaeuterung: "Bestimmte, gesetzlich zugewiesene Befugnisse (z. B. Mitglied im Verwaltungsvorstand, Aussprechen einer Haushaltssperre) darf nur der 'bestellte' Kämmerer wahrnehmen; die Bestellung erfolgt durch den Rat/Kreistag, die bloße Beauftragung durch den Bürgermeister im Rahmen seiner Organisationshoheit." }
+);
+KHR_TOPICS_ALL.find(t => t.id === "khr-k2-steuern-grundlagen").fragen.push(
+  { id: "khrk2-13", typ: "freitext", frage: "Nenne die drei Voraussetzungen, unter denen Kommunen in NRW eigene Steuern erheben dürfen.", musterloesung: "Gleichartigkeitsverbot (Art. 105 Abs. 2a GG), Gesetzesvorbehalt (§ 1 Abs. 1 KAG NRW) sowie bei erstmaliger, neuartiger Erhebung eine Genehmigung durch das Kommunal- und Finanzministerium (§ 2 Abs. 2 KAG NRW)." },
+  { id: "khrk2-14", typ: "mc", frage: "Was ist der Unterschied zwischen 'Trennsystem' und 'Verbundsystem' bei der Verteilung des Steueraufkommens (Art. 106 GG)?", optionen: ["Kein Unterschied, beide Begriffe meinen dasselbe", "Im Trennsystem stehen bestimmte Steuerarten ausschließlich Bund, Ländern oder Kommunen zu; im Verbundsystem werden Steuern zwischen ihnen aufgeteilt", "Das Trennsystem gilt nur für Kommunen, das Verbundsystem nur für Länder", "Das Verbundsystem betrifft nur die Grundsteuer"], loesung: 1, erlaeuterung: "Im Trennsystem (Art. 106 Abs. 1, 2, 6 GG) steht eine Steuerart ausschließlich einer Ebene zu; im Verbundsystem (Art. 106 Abs. 3–5a GG) wird das Aufkommen zwischen Bund, Ländern und Kommunen aufgeteilt." }
+);
+KHR_TOPICS_ALL.find(t => t.id === "khr-k2-grundsteuer").fragen.push(
+  { id: "khrk2-15", typ: "mc", frage: "Welche Steuermesszahl gilt für unbebaute Grundstücke?", optionen: ["0,31 ‰", "0,34 ‰", "0,55 ‰", "3,5 %"], loesung: 1, erlaeuterung: "Für unbebaute Grundstücke gilt eine Steuermesszahl von 0,34 ‰ (§ 15 Abs. 1 Nr. 1 GrStG i. V. m. § 246 BewG) – derselbe Satz wie für Gewerbegrundstücke, während Wohngrundstücke mit 0,31 ‰ und Land-/Forstwirtschaft mit 0,55 ‰ angesetzt werden." },
+  { id: "khrk2-16", typ: "freitext", frage: "Auf dem Nachbargrundstück eines Wohngrundstücks (Grundsteuerwert 500.000 €) befindet sich ein Discounter (Gewerbegrundstück). Der Hebesatz beträgt weiterhin 900 v. H., die Steuermesszahl für Gewerbegrundstücke 0,34 ‰. Ermittle die Jahressteuer.", musterloesung: "Steuermessbetrag = 500.000 € × 0,00034 = 170,00 €. Jahressteuer = 170,00 € × (900/100) = 170,00 € × 9 = 1.530,00 €." },
+  { id: "khrk2-17", typ: "freitext", frage: "Warum kann auch ein Grundstück im Eigentum einer Kommune grundsteuerpflichtig sein?", musterloesung: "Eine Steuerbefreiung für kommunale Grundstücke setzt voraus, dass das Grundstück dem 'öffentlichen Gebrauch' dient (§ 3 Abs. 1 Nr. 1 GrStG a. F.). Dient es dagegen z. B. als Lagerfläche oder Baubetriebshof, liegt kein öffentlicher Gebrauch vor, sodass durchaus Steuerpflicht bestehen kann." },
+  { id: "khrk2-18", typ: "mc", frage: "Bei welchem Betrag liegt die Bagatellgrenze für die Zerlegung des Grundsteuermessbetrags auf mehrere Gemeinden?", optionen: ["10 €", "25 €", "100 €", "1.000 €"], loesung: 1, erlaeuterung: "Steuermessbeträge unter 25 € werden bei der Zerlegung der Gemeinde mit dem größten Anteil zugeschlagen, statt sie aufwändig auf mehrere Gemeinden zu verteilen." }
+);
+KHR_TOPICS_ALL.find(t => t.id === "khr-k2-gewerbesteuer").fragen.push(
+  { id: "khrk2-19", typ: "freitext", frage: "Matt Eagle gründet mit einem Bäckermeister die Kapitalgesellschaft 'Schmalz und Stulle' (GmbH). Der maßgebende Gewerbeertrag beträgt 175.050 €, der Hebesatz weiterhin 500 v. H. Ermittle die Jahressteuer (kein Freibetrag für Kapitalgesellschaften).", musterloesung: "Abrundung auf volle 100 €: 175.000 €. Da es sich um eine Kapitalgesellschaft handelt, entfällt der Freibetrag. Steuermessbetrag = 175.000 € × 3,5 % = 6.125,00 €. Jahressteuer = 6.125,00 € × (500/100) = 6.125,00 € × 5 = 30.625,00 €." },
+  { id: "khrk2-20", typ: "mc", frage: "Nach welchem Kriterium wird der Gewerbesteuermessbetrag zerlegt, wenn ein Betrieb Betriebsstätten in mehreren Gemeinden hat?", optionen: ["Nach der Einwohnerzahl der Gemeinden", "Nach dem Verhältnis der Arbeitslöhne", "Nach dem Umsatz je Betriebsstätte", "Nach der Fläche der Betriebsstätten"], loesung: 1, erlaeuterung: "Maßgeblich für die Zerlegung ist gemäß § 29 Abs. 1 Nr. 1 GewStG das Verhältnis der in den einzelnen Betriebsstätten gezahlten Arbeitslöhne." },
+  { id: "khrk2-21", typ: "freitext", frage: "Nenne je zwei Beispiele für Personengesellschaften und Kapitalgesellschaften als Rechtsformen von Betrieben.", musterloesung: "Personengesellschaften: z. B. GbR, oHG, KG, Einzelkaufmann (e. K.). Kapitalgesellschaften: z. B. GmbH, AG, UG." }
+);
+ 
+const TOPICS_KHR_PARAGRAPHEN = [
+  {
+    id: "khr-paragrafen",
+    titel: "Paragrafen-Glossar: Kommunales Haushaltsrecht",
+    kurz: "Paragrafen",
+    nachschlagen: [
+      { h: "Art. 28 Abs. 2 GG", t: "Garantiert die kommunale Selbstverwaltung, einschließlich der finanziellen Eigenverantwortung (Finanzhoheit) mit einer wirtschaftskraftbezogenen Steuerquelle samt Hebesatzrecht." },
+      { h: "Art. 104a GG", t: "Verankert das Konnexitätsprinzip auf Bundesebene: Aufgaben- und Finanzverantwortung gehören zusammen." },
+      { h: "Art. 78 Abs. 3 LVerf NRW", t: "Verankert das Konnexitätsprinzip auf Landesebene NRW." },
+      { h: "Art. 84 Abs. 1 S. 7 / Art. 85 Abs. 1 S. 2 GG", t: "Durchgriffsverbot: Der Bund darf Kommunen grundsätzlich nicht unmittelbar mit Aufgaben oder Kosten belasten, ohne den Umweg über die Länder." },
+      { h: "Art. 105 GG", t: "Regelt die Gesetzgebungskompetenz im Steuerwesen; Abs. 2a belässt den Ländern die Kompetenz für örtliche Verbrauchs- und Aufwandssteuern." },
+      { h: "Art. 106 GG", t: "Regelt die Verteilung des Steueraufkommens zwischen Bund, Ländern und Kommunen (Trenn- und Verbundsystem); Abs. 6 S. 4 regelt die Gewerbesteuerumlage." },
+      { h: "§ 1 GO NRW", t: "Grundnorm: Gemeinden als Grundlage des demokratischen Staatsaufbaus und Gebietskörperschaften; sie fördern das Wohl der Einwohner in freier Selbstverwaltung." },
+      { h: "§ 41 Abs. 1 GO NRW", t: "Regelt die Allzuständigkeit des Rates (S. 1) sowie die Angelegenheiten der ausschließlichen, nicht übertragbaren Zuständigkeit des Rates (S. 2), z. B. den Erlass der Haushaltssatzung." },
+      { h: "§ 41 Abs. 2 GO NRW", t: "Ermöglicht dem Rat, bestimmte (nicht ausschließliche) Angelegenheiten auf Ausschüsse oder den Bürgermeister zu übertragen." },
+      { h: "§ 62 Abs. 1 S. 3 GO NRW", t: "Organisationshoheit des Bürgermeisters, u. a. Grundlage für die Beauftragung eines Kämmerers." },
+      { h: "§ 70 Abs. 1 S. 1 GO NRW", t: "Der (bestellte) Kämmerer ist Mitglied des Verwaltungsvorstands." },
+      { h: "§ 71 Abs. 4 GO NRW", t: "In kreisfreien Städten muss ein Beigeordneter als Stadtkämmerer bestellt werden." },
+      { h: "§ 77 GO NRW", t: "Grundsätze der Finanzmittelbeschaffung: Rangfolge sonstige Finanzmittel → selbst bestimmte Entgelte → Steuern → Kredite (Abs. 2); Rücksicht auf wirtschaftliche Leistungsfähigkeit (Abs. 3); Kreditaufnahme nur subsidiär (Abs. 4)." },
+      { h: "§ 78 Abs. 1 GO NRW", t: "Pflicht der Gemeinde, für jedes Haushaltsjahr eine Haushaltssatzung zu erlassen (Pflichtsatzung)." },
+      { h: "§ 78 Abs. 3 S. 2 GO NRW", t: "Ermöglicht einen Doppelhaushalt für zwei Haushaltsjahre." },
+      { h: "§ 78 Abs. 4 GO NRW", t: "Das Haushaltsjahr ist grundsätzlich das Kalenderjahr." },
+      { h: "§ 86 Abs. 1 GO NRW", t: "Regelt i. V. m. § 77 Abs. 4 GO NRW die Voraussetzungen für die Aufnahme von Investitionskrediten." },
+      { h: "§ 89 Abs. 2 GO NRW", t: "Regelt Liquiditätskredite (Kassenkredite) und den vom Rat in der Haushaltssatzung festzulegenden Höchstbetrag." },
+      { h: "§ 133 Abs. 1 GO NRW", t: "Ermächtigungsgrundlage für die Kommunalhaushaltsverordnung NRW (KomHVO NRW)." },
+      { h: "§ 133 Abs. 3 GO NRW", t: "Ermächtigungsgrundlage für die VV Muster (Verwaltungsvorschriften)." },
+      { h: "§ 25 KomHVO NRW", t: "Ermächtigt den (bestellten) Kämmerer zum Aussprechen einer Haushaltssperre." },
+      { h: "§ 3 AO", t: "Legaldefinition der Steuer: Geldleistung ohne Gegenleistung für eine besondere Leistung, die allen auferlegt wird, bei denen der gesetzliche Tatbestand zutrifft." },
+      { h: "§ 1 Abs. 1 KAG NRW", t: "Gesetzesvorbehalt: Grundlage für die Erhebung kommunaler Steuern in NRW." },
+      { h: "§ 2 Abs. 2 KAG NRW", t: "Genehmigungserfordernis durch das Kommunal- und Finanzministerium bei erstmaliger, neuartiger kommunaler Steuererhebung." },
+      { h: "§ 4 Abs. 2 KAG NRW", t: "Legaldefinition der Gebühr: Geldleistung als Gegenleistung für eine besondere Verwaltungsleistung oder die Inanspruchnahme öffentlicher Einrichtungen." },
+      { h: "§ 5 KAG NRW", t: "Verwaltungsgebühren – dürfen nur für beantragte oder begünstigende Verwaltungsleistungen erhoben werden." },
+      { h: "§ 6 KAG NRW", t: "Benutzungsgebühren – erhoben, wenn eine Einrichtung überwiegend dem Vorteil einer einzelnen Person dient." },
+      { h: "§ 8 Abs. 2 KAG NRW", t: "Beiträge – Geldleistungen zum Ersatz des Aufwands für Herstellung/Anschaffung/Erweiterung öffentlicher Einrichtungen." },
+      { h: "§ 2 GrStG", t: "Steuergegenstand der Grundsteuer: Betriebe der Land-/Forstwirtschaft (Grundsteuer A) und Grundstücke (Grundsteuer B)." },
+      { h: "§ 15 GrStG", t: "Regelt die Steuermesszahlen (Promillesätze) je nach Nutzungsart des Grundstücks sowie mögliche Ermäßigungen." },
+      { h: "§ 25 GrStG", t: "Regelt das Hebesatzrecht der Gemeinde bei der Grundsteuer, die Einheitlichkeit im Gemeindegebiet sowie die Grenzen rückwirkender Hebesatz-Änderungen." },
+      { h: "§§ 22–24 GrStG", t: "Regeln die Zerlegung des Grundsteuermessbetrags bei Grundstücken, die sich über mehrere Gemeinden erstrecken." },
+      { h: "§ 2 GewStG", t: "Steuergegenstand der Gewerbesteuer: der Gewerbebetrieb (kraft gewerblicher Tätigkeit, Rechtsform oder wirtschaftlichen Geschäftsbetriebs)." },
+      { h: "§ 11 GewStG", t: "Regelt die Freibeträge (24.500 € bzw. 5.000 €) und die einheitliche Steuermesszahl von 3,5 % bei der Gewerbesteuer." },
+      { h: "§ 16 GewStG", t: "Regelt das Hebesatzrecht der Gemeinde bei der Gewerbesteuer, mit einem gesetzlichen Mindest-Hebesatz von 200 %." },
+      { h: "§§ 28–34 GewStG", t: "Regeln die Zerlegung des Gewerbesteuermessbetrags nach dem Verhältnis der Arbeitslöhne bei mehreren Betriebsstätten." },
+    ],
+    fragen: [],
+  },
+];
+ 
 const SUBJECTS = [
   { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR, extra: TOPICS_KLR_GRUNDLAGEN },
+  { id: "khr", kurz: "KHR", titel: "Kommunales Haushaltsrecht", az: "KHR", topics: KHR_TOPICS_ALL, extra: TOPICS_KHR_PARAGRAPHEN },
   { id: "sgb2", kurz: "SGB II", titel: "Grundsicherung für Arbeitsuchende (SGB II)", az: "SGB II", topics: TOPICS_SGB2 },
   { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
   { id: "avr", kurz: "Auslegung", titel: "Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)", az: "R2", topics: TOPICS_AVR },
 ];
-
+ 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');`;
-
+ 
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -572,7 +802,7 @@ function shuffle(arr) {
   }
   return a;
 }
-
+ 
 function alleFragenMitThema(subject) {
   const out = [];
   subject.topics.forEach((top) => {
@@ -580,7 +810,7 @@ function alleFragenMitThema(subject) {
   });
   return out;
 }
-
+ 
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -589,11 +819,12 @@ function shuffle(arr) {
   }
   return a;
 }
-
+ 
 // ---------------- App-Status (nur im Speicher dieser Sitzung, kein Server, kein Login) ----------------
 const state = {
   screen: "home",
   fach: SUBJECTS[0].id,
+  kapitelId: null,
   themaId: null,
   index: 0,
   ergebnisse: {}, // key: "fachId:themaId" -> { fragenId: {status} }
@@ -604,23 +835,42 @@ const state = {
   anzahl: 10,
   cardState: {}, // pro Frage: { auswahl, geprueft, geloest }
 };
-
+ 
 function aktuellesFach() { return SUBJECTS.find(s => s.id === state.fach); }
+function aktuellesKapitel() {
+  const f = aktuellesFach();
+  return f && f.kapitel ? f.kapitel.find(k => k.id === state.kapitelId) : null;
+}
 function aktuellesThema() {
   const f = aktuellesFach();
   if (!f) return null;
+  if (f.kapitel) {
+    const k = aktuellesKapitel();
+    return k ? k.topics.find(t => t.id === state.themaId) : null;
+  }
   return f.topics.find(t => t.id === state.themaId) || (f.extra ? f.extra.find(t => t.id === state.themaId) : null);
 }
-function ergebnisKey() { return state.fach + ":" + state.themaId; }
+function ergebnisKey() { return state.fach + ":" + (state.kapitelId || "") + ":" + state.themaId; }
 function ergebnisseFuerThema() { return state.ergebnisse[ergebnisKey()] || {}; }
-
+ 
 function gehezuHome() { state.screen = "home"; state.pruefungAktiv = false; render(); }
 function gehezuFach(id) { state.fach = id; state.screen = "subject"; state.pruefungAktiv = false; render(); }
+function gehezuKapitel(id) { state.kapitelId = id; state.screen = "kapitel"; state.pruefungAktiv = false; render(); }
 function gehezuThema(id) { state.themaId = id; state.screen = "topic"; state.index = 0; state.cardState = {}; render(); }
 function gehezuPruefung() { state.screen = "exam"; state.pruefungAktiv = false; render(); }
-
+ 
+function examPool() {
+  const f = aktuellesFach();
+  if (!f) return [];
+  if (f.kapitel) {
+    const k = aktuellesKapitel();
+    return k ? alleFragenMitThema(k) : [];
+  }
+  return alleFragenMitThema(f);
+}
+ 
 function starteNeuePruefung() {
-  const pool = alleFragenMitThema(aktuellesFach());
+  const pool = examPool();
   const n = Math.min(state.anzahl, pool.length);
   state.pruefungsfragen = shuffle(pool).slice(0, n);
   state.pruefungsErgebnisse = {};
@@ -629,27 +879,27 @@ function starteNeuePruefung() {
   state.cardState = {};
   render();
 }
-
+ 
 function esc(s) {
   const d = document.createElement("div");
   d.textContent = s;
   return d.innerHTML;
 }
-
+ 
 // ---------------- Bausteine ----------------
 function stempel(status) {
   const cfg = { richtig: "RICHTIG", teilweise: "TEILWEISE", falsch: "NICHT KORREKT" }[status];
   if (!cfg) return "";
   return `<div class="stamp ${status}">${cfg}</div>`;
 }
-
+ 
 function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered) {
   const cs = state.cardState[frage.id] || { auswahl: null, geprueft: !!ergebnisseObj[frage.id] };
   state.cardState[frage.id] = cs;
   const gespeichert = ergebnisseObj[frage.id];
   const geprueft = cs.geprueft || !!gespeichert;
   const status = gespeichert ? gespeichert.status : cs.status;
-
+ 
   let inner = "";
   if (frage.typ === "mc") {
     inner += `<div>`;
@@ -674,7 +924,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
         <p class="hinweis" style="margin-top:8px;">Diese Version läuft ohne Claude-Konto – die Freitextantwort wird nicht automatisch bewertet. Vergleiche selbst mit der Musterlösung und markiere dein Ergebnis.</p>`;
     }
   }
-
+ 
   let solutionBlock = "";
   if (geprueft) {
     solutionBlock = `<div class="solution">
@@ -698,7 +948,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
       </div>
     </div>`;
   }
-
+ 
   return `<div class="karte">
     <div class="perf"></div>
     <div class="toprow">
@@ -710,14 +960,14 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
     ${solutionBlock}
   </div>`;
 }
-
+ 
 function waehleOption(fid, i) {
   const cs = state.cardState[fid];
   if (cs.geprueft) return;
   cs.auswahl = i;
   render();
 }
-
+ 
 function pruefeMC(fid, index, imExamen) {
   const cs = state.cardState[fid];
   if (cs.auswahl === null || cs.auswahl === undefined) return;
@@ -728,14 +978,14 @@ function pruefeMC(fid, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
-
+ 
 function zeigeLoesung(fid) {
   const cs = state.cardState[fid];
   cs.freitext = document.getElementById("ft-" + fid) ? document.getElementById("ft-" + fid).value : (cs.freitext || "");
   cs.zeigeLoesung = true;
   render();
 }
-
+ 
 function selbstBewertung(fid, status, index, imExamen) {
   const cs = state.cardState[fid];
   cs.geprueft = true;
@@ -743,7 +993,7 @@ function selbstBewertung(fid, status, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
-
+ 
 function findFrage(fid) {
   if (state.pruefungAktiv) {
     return state.pruefungsfragen.find(f => f.id === fid);
@@ -751,7 +1001,7 @@ function findFrage(fid) {
   const t = aktuellesThema();
   return t ? t.fragen.find(f => f.id === fid) : null;
 }
-
+ 
 function speichereErgebnis(fid, ergebnis, imExamen) {
   if (imExamen) {
     state.pruefungsErgebnisse[fid] = ergebnis;
@@ -761,7 +1011,7 @@ function speichereErgebnis(fid, ergebnis, imExamen) {
     state.ergebnisse[key][fid] = ergebnis;
   }
 }
-
+ 
 function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
   return `<div class="progressbar">${fragen.map((f, i) => {
     const r = ergebnisseObj[f.id];
@@ -769,7 +1019,7 @@ function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
     return `<span class="${cls} ${i === aktuellerIndex ? "active" : ""}" title="Frage ${i + 1}" onclick="${onJump}(${i})"></span>`;
   }).join("")}</div>`;
 }
-
+ 
 function breadcrumb(teile) {
   return `<div class="breadcrumb">${teile.map((t, i) => {
     const sep = i > 0 ? '<span class="sep">/</span>' : "";
@@ -777,14 +1027,14 @@ function breadcrumb(teile) {
     return sep + el;
   }).join("")}</div>`;
 }
-
+ 
 function ordnerkachel(titel, unterzeile, onClick, opts) {
   opts = opts || {};
   const cls = "tile" + (opts.gross ? " gross" : "") + (opts.akzent ? " akzent" : "") + (opts.dashed ? " dashed" : "");
   const clickAttr = opts.dashed ? "" : ` onclick="${onClick}"`;
   return `<button class="${cls}"${clickAttr}><div class="tab"></div><div class="ttl">${esc(titel)}</div>${unterzeile ? `<div class="meta">${esc(unterzeile)}</div>` : ""}</button>`;
 }
-
+ 
 function kopf(ueberschrift, unterzeile) {
   return `<header style="margin-bottom:22px;">
     <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
@@ -792,7 +1042,7 @@ function kopf(ueberschrift, unterzeile) {
     ${unterzeile ? `<div class="sub">${esc(unterzeile)}</div>` : ""}
   </header>`;
 }
-
+ 
 // ---------------- Navigation innerhalb Thema/Prüfung ----------------
 function themaWeiter() { const t = aktuellesThema(); state.index = Math.min(t.fragen.length - 1, state.index + 1); render(); }
 function themaZurueck() { state.index = Math.max(0, state.index - 1); render(); }
@@ -802,23 +1052,42 @@ function examZurueck() { state.pruefungIndex = Math.max(0, state.pruefungIndex -
 function examSpringe(i) { state.pruefungIndex = i; render(); }
 function examAbbrechen() { state.pruefungAktiv = false; render(); }
 function setAnzahl(v) { state.anzahl = Number(v); }
-
+ 
 // ---------------- Screens ----------------
+function alleThemenCount(f) {
+  if (f.kapitel) return f.kapitel.reduce((s, k) => s + k.topics.length, 0);
+  return f.topics.length;
+}
+function alleFragenCountFach(f) {
+  if (f.kapitel) return f.kapitel.reduce((s, k) => s + alleFragenMitThema(k).length, 0);
+  return alleFragenMitThema(f).length;
+}
+ 
 function renderHome() {
   let html = kopf("Lernkartei", "Az. Übersicht · Fachbereiche");
   html += `<div class="section-label">FACHBEREICHE</div>`;
   SUBJECTS.forEach(s => {
-    const pool = alleFragenMitThema(s);
-    html += ordnerkachel(s.titel, `Az. ${s.az} · ${s.topics.length} Themengebiete · ${pool.length} Fragen`, `gehezuFach('${s.id}')`, { gross: true });
+    const themenLabel = s.kapitel ? `${s.kapitel.length} Kapitel · ${alleThemenCount(s)} Themen` : `${alleThemenCount(s)} Themengebiete`;
+    html += ordnerkachel(s.titel, `Az. ${s.az} · ${themenLabel} · ${alleFragenCountFach(s)} Fragen`, `gehezuFach('${s.id}')`, { gross: true });
   });
   html += ordnerkachel("+ weitere Fachbereiche", "folgen, sobald Skripte hochgeladen sind", "", { gross: true, dashed: true });
   return html;
 }
-
+ 
 function renderSubject() {
   const f = aktuellesFach();
   let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz }]);
   html += kopf(f.titel, `Az. ${f.az}`);
+ 
+  if (f.kapitel) {
+    html += `<div class="section-label">KAPITEL</div>`;
+    f.kapitel.forEach(k => {
+      const n = alleFragenMitThema(k).length;
+      html += ordnerkachel(k.titel, `${k.topics.length} Themen · ${n} Fragen · eigene Prüfung`, `gehezuKapitel('${k.id}')`, { gross: true });
+    });
+    return html;
+  }
+ 
   html += `<div class="section-label">PRÜFUNG</div>`;
   html += ordnerkachel("Prüfung – alle Themen gemischt", "bei jedem Start neu zufällig zusammengestellt", "gehezuPruefung()", { akzent: true });
   html += `<div class="section-label" style="margin-top:14px;">THEMENGEBIETE ZUM NACHSCHLAGEN</div>`;
@@ -834,20 +1103,40 @@ function renderSubject() {
   }
   return html;
 }
-
-function renderTopic() {
+ 
+function renderKapitel() {
   const f = aktuellesFach();
-  const t = aktuellesThema();
+  const k = aktuellesKapitel();
   let html = breadcrumb([
     { label: "Start", onClick: "gehezuHome()" },
     { label: f.kurz, onClick: `gehezuFach('${f.id}')` },
-    { label: t.kurz },
+    { label: k.kurz },
   ]);
+  html += kopf(k.titel, `Az. ${f.az} · ${k.kurz}`);
+  html += `<div class="section-label">PRÜFUNG</div>`;
+  html += ordnerkachel("Prüfung – Themen dieses Kapitels gemischt", "bei jedem Start neu zufällig zusammengestellt", "gehezuPruefung()", { akzent: true });
+  html += `<div class="section-label" style="margin-top:14px;">THEMEN ZUM NACHSCHLAGEN</div>`;
+  k.topics.forEach(t => {
+    html += ordnerkachel(t.titel, `${t.fragen.length} Übungsfragen`, `gehezuThema('${t.id}')`);
+  });
+  return html;
+}
+ 
+function renderTopic() {
+  const f = aktuellesFach();
+  const t = aktuellesThema();
+  const crumbs = [{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }];
+  if (f.kapitel) {
+    const k = aktuellesKapitel();
+    crumbs.push({ label: k.kurz, onClick: `gehezuKapitel('${k.id}')` });
+  }
+  crumbs.push({ label: t.kurz });
+  let html = breadcrumb(crumbs);
   html += `<h2>${esc(t.titel)}</h2>`;
   t.nachschlagen.forEach((block, i) => {
     html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4><p class="body-text">${esc(block.t)}</p></div>`;
   });
-
+ 
   const fragen = t.fragen;
   if (fragen.length > 0) {
     const erg = ergebnisseFuerThema();
@@ -863,15 +1152,27 @@ function renderTopic() {
   }
   return html;
 }
-
+ 
+function examBreadcrumb(letzterLabel) {
+  const f = aktuellesFach();
+  const crumbs = [{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }];
+  if (f.kapitel) {
+    const k = aktuellesKapitel();
+    crumbs.push({ label: k.kurz, onClick: `gehezuKapitel('${k.id}')` });
+  }
+  crumbs.push({ label: letzterLabel });
+  return breadcrumb(crumbs);
+}
+ 
 function renderExamSetup() {
   const f = aktuellesFach();
-  const pool = alleFragenMitThema(f);
-  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }, { label: "Prüfung" }]);
+  const pool = examPool();
+  let html = examBreadcrumb("Prüfung");
+  const titelZiel = f.kapitel ? aktuellesKapitel().titel : f.titel;
   const optionen = [5, 10, 15, pool.length].filter((v, i, a) => a.indexOf(v) === i && v <= pool.length);
   html += `<div class="center-card">
     <h2 style="font-size:20px;">Prüfung starten</h2>
-    <p class="body-text" style="margin-bottom:18px;">Fragen aus allen Themengebieten von ${esc(f.titel)} werden zufällig gemischt. Jede neue Prüfung stellt eine neue, willkürliche Auswahl und Reihenfolge zusammen.</p>
+    <p class="body-text" style="margin-bottom:18px;">Fragen aus allen Themen von ${esc(titelZiel)} werden zufällig gemischt. Jede neue Prüfung stellt eine neue, willkürliche Auswahl und Reihenfolge zusammen.</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;">
       <label style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);">Anzahl Fragen:</label>
       <select onchange="setAnzahl(this.value)">
@@ -882,10 +1183,9 @@ function renderExamSetup() {
   </div>`;
   return html;
 }
-
+ 
 function renderExamActive() {
-  const f = aktuellesFach();
-  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }, { label: "Prüfung" }]);
+  let html = examBreadcrumb("Prüfung");
   const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
   const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
   html += `<div class="section-label">PRÜFUNG · ${beantwortet}/${state.pruefungsfragen.length} beantwortet · ${richtig} richtig</div>`;
@@ -899,11 +1199,10 @@ function renderExamActive() {
   <button onclick="examAbbrechen()" style="margin-top:16px;background:transparent;border:none;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;text-decoration:underline;">Prüfung abbrechen</button>`;
   return html;
 }
-
+ 
 function renderExamDone() {
-  const f = aktuellesFach();
   const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
-  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }, { label: "Prüfung" }]);
+  let html = examBreadcrumb("Prüfung");
   html += `<div class="center-card">
     <div style="margin-bottom:10px;">${stempel(richtig === state.pruefungsfragen.length ? "richtig" : "teilweise")}</div>
     <h2 style="margin:10px 0 6px 0;">${richtig} von ${state.pruefungsfragen.length} richtig</h2>
@@ -915,11 +1214,12 @@ function renderExamDone() {
   </div>`;
   return html;
 }
-
+ 
 function render() {
   let html = "";
   if (state.screen === "home") html = renderHome();
   else if (state.screen === "subject") html = renderSubject();
+  else if (state.screen === "kapitel") html = renderKapitel();
   else if (state.screen === "topic") html = renderTopic();
   else if (state.screen === "exam") {
     if (!state.pruefungAktiv) html = renderExamSetup();
@@ -931,8 +1231,9 @@ function render() {
   }
   document.getElementById("app").innerHTML = html;
 }
-
+ 
 render();
 </script>
 </body>
 </html>
+ 
