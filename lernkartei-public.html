@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernkartei · Verwaltung</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+:root{
+  --ink:#1F2A3D; --muted:#5B6472; --border:#C9CABF; --bg:#EDEEE7; --card:#F7F7F3;
+  --accent:#8B2635; --green:#3F6B4F; --amber:#B5762A; --red:#8B2635;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);font-family:'IBM Plex Sans',sans-serif;color:var(--ink);}
+.wrap{max-width:680px;margin:0 auto;padding:36px 20px 60px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px;}
+h1{font-family:'Fraunces',serif;font-weight:700;font-size:28px;margin:0;}
+h2{font-family:'Fraunces',serif;font-weight:700;font-size:24px;margin:0 0 16px 0;}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:6px 0 20px 0;line-height:1.35;}
+h4{font-family:'Fraunces',serif;font-weight:600;font-size:16.5px;margin:0 0 8px 0;}
+.sub{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:2px;}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.06em;margin:6px 0 10px 0;}
+.breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+.breadcrumb .sep{color:#9A9C90;}
+.breadcrumb button{background:none;border:none;padding:0;color:var(--muted);cursor:pointer;text-decoration:underline;font:inherit;}
+.breadcrumb .current{color:var(--ink);font-weight:600;}
+.tile{position:relative;text-align:left;width:100%;padding:16px 16px 14px;border-radius:3px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;margin-bottom:12px;}
+.tile.gross{padding:22px;font-size:18px;}
+.tile.akzent{border-color:var(--accent);}
+.tile.dashed{border:1.5px dashed var(--border);background:transparent;cursor:default;color:#9A9C90;}
+.tile:hover:not(.dashed){box-shadow:0 2px 6px rgba(31,42,61,0.10);}
+.tile .tab{position:absolute;top:-8px;left:16px;width:34px;height:8px;background:var(--border);border-radius:3px 3px 0 0;}
+.tile.akzent .tab{background:var(--accent);}
+.tile.dashed .tab{background:var(--bg);}
+.tile .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin-bottom:4px;}
+.tile.gross .ttl{font-size:18px;}
+.tile .meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);}
+.tile.akzent .meta{color:var(--accent);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:18px 20px;margin-bottom:12px;}
+.num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.06em;margin-bottom:6px;}
+.body-text{margin:0;font-size:14.5px;color:#3A4152;line-height:1.6;}
+.karte{background:var(--card);border:1px solid var(--border);border-left:none;border-radius:4px;padding:28px 30px 26px 34px;position:relative;box-shadow:0 1px 2px rgba(31,42,61,.06);margin-bottom:16px;}
+.karte .perf{position:absolute;left:0;top:0;bottom:0;width:14px;border-left:2px dashed var(--border);}
+.karte .toprow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
+.opt{display:block;width:100%;text-align:left;padding:11px 14px;border-radius:3px;border:1.5px solid var(--border);background:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);cursor:pointer;margin-bottom:9px;}
+.opt.selected{border-color:var(--ink);background:var(--bg);}
+.opt.correct{border-color:var(--green);background:#EAF1EB;}
+.opt.wrong{border-color:var(--red);background:#F6E9EA;}
+.opt[disabled]{cursor:default;}
+textarea{width:100%;border:1.5px solid var(--border);border-radius:3px;padding:10px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);resize:vertical;box-sizing:border-box;outline:none;}
+textarea[disabled]{background:var(--bg);}
+button.primary{background:var(--ink);color:var(--card);border:none;padding:9px 20px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.03em;cursor:pointer;}
+button.primary:disabled{background:var(--border);cursor:default;}
+button.ghost{background:transparent;border:1px solid var(--border);color:var(--ink);padding:8px 16px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;}
+button.ghost:disabled{color:var(--border);cursor:default;}
+button.danger{background:var(--accent);color:var(--card);border:none;padding:11px 26px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.04em;cursor:pointer;}
+.stamp{display:inline-block;border:3px solid var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.12em;padding:4px 14px;border-radius:3px;transform:rotate(-3deg);font-size:13px;}
+.stamp.richtig{border-color:var(--green);color:var(--green);}
+.stamp.teilweise{border-color:var(--amber);color:var(--amber);}
+.stamp.falsch{border-color:var(--red);color:var(--red);}
+.solution{margin-top:20px;border-top:1px solid var(--border);padding-top:18px;}
+.solution-box{background:var(--bg);border-left:3px solid var(--ink);padding:12px 14px;border-radius:2px;}
+.solution-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:5px;}
+.progressbar{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;}
+.progressbar span{width:22px;height:6px;border-radius:3px;background:var(--border);cursor:pointer;opacity:.55;}
+.progressbar span.active{opacity:1;}
+.progressbar span.richtig{background:var(--green);}
+.progressbar span.teilweise{background:var(--amber);}
+.progressbar span.falsch{background:var(--red);}
+.navrow{display:flex;justify-content:space-between;margin-top:20px;}
+.center-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:26px;text-align:center;}
+.self-grade{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+.self-grade button{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 12px;border-radius:3px;cursor:pointer;border:1.5px solid var(--border);background:#fff;}
+.self-grade button.richtig-btn{border-color:var(--green);color:var(--green);}
+.self-grade button.teilweise-btn{border-color:var(--amber);color:var(--amber);}
+.self-grade button.falsch-btn{border-color:var(--red);color:var(--red);}
+.hinweis{font-size:13px;color:var(--muted);margin:0 0 18px 0;font-style:italic;}
+select{border:1.5px solid var(--border);border-radius:3px;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
+</style>
+</head>
+<body>
+<div class="wrap"><div id="app"></div></div>
+<script>
+
+/* ------------------------------------------------------------------
+   Fachbereich: Kosten- und Leistungsrechnung (KLR) – Modul Vfal90
+------------------------------------------------------------------- */
+
+const TOPICS_KLR = [
+  {
+    id: "grundbegriffe",
+    titel: "Grundbegriffe & Abgrenzung",
+    kurz: "Grundbegriffe",
+    nachschlagen: [
+      { h: "Kosten vs. Ausgaben/Aufwand", t: "Kosten sind der leistungsbezogene, sachzielorientierte Werteverzehr einer Periode – unabhängig davon, ob dafür Geld fließt. Aufwand ist der bewertete Güterverbrauch laut Finanzbuchhaltung. Beide Größen fallen zeitlich und betragsmäßig oft auseinander." },
+      { h: "Das Vier-Felder-Schema", t: "Gesamtaufwand (Bilanzrechnung) gliedert sich in neutralen Aufwand und Zweckaufwand. Neutraler Aufwand ist betriebsfremd, außerordentlich oder periodenfremd und bleibt in der KLR unberücksichtigt. Zweckaufwand wird entweder unverändert als Kosten verrechnet (Grundkosten) oder nicht als Kosten verrechnet, weil dafür kalkulatorische Kosten angesetzt werden (Anderskosten, z. B. kalkulatorische Abschreibung statt bilanzieller AfA). Zusätzlich gibt es Zusatzkosten: kalkulatorische Kosten ohne jeden Aufwand in der Finanzbuchhaltung (z. B. kalkulatorischer Unternehmerlohn). Gesamtkosten (Kostenrechnung) = Grundkosten + kalkulatorische Kosten (Anderskosten + Zusatzkosten)." },
+      { h: "Merksatz", t: "Grundkosten = Zweckaufwand, der 1:1 als Kosten übernommen wird. Anderskosten ersetzen einen vorhandenen Aufwand durch einen anders bewerteten kalkulatorischen Ansatz. Zusatzkosten haben gar keine Entsprechung im Aufwand." },
+    ],
+    fragen: [
+      { id: "kb-01", typ: "mc", frage: "Welche Aussage zum Verhältnis von Kosten und Ausgaben trifft zu?", optionen: ["Jede Ausgabe ist zugleich eine Kosten, nur zeitversetzt.", "Kosten sind der leistungsbezogene, sachzielorientierte Werteverzehr einer Periode – unabhängig davon, ob dafür Geld fließt.", "Ausgaben entstehen nur in der Kostenrechnung, Kosten nur in der Finanzrechnung.", "Kosten und Ausgaben sind in der Kommunalverwaltung immer identisch."], loesung: 1, erlaeuterung: "Kosten sind der bewertete, leistungsbezogene Verbrauch von Gütern und Diensten einer Periode. Ausgaben betreffen den Geldabfluss – beide Größen können zeitlich und betragsmäßig auseinanderfallen." },
+      { id: "kb-02", typ: "freitext", frage: "Reisekosten von Mitarbeitern der Verwaltung zur Fortbildung 'Doppik in der Kommunalverwaltung' – neutraler Aufwand, Grundkosten, Anderskosten oder Zusatzkosten? Begründe kurz.", musterloesung: "Grundkosten: Es handelt sich um betriebsbezogenen Zweckaufwand (Reisekosten für dienstliche Fortbildung), der unverändert in gleicher Höhe als Kosten übernommen wird." },
+      { id: "kb-03", typ: "mc", frage: "Wie wird die kalkulatorische Abschreibung des Dienstwagens eingeordnet?", optionen: ["Grundkosten", "Anderskosten", "Zusatzkosten", "Neutraler Aufwand"], loesung: 1, erlaeuterung: "Anderskosten: Der bilanziellen AfA steht ein kalkulatorischer Ansatz gegenüber (z. B. auf Wiederbeschaffungswert und individuelle Nutzungsdauer bezogen), der Aufwand wird also nicht 1:1, sondern 'anders' bewertet übernommen." },
+      { id: "kb-04", typ: "mc", frage: "Zinsen für das eingesetzte Eigen- und Fremdkapital in der KLR (kalkulatorische Zinsen) sind ...", optionen: ["reine Grundkosten, da immer ein Aufwand in gleicher Höhe existiert", "eine Mischung aus Anderskosten (für verzinstes Fremdkapital) und Zusatzkosten (für Eigenkapital, dem kein Aufwand gegenübersteht)", "immer neutraler Aufwand", "in der Kommunalverwaltung nicht zulässig"], loesung: 1, erlaeuterung: "Für verzinsliches Fremdkapital besteht bereits ein Aufwand (Zinsaufwand) – der kalkulatorische Ansatz ersetzt ihn ggf. anders bewertet (Anderskosten). Für das Eigenkapital gibt es keinen Aufwand, hier entstehen reine Zusatzkosten." },
+      { id: "kb-05", typ: "freitext", frage: "Die Abschreibung eines nicht mehr genutzten Gerätehauses im Stadtpark – wie wird sie eingeordnet und warum?", musterloesung: "Neutraler Aufwand (betriebsfremd): Das Gerätehaus wird nicht mehr genutzt, der Werteverzehr dient also nicht der eigentlichen Leistungserstellung und fließt nicht in die Kostenrechnung ein." },
+      { id: "kb-06", typ: "freitext", frage: "Ein außerordentlich hoher Forderungsausfall des Eigenbetriebs 'Trinkwasser' durch Insolvenz eines Unternehmens – neutraler Aufwand oder Kosten?", musterloesung: "Neutraler Aufwand (außerordentlich): Es handelt sich um ein einmaliges, untypisches Ereignis, das nicht regelmäßig mit der laufenden Leistungserstellung zusammenhängt und daher nicht in die Kostenrechnung einfließt." },
+      { id: "kb-07", typ: "mc", frage: "Zinserträge aus einer Geldanlage der Kommune sind in der Abgrenzung Aufwand/Ertrag ...", optionen: ["Aufwand", "Ertrag", "weder Aufwand noch Ertrag"], loesung: 1, erlaeuterung: "Zinserträge sind ein Ertrag – ein Wertezuwachs der Periode." },
+      { id: "kb-08", typ: "mc", frage: "Der Abschluss einer Versicherung, bei dem nur der Vertrag unterschrieben wird und noch keine Zahlung erfolgt, ist ...", optionen: ["Aufwand", "Ertrag", "weder Aufwand noch Ertrag"], loesung: 2, erlaeuterung: "Der reine Vertragsabschluss ohne Zahlung oder Werteverzehr ist weder Aufwand noch Ertrag – erst die spätere Prämienzahlung bzw. der Versicherungsschutzverbrauch wird relevant." },
+    ],
+  },
+  {
+    id: "abschreibung",
+    titel: "Kalkulatorische Abschreibung",
+    kurz: "Abschreibung",
+    nachschlagen: [
+      { h: "Warum wird abgeschrieben?", t: "Anlagegüter verlieren durch Nutzung, technischen Fortschritt, natürlichen Verschleiß oder außergewöhnliche Ereignisse an Wert. Die Abschreibung (AfA = Absetzung für Abnutzung) verteilt die Anschaffungskosten auf die Nutzungsdauer, damit später aus den erwirtschafteten Mitteln eine Ersatzinvestition finanziert werden kann (Abschreibungskreislauf)." },
+      { h: "Lineare AfA – Formeln", t: "AfA-Betrag = Anschaffungs-/Wiederbeschaffungswert ÷ Nutzungsdauer. AfA-Satz (%) = 100 % ÷ Nutzungsdauer. Bei linearer Abschreibung bleiben die jährlichen Beträge über die gesamte Nutzungsdauer gleich." },
+      { h: "Bilanzielle vs. kalkulatorische Abschreibung", t: "Bilanziell: Basis sind die tatsächlichen Anschaffungs-/Herstellungskosten, Nutzungsdauer nach steuerlichen AfA-Tabellen, Zweck ist die Bilanzpolitik, Rechtsgrundlage Steuerrecht/HGB. Kalkulatorisch: Basis ist der Wiederbeschaffungswert (Tageswert), Nutzungsdauer wird betriebsindividuell geschätzt, Zweck ist die Substanzerhaltung, keine gesetzliche Grundlage." },
+      { h: "Warum Wiederbeschaffungswert?", t: "Damit die Kommune aus den kalkulierten Gebühren/Kosten tatsächlich in der Lage ist, das Anlagegut zum aktuellen (oft gestiegenen) Preis zu ersetzen – nicht nur zum historischen Anschaffungspreis." },
+    ],
+    fragen: [
+      { id: "afa-01", typ: "mc", frage: "Auf welcher Wertbasis werden kalkulatorische Abschreibungen in der Kommunalverwaltung grundsätzlich berechnet?", optionen: ["Anschaffungs- bzw. Herstellungswert", "Wiederbeschaffungswert (Tageswert)", "Buchwert laut Bilanz des Vorjahres", "Verkehrswert des Grundstücks"], loesung: 1, erlaeuterung: "Anders als in der Handelsbilanz wird in der KLR meist der Wiederbeschaffungswert angesetzt, damit die spätere Ersatzbeschaffung finanziert werden kann (Substanzerhaltung)." },
+      { id: "afa-02", typ: "freitext", frage: "Bei Anschaffungskosten von 100.000 € und einer Nutzungsdauer von 5 Jahren: Wie hoch sind AfA-Betrag und AfA-Satz?", musterloesung: "AfA-Betrag = 100.000 € / 5 = 20.000 € pro Jahr. AfA-Satz = 100 % / 5 = 20 % pro Jahr." },
+      { id: "afa-03", typ: "freitext", frage: "Stadtwerke Neustadt: LKW-Anschaffungswert 100.000 €, betriebsgewöhnliche Nutzungsdauer lt. Abschreibungstabelle 4 Jahre. Wiederbeschaffungswert 150.000 €, tatsächliche Nutzungsdauer 10 Jahre. Berechne die bilanzielle und die kalkulatorische Abschreibung pro Jahr sowie jeweils den Restwert am Ende des 1. Nutzungsjahres.", musterloesung: "Bilanziell: 100.000 € / 4 Jahre = 25.000 €/Jahr; Restwert Ende Jahr 1 = 100.000 − 25.000 = 75.000 €. Kalkulatorisch: 150.000 € / 10 Jahre = 15.000 €/Jahr; Restwert Ende Jahr 1 = 150.000 − 15.000 = 135.000 €." },
+      { id: "afa-04", typ: "freitext", frage: "Kehrmaschine Stadt S: Anschaffungswert 80.000 €, Nutzungsdauer 8 Jahre. Berechne die lineare Abschreibung für das 1. und 2. Nutzungsjahr sowie die Restwerte, wenn vom Anschaffungswert abgeschrieben wird (Fall a).", musterloesung: "AfA = 80.000 € / 8 = 10.000 €/Jahr. Restwert nach Jahr 1: 80.000 − 10.000 = 70.000 €. Restwert nach Jahr 2: 70.000 − 10.000 = 60.000 €." },
+      { id: "afa-05", typ: "freitext", frage: "Gleiche Kehrmaschine (Anschaffungswert 80.000 €, Nutzungsdauer 8 Jahre), aber die Preise für Kehrmaschinen sind in den letzten 8 Jahren um 40 % gestiegen. Berechne die kalkulatorische Abschreibung vom Wiederbeschaffungswert für das 1. und 2. Nutzungsjahr sowie die jeweiligen Restwerte.", musterloesung: "Wiederbeschaffungswert = 80.000 € × 1,4 = 112.000 €. AfA = 112.000 € / 8 = 14.000 €/Jahr. Restwert nach Jahr 1: 112.000 − 14.000 = 98.000 €. Restwert nach Jahr 2: 98.000 − 14.000 = 84.000 €." },
+      { id: "afa-06", typ: "mc", frage: "Warum ist bei der Kehrmaschine der ursprüngliche Anschaffungspreis nicht als Kosten in der Kostenrechnung anzusetzen?", optionen: ["Weil Anschaffungspreise grundsätzlich nie Kosten sind", "Weil nur der auf die Nutzungsdauer verteilte, ggf. am Wiederbeschaffungswert orientierte Werteverzehr (kalkulatorische Abschreibung) periodengerecht und verursachungsgerecht ist, nicht der einmalige Anschaffungspreis als Ganzes", "Weil die Stadt die Maschine ohnehin nie ersetzen wird", "Weil der Marktstandsgeld-Ertrag höher als der Anschaffungspreis ist"], loesung: 1, erlaeuterung: "Die Anschaffung ist eine einmalige Ausgabe; für die Kostenrechnung wird der Werteverzehr periodengerecht über die Nutzungsdauer verteilt (Abschreibung), damit jede Periode nur den ihr zurechenbaren Anteil trägt." },
+      { id: "afa-07", typ: "freitext", frage: "Nenne zwei Unterschiede zwischen bilanzieller und kalkulatorischer Abschreibung.", musterloesung: "Z. B.: (1) Abschreibungsbasis – bilanziell Anschaffungs-/Herstellungskosten, kalkulatorisch meist Wiederbeschaffungswert. (2) Zweck – bilanziell Bilanzpolitik/Steuerrecht, kalkulatorisch Substanzerhaltung. Weitere mögliche Unterschiede: Nutzungsdauer (gesetzliche AfA-Tabelle vs. betriebsindividuelle Schätzung) und Rechtsgrundlage (Steuerrecht/HGB vs. keine)." },
+    ],
+  },
+  {
+    id: "zinsen",
+    titel: "Kalkulatorische Zinsen",
+    kurz: "Zinsen",
+    nachschlagen: [
+      { h: "Was sind kalkulatorische Zinsen?", t: "Berechnete Zinsen in der KLR für das gesamte eingesetzte betriebsnotwendige Kapital – auch für Eigenkapital, obwohl dafür keine direkten Zinszahlungen anfallen. Merksatz: Kalkulatorische Zinsen machen die versteckten Kosten des Eigenkapitals sichtbar." },
+      { h: "Warum werden sie berechnet?", t: "Eigenkapital ist anderen zinsbringenden Anlagen entzogen (Opportunitätskosten). Der Verzicht auf mögliche Zinserträge ist Ressourcenverbrauch. Sie sorgen für vollständige Kostenerfassung und bessere Vergleichbarkeit zwischen Betrieben durch einen einheitlichen Mischzinssatz." },
+      { h: "Restwertmethode", t: "Es wird nur der jährlich sinkende Restwert verzinst: Kalkulatorische Zinsen (Jahr n) = Restwert am Jahresende × Zinssatz/100. Die Zinsbelastung sinkt mit abnehmendem Restwert – bildet die tatsächliche Belastung relativ gut ab." },
+      { h: "Durchschnittswertmethode (Halbwertmethode)", t: "Es wird mit einem konstanten Durchschnittswert gerechnet: ohne Rest-/Endwert = Anschaffungswert / 2; mit Rest-/Endwert = (Anfangswert + Endwert) / 2. Kalkulatorische Zinsen (pro Jahr) = Durchschnittswert × Zinssatz/100. Die Zinsen bleiben über alle Jahre konstant – einfache, schnelle Berechnung." },
+      { h: "Bilanzielle vs. kalkulatorische Zinsen", t: "Bilanzielle Zinsen = nur Fremdkapital × vereinbarter Zinssatz. Kalkulatorische Zinsen = (Fremdkapital + Eigenkapital) × marktüblicher Zinssatz. Kalkulatorische Zinsen berücksichtigen zusätzlich die Opportunitätskosten des Eigenkapitals und ermöglichen realistische Vergleiche sowie verursachungsgerechte Gebührenkalkulation." },
+    ],
+    fragen: [
+      { id: "zi-01", typ: "freitext", frage: "Durchschnittlich gebundenes Kapital 30.000 €, kalkulatorischer Zinssatz 5 %. Wie hoch sind die kalkulatorischen Zinsen pro Jahr?", musterloesung: "Kalkulatorische Zinsen = 30.000 € × 5 % = 1.500 € pro Jahr." },
+      { id: "zi-02", typ: "freitext", frage: "Bauhof Musterstadt: Fremdkapital (Bankdarlehen) 200.000 € zu 4 % p. a., Eigenkapital 300.000 €, marktüblicher Zinssatz 5 % p. a. Berechne die bilanziellen und die kalkulatorischen Zinsen.", musterloesung: "Bilanzielle Zinsen = 200.000 € × 4 % = 8.000 €/Jahr (nur Fremdkapital). Kalkulatorische Zinsen = (200.000 € + 300.000 €) × 5 % = 500.000 € × 5 % = 25.000 €/Jahr (Fremd- und Eigenkapital zum marktüblichen Satz)." },
+      { id: "zi-03", typ: "mc", frage: "Warum sind kalkulatorische Zinsen für die Gebührenkalkulation der Verwaltung wichtig?", optionen: ["Weil sie die einzigen Kosten sind, die überhaupt anfallen", "Weil sie sicherstellen, dass auch das gebundene Kapital (inkl. Eigenkapital) als Kostenfaktor berücksichtigt wird und Gebühren die vollen Kosten decken", "Weil sie gesetzlich vorgeschriebene Bankzinsen ersetzen", "Weil sie ausschließlich für private Unternehmen gelten"], loesung: 1, erlaeuterung: "Kalkulatorische Zinsen sorgen für eine verursachungsgerechte, vollständige Kostenverrechnung – ohne sie würde das Eigenkapital scheinbar 'kostenlos' erscheinen und die Gebühren würden die tatsächlichen Kosten nicht decken." },
+      { id: "zi-04", typ: "freitext", frage: "Filteranlage: Anschaffungswert 100.000 €, Nutzungsdauer 10 Jahre, kalkulatorischer Pauschalzinssatz 8 %. Berechne die kalkulatorischen Zinsen für das 1. Nutzungsjahr nach der Restwertmethode (Hinweis: erst linear abschreiben, dann den Restwert verzinsen).", musterloesung: "Jährliche Abschreibung = 100.000 € / 10 = 10.000 €. Restwert Ende Jahr 1 = 100.000 − 10.000 = 90.000 €. Kalkulatorische Zinsen Jahr 1 = 90.000 € × 8 % = 7.200 €." },
+      { id: "zi-05", typ: "freitext", frage: "Gleiche Filteranlage (Anschaffungswert 100.000 €, 8 % Zinssatz): Berechne die kalkulatorischen Zinsen nach der Durchschnittswertmethode.", musterloesung: "Durchschnittswert = Anschaffungswert / 2 = 100.000 € / 2 = 50.000 €. Kalkulatorische Zinsen = 50.000 € × 8 % = 4.000 € jährlich (bleibt über alle Jahre konstant)." },
+      { id: "zi-06", typ: "mc", frage: "Welchen Nachteil hat die Durchschnittswertmethode gegenüber der Restwertmethode?", optionen: ["Sie ist deutlich aufwändiger zu berechnen", "Sie bildet die tatsächliche, im Zeitverlauf sinkende Kapitalbindung nicht ab, sondern rechnet über die gesamte Nutzungsdauer mit einem konstanten Wert", "Sie kann nur bei Fremdkapital angewendet werden", "Sie berücksichtigt keine Zinssätze"], loesung: 1, erlaeuterung: "Die Durchschnittswertmethode ist einfach und sorgt für einen gleichmäßigen, konstanten Gebührenverlauf, spiegelt aber nicht wider, dass das gebundene Kapital durch die Abschreibung tatsächlich jährlich sinkt – das leistet die Restwertmethode besser." },
+    ],
+  },
+  {
+    id: "kapital",
+    titel: "Betriebsnotwendiges Kapital",
+    kurz: "Kapital",
+    nachschlagen: [
+      { h: "Grundschema", t: "Betriebsnotwendiges Anlagevermögen (b.AV) + betriebsnotwendiges Umlaufvermögen (b.UV) = betriebsnotwendiges Vermögen. Davon wird das Abzugskapital subtrahiert: = betriebsnotwendiges Kapital. Dieses ist die Grundlage für die kalkulatorischen Zinsen." },
+      { h: "Anlagevermögen", t: "Grundstücke unterliegen keiner Wertminderung → Durchschnittswert = Anschaffungswert. Gebäude, Maschinen und Fuhrpark werden je nach Methode mit Restwert oder Durchschnittswert angesetzt." },
+      { h: "Umlaufvermögen", t: "Immer mit Durchschnittswerten: b.UV = (b.UV am Jahresanfang + b.UV am Jahresende) / 2. Umfasst Vorräte, Forderungen, Zahlungsmittel (Bank, Kasse)." },
+      { h: "Abzugskapital", t: "Zinslos überlassenes Kapital, z. B. Beiträge, Zuschüsse, Zuweisungen Dritter (etwa ein Investitionszuschuss des Landes). Es wird abgezogen, weil dafür keine kalkulatorischen Zinsen anzusetzen sind." },
+    ],
+    fragen: [
+      { id: "bk-01", typ: "mc", frage: "Was zählt zum sogenannten Abzugskapital, das bei der Ermittlung des betriebsnotwendigen Kapitals abgezogen wird?", optionen: ["Verzinsliches Fremdkapital wie Investitionskredite", "Unverzinsliches Fremdkapital, z. B. Zuschüsse, Beiträge oder Zuweisungen Dritter", "Das gesamte Eigenkapital der Kommune", "Nur liquide Mittel der Kasse"], loesung: 1, erlaeuterung: "Abzugskapital ist unverzinslich zur Verfügung stehendes Kapital (z. B. Investitionszuschüsse). Es wird abgezogen, weil der Betrieb dafür keine eigenen kalkulatorischen Zinsen tragen muss." },
+      { id: "bk-02", typ: "freitext", frage: "Gas und Wasser GmbH Schnöttentrop – betriebsnotwendige Vermögenswerte: Gebäude 2.100.000 €, Maschinen 1.500.000 €, BGA 300.000 €, Fuhrpark 120.000 € (Restwerte); Vorräte 140.000 €, Forderungen 100.000 €, Zahlungsmittel 40.000 € (Durchschnittswerte). Investitionszuschuss des Landes: 100.000 €. Kalkulatorischer Zinssatz 8 %. Ermittle das betriebsnotwendige Kapital und die kalkulatorischen Zinsen.", musterloesung: "Summe Anlagevermögen = 2.100.000 + 1.500.000 + 300.000 + 120.000 = 4.020.000 €. Summe Umlaufvermögen = 140.000 + 100.000 + 40.000 = 280.000 €. Betriebsnotwendiges Vermögen = 4.300.000 €. − Abzugskapital 100.000 € = Betriebsnotwendiges Kapital 4.200.000 €. Kalkulatorische Zinsen = 4.200.000 € × 8 % = 336.000 €." },
+      { id: "bk-03", typ: "freitext", frage: "Eine Kommune hat (Restwerte) unbebaute Grundstücke 1.240.000 €, bebaute Grundstücke 8.300.000 €, Infrastrukturvermögen 27.450.000 €; (Durchschnittswerte) Betriebsstoffe 89.000 €, öffentlich-rechtliche Forderungen 6.090.000 €, privatrechtliche Forderungen 1.100.000 €. Landeszuschuss 800.000 €, kalkulatorischer Zinssatz 7,5 %. Ermittle das betriebsnotwendige Kapital und die kalkulatorischen Zinsen.", musterloesung: "Betriebsnotwendiges AV = 1.240.000 + 8.300.000 + 27.450.000 = 36.990.000 €. Betriebsnotwendiges UV = 89.000 + 6.090.000 + 1.100.000 = 7.279.000 €. Betriebsnotwendiges Vermögen = 44.269.000 €. − Abzugskapital 800.000 € = Betriebsnotwendiges Kapital 43.469.000 €. Kalkulatorische Zinsen = 43.469.000 € × 7,5 % = 3.260.175 €." },
+      { id: "bk-04", typ: "mc", frage: "Warum werden unbebaute Grundstücke stets mit dem vollen Anschaffungswert (nicht mit einem Restwert) angesetzt?", optionen: ["Weil Grundstücke steuerlich begünstigt sind", "Weil Grundstücke keiner Wertminderung/Abnutzung unterliegen", "Weil Grundstücke nicht betriebsnotwendig sein können", "Weil dafür keine kalkulatorischen Zinsen anfallen"], loesung: 1, erlaeuterung: "Grundstücke nutzen sich nicht ab, es gibt also keine Abschreibung und keinen sinkenden Restwert – Durchschnittswert = Anschaffungswert." },
+      { id: "bk-05", typ: "freitext", frage: "Nenne die Formel zur Ermittlung des betriebsnotwendigen Kapitals und erkläre kurz die Bestandteile.", musterloesung: "Betriebsnotwendiges Kapital = betriebsnotwendiges Anlagevermögen (b.AV, Restwerte oder Durchschnittswerte je nach Methode) + betriebsnotwendiges Umlaufvermögen (b.UV, immer Durchschnittswerte) − Abzugskapital (zinslos überlassenes Kapital). Es ist die Bemessungsgrundlage für die kalkulatorischen Zinsen." },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------
+   Fachbereich: SGB II – Grundsicherung für Arbeitsuchende (Bürgergeld)
+------------------------------------------------------------------- */
+const TOPICS_SGB2 = [
+  {
+    id: "leistungsberechtigung",
+    titel: "Leistungsberechtigung (§ 7 SGB II)",
+    kurz: "Leistungsberechtigung",
+    nachschlagen: [
+      { h: "Von Bürgergeld zu Grundsicherung für Arbeitsuchende", t: "Seit dem 1. Juli 2026 heißt die Leistung wieder amtlich 'Grundsicherung für Arbeitsuchende' (Grundsicherungsgeld) statt 'Bürgergeld'. Die Reform stärkt den Vermittlungsvorrang in Arbeit und regelt Mitwirkungspflichten strenger. Bereits erteilte Bürgergeld-Bescheide bleiben gültig; der Begriff 'Bürgergeld' darf in Schreiben noch bis Ende 2026 mitverwendet werden. Die grundsätzliche Prüfsystematik ist unverändert geblieben." },
+      { h: "Wer ist leistungsberechtigt? (§ 7 Abs. 1 SGB II)", t: "Vier Voraussetzungen müssen kumulativ vorliegen: (1) Vollendung des 15. Lebensjahres und noch nicht Erreichen der Altersgrenze für die Regelaltersrente, (2) Erwerbsfähigkeit (mind. 3 Std./Tag unter den üblichen Bedingungen des Arbeitsmarktes erwerbsfähig), (3) Hilfebedürftigkeit (§ 9 SGB II – Bedarf kann nicht/nicht ausreichend aus eigenem Einkommen/Vermögen gedeckt werden), (4) gewöhnlicher Aufenthalt in der Bundesrepublik Deutschland." },
+      { h: "Bedarfsgemeinschaft", t: "Zur Bedarfsgemeinschaft gehören die leistungsberechtigte Person, ihr Partner/ihre Partnerin sowie im Haushalt lebende unverheiratete Kinder unter 25 Jahren, soweit diese ihren Lebensunterhalt nicht aus eigenem Einkommen/Vermögen decken können. Die Bedarfsgemeinschaft ist die Rechengröße für Bedarf und Einkommensanrechnung." },
+      { h: "Leistungsausschlüsse (§ 7 Abs. 5, Abs. 1 Satz 2)", t: "Ausgeschlossen sind u. a. Auszubildende und Studierende, deren Ausbildung dem Grunde nach BAföG-/BAB-förderfähig ist (Ausnahmen möglich, z. B. Mehrbedarfe oder Darlehen), sowie EU-Bürger in bestimmten Konstellationen ohne materielles Aufenthaltsrecht." },
+    ],
+    fragen: [
+      { id: "lb-01", typ: "mc", frage: "Welche Voraussetzung gehört NICHT zu den vier Leistungsvoraussetzungen nach § 7 Abs. 1 SGB II?", optionen: ["Vollendung des 15. Lebensjahres, noch keine Regelaltersgrenze erreicht", "Erwerbsfähigkeit", "Deutsche Staatsangehörigkeit", "Hilfebedürftigkeit"], loesung: 2, erlaeuterung: "Die deutsche Staatsangehörigkeit ist keine Voraussetzung – entscheidend ist stattdessen der gewöhnliche Aufenthalt in der Bundesrepublik Deutschland. Die vier Voraussetzungen sind Altersgrenze, Erwerbsfähigkeit, Hilfebedürftigkeit und gewöhnlicher Aufenthalt." },
+      { id: "lb-02", typ: "freitext", frage: "Was versteht man unter einer Bedarfsgemeinschaft und wer gehört typischerweise dazu?", musterloesung: "Die Bedarfsgemeinschaft umfasst die leistungsberechtigte Person, ihren Partner/ihre Partnerin sowie unverheiratete, im Haushalt lebende Kinder unter 25 Jahren, die ihren Bedarf nicht selbst decken können. Sie ist die maßgebliche Rechengröße für die Bedarfs- und Einkommensermittlung." },
+      { id: "lb-03", typ: "mc", frage: "Wie hoch muss die Erwerbsfähigkeit mindestens sein, damit die Voraussetzung nach § 7 SGB II erfüllt ist?", optionen: ["Mindestens 3 Stunden täglich unter den üblichen Bedingungen des Arbeitsmarktes", "Mindestens 6 Stunden täglich", "Vollzeitfähigkeit (8 Stunden täglich)", "Erwerbsfähigkeit spielt keine Rolle"], loesung: 0, erlaeuterung: "Erwerbsfähig ist, wer nicht wegen Krankheit oder Behinderung auf absehbare Zeit außerstande ist, mindestens 3 Stunden täglich unter den üblichen Bedingungen des allgemeinen Arbeitsmarktes erwerbstätig zu sein." },
+      { id: "lb-04", typ: "freitext", frage: "Warum sind Studierende, deren Ausbildung dem Grunde nach BAföG-förderfähig ist, grundsätzlich von SGB-II-Leistungen ausgeschlossen?", musterloesung: "Weil für diese Personengruppe vorrangig andere Sicherungssysteme (BAföG/BAB) vorgesehen sind – das SGB II soll nicht das vorrangige Ausbildungsförderungsrecht ersetzen. Ausnahmen (z. B. Mehrbedarfe, Darlehen in Härtefällen) bleiben möglich." },
+    ],
+  },
+  {
+    id: "bedarf",
+    titel: "Bedarfsermittlung",
+    kurz: "Bedarf",
+    nachschlagen: [
+      { h: "Regelbedarf (§ 20 SGB II)", t: "Der Regelbedarf deckt laufende Bedarfe des täglichen Lebens (Ernährung, Kleidung, Hausrat, Strom ohne Heizung, Körperpflege, Teilhabe). Stand 2026: Regelbedarfsstufe 1 (Alleinstehende/Alleinerziehende) 563 €/Monat, Regelbedarfsstufe 2 (Partner in Bedarfsgemeinschaft) je 506 €/Monat (zusammen 1.012 €). Diese Sätze gelten unverändert seit 1.1.2024 (Besitzschutzregelung verhindert eine Absenkung, obwohl die Fortschreibung 2026 rechnerisch niedriger läge)." },
+      { h: "Mehrbedarfe (§ 21 SGB II)", t: "Zuschläge zum Regelbedarf für besondere Lebenslagen, z. B. Alleinerziehende (gestaffelt 12–60 % des Regelbedarfs je nach Anzahl/Alter der Kinder), werdende Mütter ab der 13. Schwangerschaftswoche (17 %), Menschen mit Behinderung bei bestimmten Teilhabeleistungen, kostenaufwändige Ernährung aus medizinischen Gründen." },
+      { h: "Kosten der Unterkunft und Heizung – KdU (§ 22 SGB II)", t: "Miete/Nebenkosten und Heizkosten werden zusätzlich zum Regelbedarf übernommen, soweit sie angemessen sind. In der einjährigen Karenzzeit zu Beginn des Leistungsbezugs gelten erleichterte Regeln zur Angemessenheit der Unterkunftskosten – seit 1. Juli 2026 ist die Übernahme auch in der Karenzzeit gedeckelt (bis zum 1,5-fachen des angemessenen Werts), während zuvor die tatsächlichen Kosten in dieser Zeit voll übernommen wurden." },
+      { h: "Gesamtbedarf", t: "Gesamtbedarf = Regelbedarf + ggf. Mehrbedarfe + angemessene Kosten der Unterkunft und Heizung (KdU)." },
+    ],
+    fragen: [
+      { id: "bd-01", typ: "freitext", frage: "Eine alleinstehende Person hat 2026 keinen Mehrbedarf und eine angemessene Warmmiete von 450 €. Wie hoch ist der monatliche Gesamtbedarf?", musterloesung: "Gesamtbedarf = Regelbedarf 563 € + KdU 450 € = 1.013 € pro Monat." },
+      { id: "bd-02", typ: "mc", frage: "Was zählt NICHT zu den Kosten der Unterkunft und Heizung (KdU)?", optionen: ["Kaltmiete", "Heizkosten", "Nebenkosten (Betriebskosten)", "Kosten für Ernährung und Kleidung"], loesung: 3, erlaeuterung: "Ernährung und Kleidung sind Bestandteile des Regelbedarfs, nicht der KdU. KdU umfasst Miete/Nebenkosten und Heizkosten." },
+      { id: "bd-03", typ: "freitext", frage: "In welcher Spanne bewegt sich der Mehrbedarf für Alleinerziehende nach § 21 SGB II?", musterloesung: "12 bis 60 Prozent des maßgebenden Regelbedarfs, gestaffelt nach Anzahl und Alter der Kinder." },
+      { id: "bd-04", typ: "freitext", frage: "Was ist die 'Karenzzeit' bei den Kosten der Unterkunft und was hat sich daran zum 1. Juli 2026 geändert?", musterloesung: "Die Karenzzeit ist das erste Jahr des Leistungsbezugs, in dem die Angemessenheitsprüfung der Unterkunftskosten erleichtert ist. Bis zur Reform wurden die tatsächlichen Kosten in dieser Zeit voll übernommen; seit 1. Juli 2026 ist die Übernahme auch in der Karenzzeit gedeckelt, und zwar bis zum 1,5-fachen des angemessenen Werts." },
+    ],
+  },
+  {
+    id: "einkommen",
+    titel: "Einkommensanrechnung (§ 11 SGB II)",
+    kurz: "Einkommen",
+    nachschlagen: [
+      { h: "Grundsatz", t: "Alle Einnahmen in Geld oder Geldeswert sind grundsätzlich als Einkommen zu berücksichtigen, soweit sie nicht ausdrücklich ausgenommen sind (§ 11a SGB II, z. B. bestimmte zweckbestimmte Leistungen). Vom Einkommen werden Freibeträge/Absetzbeträge abgezogen – erst der verbleibende Betrag mindert den Anspruch." },
+      { h: "Absetzbeträge (§ 11b SGB II)", t: "Von Erwerbseinkommen werden u. a. abgesetzt: Steuern, Sozialversicherungsbeiträge, Werbungskostenpauschale/Versicherungspauschale sowie ein gestaffelter Erwerbstätigenfreibetrag: bis 100 € vollständig anrechnungsfrei (Grundfreibetrag), vom Betrag zwischen 100 € und 520 € werden 20 % zusätzlich nicht angerechnet, vom Betrag zwischen 520 € und 1.000 € (bzw. 1.200 € bei Kind in der Bedarfsgemeinschaft) weitere 30 %." },
+      { h: "Was zählt nicht als Einkommen", t: "Bestimmte zweckbestimmte Leistungen (z. B. Kindergeld direkt für das Kind, sofern es dessen eigenen Bedarf deckt), Leistungen der Grundsicherung selbst sowie einzelne im Gesetz benannte Einnahmen zählen nicht bzw. nur eingeschränkt als anrechenbares Einkommen." },
+    ],
+    fragen: [
+      { id: "ek-01", typ: "freitext", frage: "Eine Person hat ein monatliches Bruttoerwerbseinkommen, von dem nach Abzug von Steuern/Sozialabgaben 400 € netto verbleiben. Wie hoch ist der Erwerbstätigenfreibetrag nach der gestaffelten Regel (100 € frei, danach 20 % bis 520 €)?", musterloesung: "Die ersten 100 € sind voll anrechnungsfrei. Vom restlichen Betrag (400 € − 100 € = 300 €) werden 20 % zusätzlich freigestellt: 300 € × 20 % = 60 €. Gesamtfreibetrag = 100 € + 60 € = 160 €. Anzurechnen sind somit 400 € − 160 € = 240 €." },
+      { id: "ek-02", typ: "mc", frage: "Warum werden bei Erwerbseinkommen gestaffelte Freibeträge gewährt, statt es voll anzurechnen?", optionen: ["Um den Verwaltungsaufwand zu erhöhen", "Um einen Anreiz zu erhalten, dass sich Erwerbstätigkeit trotz Leistungsbezugs finanziell lohnt", "Weil Erwerbseinkommen steuerlich ohnehin nicht angerechnet werden darf", "Die Freibeträge gelten nur für Selbstständige"], loesung: 1, erlaeuterung: "Die gestaffelten Freibeträge sollen sicherstellen, dass zusätzliche Erwerbsarbeit sich für Leistungsberechtigte finanziell lohnt (Lohnabstandsgebot/Arbeitsanreiz), statt Einkommen 1:1 auf die Leistung anzurechnen." },
+      { id: "ek-03", typ: "freitext", frage: "Nenne zwei Beispiele für Absetzbeträge, die vor der eigentlichen Einkommensanrechnung vom Bruttoeinkommen abgezogen werden.", musterloesung: "Z. B. Steuern (Lohnsteuer), Sozialversicherungsbeiträge, die Versicherungspauschale sowie ggf. Werbungskosten/Fahrtkosten zum Arbeitsplatz und Kinderbetreuungskosten." },
+    ],
+  },
+  {
+    id: "vermoegen",
+    titel: "Vermögensprüfung (§ 12 SGB II)",
+    kurz: "Vermögen",
+    nachschlagen: [
+      { h: "Grundsatz", t: "Hilfebedürftig ist nur, wer seinen Bedarf nicht aus zu berücksichtigendem Vermögen decken kann. Vermögen wird daher vor der Bewilligung geprüft; geschütztes ('Schon-')Vermögen bleibt anrechnungsfrei." },
+      { h: "Karenzzeit beim Vermögen", t: "Im ersten Jahr des Leistungsbezugs (Karenzzeit) gilt ein deutlich erhöhter Vermögensfreibetrag; erst danach greift die reguläre, niedrigere Vermögensgrenze. Mit der Reform zum 1. Juli 2026 wurde der Spielraum beim Vermögen insgesamt enger gefasst als zuvor." },
+      { h: "Geschütztes Vermögen", t: "Angemessenes selbstgenutztes Wohneigentum, ein angemessenes Kraftfahrzeug je erwerbsfähiger Person in der Bedarfsgemeinschaft sowie eine angemessene Altersvorsorge zählen unabhängig von der Karenzzeit grundsätzlich zum geschützten Vermögen." },
+    ],
+    fragen: [
+      { id: "vm-01", typ: "mc", frage: "Was gilt für den Vermögensfreibetrag während der einjährigen Karenzzeit zu Beginn des Leistungsbezugs?", optionen: ["Er ist niedriger als danach", "Er ist deutlich höher als die reguläre Vermögensgrenze nach der Karenzzeit", "Es gibt in der Karenzzeit gar keinen Vermögensfreibetrag", "Die Karenzzeit betrifft nur die Unterkunftskosten, nicht das Vermögen"], loesung: 1, erlaeuterung: "Im ersten Jahr des Leistungsbezugs gilt ein erhöhter Vermögensfreibetrag, um den Zugang zu Leistungen zu erleichtern. Erst nach Ablauf der Karenzzeit greift die niedrigere reguläre Vermögensgrenze." },
+      { id: "vm-02", typ: "freitext", frage: "Nenne zwei Vermögensgegenstände, die grundsätzlich als geschütztes ('Schon-')Vermögen gelten.", musterloesung: "Z. B. ein angemessenes selbstgenutztes Hausgrundstück/Eigentumswohnung, ein angemessenes Kraftfahrzeug je erwerbsfähiger Person in der Bedarfsgemeinschaft, sowie eine angemessene Altersvorsorge." },
+    ],
+  },
+  {
+    id: "gesamtschema",
+    titel: "Gesamtprüfschema & Anspruchshöhe",
+    kurz: "Gesamtschema",
+    nachschlagen: [
+      { h: "Prüfreihenfolge", t: "1. Persönlicher Anwendungsbereich (§ 7): Sind die vier Grundvoraussetzungen erfüllt und liegt kein Ausschlussgrund vor? 2. Bedarfsermittlung: Regelbedarf + Mehrbedarfe + angemessene KdU = Gesamtbedarf. 3. Vermögensprüfung (§ 12): Ist zu berücksichtigendes Vermögen vorhanden, das den Bedarf deckt? 4. Einkommensanrechnung (§ 11): Anzurechnendes Einkommen nach Abzug der Freibeträge ermitteln. 5. Anspruchshöhe: Gesamtbedarf − anzurechnendes Einkommen = monatlicher Leistungsanspruch." },
+      { h: "Formel", t: "Anspruch = (Regelbedarf + Mehrbedarfe + angemessene KdU) − anzurechnendes Einkommen. Übersteigt das anzurechnende Einkommen (oder das zu berücksichtigende Vermögen) den Gesamtbedarf, besteht keine Hilfebedürftigkeit und damit kein Anspruch." },
+    ],
+    fragen: [
+      { id: "gs-01", typ: "freitext", frage: "Eine alleinstehende Person hat einen Gesamtbedarf (Regelbedarf + KdU) von 1.013 € und ein anzurechnendes Einkommen von 240 €. Kein zu berücksichtigendes Vermögen. Wie hoch ist der monatliche Leistungsanspruch?", musterloesung: "Anspruch = Gesamtbedarf − anzurechnendes Einkommen = 1.013 € − 240 € = 773 € pro Monat." },
+      { id: "gs-02", typ: "mc", frage: "In welcher Reihenfolge wird im SGB-II-Prüfschema grundsätzlich vorgegangen?", optionen: ["Erst Anspruchshöhe berechnen, dann prüfen ob die Person überhaupt leistungsberechtigt ist", "Persönlicher Anwendungsbereich → Bedarf → Vermögen/Einkommen → Anspruchshöhe", "Nur Einkommensprüfung, alle anderen Schritte sind optional", "Die Reihenfolge ist beliebig, da alle Prüfschritte unabhängig voneinander sind"], loesung: 1, erlaeuterung: "Erst wird geklärt, ob die Person überhaupt zum leistungsberechtigten Personenkreis gehört (§ 7), dann der Bedarf ermittelt, dann Vermögen und Einkommen geprüft – erst daraus ergibt sich die konkrete Anspruchshöhe." },
+      { id: "gs-03", typ: "freitext", frage: "Was passiert, wenn das anzurechnende Einkommen einer Person höher ist als ihr Gesamtbedarf?", musterloesung: "Dann besteht keine Hilfebedürftigkeit im Sinne des § 9 SGB II, da der Bedarf bereits aus eigenem Einkommen gedeckt werden kann – es entsteht kein Leistungsanspruch." },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------
+   Fachbereich: Recht der Gefahrenabwehr NRW
+------------------------------------------------------------------- */
+const TOPICS_GA = [
+  {
+    id: "gefahrbegriff",
+    titel: "Die Gefahr als Tatbestandsvoraussetzung (§ 14 I OBG)",
+    kurz: "Gefahrbegriff",
+    nachschlagen: [
+      { h: "Definition (Preußisches OVG)", t: "Gefahr ist ein Zustand, der bei ungehindertem Geschehensablauf mit hinreichender Wahrscheinlichkeit zu einem Schaden an einem geschützten Rechtsgut der öffentlichen Sicherheit oder Ordnung führt. Drei Prüfungselemente: (1) objektive Würdigung, (2) möglicher Schaden, (3) hinreichende Wahrscheinlichkeit." },
+      { h: "Objektive Würdigung (Ex-ante-Sicht)", t: "Maßstab ist nicht das subjektive Empfinden eines einzelnen Beamten, sondern die Einschätzung eines verständigen, besonnenen Amtsträgers im Moment des Einschreitens (ex-ante), nicht rückblickend (ex-post)." },
+      { h: "Schaden und Wahrscheinlichkeit", t: "Ein Schaden ist jede nicht unerhebliche Verletzung eines geschützten Rechtsguts – entweder Minderung (Funktionsstörung) oder Zerstörung. Bloße Belästigungen zählen nur, wenn sie das zumutbare Maß überschreiten. Hinreichende Wahrscheinlichkeit ist mehr als eine bloße Vermutung, aber weniger als Gewissheit. Korrelationsprinzip: Je wertvoller das bedrohte Rechtsgut, desto geringer die Anforderungen an die Wahrscheinlichkeit." },
+      { h: "Gefahr vs. Störung", t: "Bei einer Gefahr droht der Schaden erst noch. Bei einer Störung ist der Schaden bereits eingetreten, wirkt aber fort oder kann sich verschlimmern – die Behörde darf trotzdem eingreifen, um die Fortwirkung zu beenden." },
+      { h: "Anscheinsgefahr, Scheingefahr, Gefahrenverdacht", t: "Anscheinsgefahr: Die Lage erscheint im Moment des Einschreitens (ex-ante) objektiv gefährlich, stellt sich nachträglich aber als harmlos heraus – das Handeln bleibt rechtmäßig. Scheingefahr (Putativgefahr): Die Behörde nimmt subjektiv eine Gefahr an, die ein besonnener Durchschnittsbetrachter objektiv nicht erkannt hätte – das Handeln ist rechtswidrig. Gefahrenverdacht: Die Behörde weiß es nicht sicher, hat aber ernstzunehmende Anhaltspunkte – erlaubt nur vorläufige Aufklärungsmaßnahmen." },
+    ],
+    fragen: [
+      { id: "ga-01", typ: "freitext", frage: "Nenne die drei Prüfungselemente der Gefahrendefinition nach dem Preußischen OVG.", musterloesung: "(1) Objektive Würdigung der Situation aus Ex-ante-Sicht, (2) Möglichkeit eines Schadens an einem geschützten Rechtsgut, (3) hinreichende Wahrscheinlichkeit des Schadenseintritts." },
+      { id: "ga-02", typ: "mc", frage: "Ein Polizist hält einen täuschend echten Spielzeugrevolver für eine echte Waffe und schießt daher besonnen zurück, obwohl bei sorgfältiger Prüfung erkennbar gewesen wäre, dass es sich um eine Attrappe handelt. Um welche Konstellation handelt es sich?", optionen: ["Anscheinsgefahr", "Scheingefahr (Putativgefahr)", "Gefahrenverdacht", "Latente Gefahr"], loesung: 1, erlaeuterung: "Da bei sorgfältigem Hinsehen erkennbar gewesen wäre, dass keine Gefahr bestand, handelt es sich um eine Scheingefahr – das Handeln ist rechtswidrig. Wäre die Attrappe auch bei sorgfältiger ex-ante-Prüfung nicht erkennbar gewesen, läge eine (rechtmäßige) Anscheinsgefahr vor." },
+      { id: "ga-03", typ: "freitext", frage: "Was besagt das Korrelationsprinzip bei der Wahrscheinlichkeitsprüfung?", musterloesung: "Je wertvoller bzw. bedeutsamer das bedrohte Rechtsgut ist (z. B. Leben), desto geringer dürfen die Anforderungen an die Wahrscheinlichkeit des Schadenseintritts sein, damit schon von einer Gefahr gesprochen wird." },
+      { id: "ga-04", typ: "mc", frage: "Warum darf eine Behörde auch bei einer bereits eingetretenen Störung noch eingreifen?", optionen: ["Weil Störungen rechtlich irrelevant sind", "Weil die Störung fortwirken oder sich verschlimmern kann", "Weil jede Störung automatisch eine Straftat ist", "Eingreifen ist bei Störungen grundsätzlich unzulässig"], loesung: 1, erlaeuterung: "Eine Störung ist ein bereits eingetretener Schaden, der aber fortwirkt oder sich verschlimmern kann – deshalb bleibt ein Einschreiten zur Beendigung der Fortwirkung möglich und geboten." },
+    ],
+  },
+  {
+    id: "gefahrenarten",
+    titel: "Gefahrenarten im Überblick",
+    kurz: "Gefahrenarten",
+    nachschlagen: [
+      { h: "Konkrete vs. abstrakte Gefahr", t: "Konkrete Gefahr: ein bestimmter Einzelfall an einem bestimmten Ort zu einer bestimmten Zeit (Grundlage für eine Einzelmaßnahme/Ordnungsverfügung). Abstrakte Gefahr: generell-hypothetisch gedacht, nicht auf den Einzelfall bezogen (Grundlage für eine Verordnung, nicht für eine Einzelmaßnahme)." },
+      { h: "Erhebliche und gegenwärtige Gefahr", t: "Erhebliche Gefahr: bedroht ein wichtiges Rechtsgut oder Gemeinschaftsgut, keine Bagatelle. Gegenwärtige Gefahr: der Schaden beginnt bereits oder steht unmittelbar bevor, nicht erst irgendwann in der Zukunft." },
+      { h: "Gefahr im Verzug, latente Gefahr, Gefahrenverdacht", t: "Gefahr im Verzug: so dringend, dass keine Zeit bleibt, die eigentlich zuständige Behörde einzuschalten – eine andere Stelle darf einspringen (Eilkompetenz). Latente Gefahr: schlummert noch im Verborgenen, ohne aktuellen Anlass – hier darf noch nicht eingeschritten werden. Gefahrenverdacht: ernstzunehmende Anhaltspunkte ohne Gewissheit – erlaubt nur Aufklärungsmaßnahmen." },
+      { h: "Anscheinsgefahr und Scheingefahr", t: "Anscheinsgefahr: sah ex-ante objektiv gefährlich aus, war es aber nicht – Handeln bleibt rechtmäßig. Scheingefahr: bei sorgfältigem Hinsehen erkennbar keine echte Gefahr – Handeln ist rechtswidrig." },
+    ],
+    fragen: [
+      { id: "gart-01", typ: "mc", frage: "Ein generelles Leinenzwang-Gebot für alle gefährlichen Hunde in einer Stadt basiert auf welcher Gefahrenart?", optionen: ["Konkrete Gefahr", "Abstrakte Gefahr", "Gefahr im Verzug", "Latente Gefahr"], loesung: 1, erlaeuterung: "Ein genereller, nicht auf den Einzelfall bezogener Regelungsbedarf für eine ganze Fallgruppe ist eine abstrakte Gefahr – typische Grundlage für eine Verordnung." },
+      { id: "gart-02", typ: "freitext", frage: "Ein bissiger Hund läuft gerade frei in einer Fußgängerzone herum. Um welche Gefahrenart handelt es sich, und warum?", musterloesung: "Konkrete Gefahr: Es handelt sich um einen bestimmten Einzelfall an einem bestimmten Ort zu einer bestimmten Zeit, der eine sofortige Einzelmaßnahme rechtfertigt." },
+      { id: "gart-03", typ: "mc", frage: "Die Polizei handelt nachts, weil das eigentlich zuständige Ordnungsamt nicht erreichbar ist. Welche Gefahrenart/Konstellation liegt vor?", optionen: ["Latente Gefahr", "Abstrakte Gefahr", "Gefahr im Verzug", "Scheingefahr"], loesung: 2, erlaeuterung: "Gefahr im Verzug liegt vor, wenn keine Zeit bleibt, die eigentlich zuständige Behörde einzuschalten – eine andere Stelle darf dann im Wege der Eilkompetenz einspringen." },
+      { id: "gart-04", typ: "freitext", frage: "Ein Neubaugebiet rückt langsam an eine bestehende, laute Sportanlage heran, ohne dass aktuell ein konkreter Anlass zum Einschreiten besteht. Welche Gefahrenart liegt vor und was folgt daraus?", musterloesung: "Latente Gefahr: Sie schlummert noch im Hintergrund ohne aktuellen Anlass. Es darf noch nicht eingeschritten werden – ein Einschreiten ist erst zulässig, wenn sich die Gefahr weiter konkretisiert." },
+    ],
+  },
+  {
+    id: "rechtsgrundlage",
+    titel: "Rechtsgrundlage & Ermächtigungsgrundlagen",
+    kurz: "Rechtsgrundlage",
+    nachschlagen: [
+      { h: "Vorbehalt des Gesetzes", t: "Als belastender Verwaltungsakt bedarf eine Ordnungsverfügung einer ausreichenden Ermächtigungsgrundlage ('Kein Handeln ohne Gesetz'). Bloße Aufgabenzuweisungen (z. B. § 1 I OBG) reichen dafür nicht aus – nötig sind konkrete, gesetzlich eingeräumte Eingriffsbefugnisse." },
+      { h: "Stufenfolge: Vom Speziellen zum Allgemeinen", t: "1. Spezialgesetzliche Eingriffsgrundlage (z. B. Bauordnungsrecht) hat immer Vorrang. 2. Fehlt eine solche, kommen ordnungsbehördliche Standardmaßnahmen nach § 24 OBG i. V. m. PolG NRW in Betracht (z. B. Befragung, Vorladung, Identitätsfeststellung, Platzverweisung, Ingewahrsamnahme, Durchsuchung, Sicherstellung). 3. Erst wenn beides nicht greift, wird auf die Generalklausel § 14 Abs. 1 OBG zurückgegriffen." },
+      { h: "Wortlaut § 14 Abs. 1 OBG (sinngemäß)", t: "'Die Ordnungsbehörden können die notwendigen Maßnahmen treffen, um eine im einzelnen Falle bestehende Gefahr für die öffentliche Sicherheit oder Ordnung abzuwehren.' In diesem einen Satz stecken bereits fast alle Prüfungspunkte des Gesamtschemas." },
+      { h: "Historische Einordnung", t: "1794: Allgemeines Landrecht (ALR) – erste gesetzliche Definition der Polizei zur Erhaltung von Ruhe, Sicherheit und Ordnung. 1882: Kreuzberg-Urteil des Preußischen Oberverwaltungsgerichts – die Polizei darf nur noch zur Gefahrenabwehr tätig werden, nicht mehr zur allgemeinen Wohlfahrtspflege (Geburtsstunde des modernen, rechtsstaatlich begrenzten Gefahrenabwehrrechts). 1949: endgültige Trennung von Ordnungsbehörden (Verwaltung) und Polizei (Vollzug)." },
+    ],
+    fragen: [
+      { id: "rg-01", typ: "mc", frage: "In welcher Reihenfolge wird die passende Ermächtigungsgrundlage geprüft?", optionen: ["Generalklausel → Standardmaßnahme → Spezialgesetz", "Spezialgesetz → Standardmaßnahme → Generalklausel", "Standardmaßnahme → Generalklausel → Spezialgesetz", "Die Reihenfolge ist beliebig"], loesung: 1, erlaeuterung: "Vom Speziellen zum Allgemeinen: Erst Spezialgesetz, dann Standardmaßnahme, erst zuletzt die Generalklausel (Subsidiaritätsprinzip der Generalklausel)." },
+      { id: "rg-02", typ: "freitext", frage: "Warum reicht eine bloße Aufgabenzuweisung wie § 1 Abs. 1 OBG nicht als Ermächtigungsgrundlage für eine belastende Maßnahme aus?", musterloesung: "Weil der Vorbehalt des Gesetzes eine konkrete, gesetzlich eingeräumte Eingriffsbefugnis gegenüber einem Adressaten verlangt. Eine Aufgabenzuweisung beschreibt nur, wofür die Behörde zuständig ist, nicht, welche konkreten Maßnahmen sie gegenüber Bürgern anordnen darf." },
+      { id: "rg-03", typ: "mc", frage: "Welches historische Ereignis gilt als Geburtsstunde des modernen, auf Gefahrenabwehr beschränkten Polizeirechts?", optionen: ["Das Allgemeine Landrecht 1794", "Das Kreuzberg-Urteil des Preußischen Oberverwaltungsgerichts 1882", "Die Nachkriegsordnung 1949", "Die Einführung des OBG NRW"], loesung: 1, erlaeuterung: "Das Kreuzberg-Urteil von 1882 beschränkte die Polizei erstmals auf die Gefahrenabwehr und untersagte ihr die allgemeine Wohlfahrtspflege." },
+      { id: "rg-04", typ: "freitext", frage: "Nenne zwei Beispiele für ordnungsbehördliche Standardmaßnahmen nach § 24 OBG i. V. m. PolG NRW.", musterloesung: "Z. B. Befragung/Auskunftspflicht, Vorladung, Identitätsfeststellung, Platzverweisung, Ingewahrsamnahme, Durchsuchung von Personen/Sachen, Sicherstellung, Verwahrung." },
+    ],
+  },
+  {
+    id: "schutzgut",
+    titel: "Schutzgut: Öffentliche Sicherheit & Ordnung",
+    kurz: "Schutzgut",
+    nachschlagen: [
+      { h: "Öffentliche Sicherheit", t: "Umfasst drei Bereiche: (1) Individualrechtsgüter – Leben, Gesundheit, Freiheit, Ehre, Vermögen und Eigentum einzelner Personen; (2) Gemeinschaftsgüter – Schutz des Staates und seiner Einrichtungen, Schutz der geschriebenen Rechtsordnung (jeder Verstoß gegen eine Rechtsnorm zählt), Schutz von Kollektivgütern wie Umwelt, Wasser, Gesundheit der Allgemeinheit; (3) Schutz der Rechtsordnung selbst." },
+      { h: "Öffentliche Ordnung (subsidiär)", t: "Ungeschriebene Regeln des Anstands, die für ein geordnetes Zusammenleben unerlässlich sind – kommt nur zum Zug, wenn die öffentliche Sicherheit nicht greift (kein Gesetzesverstoß, aber grober Verstoß gegen Moral-/Sittenvorstellungen). Beispiele aus der Praxis: Laserdrome, Peep-Shows, Zeigen der Reichskriegsflagge. Der Begriff ist wegen seiner Unbestimmtheit umstritten." },
+      { h: "Prüfreihenfolge und öffentliches Interesse", t: "Die öffentliche Sicherheit wird immer zuerst geprüft, die öffentliche Ordnung nur subsidiär. Zusätzlich muss überhaupt ein öffentliches Schutzinteresse betroffen sein – bei einer rein privaten, selbstgewählten Gefährdung (jemand gefährdet sich freiwillig selbst) fehlt dieses Interesse meist, außer bei drohendem Suizid." },
+    ],
+    fragen: [
+      { id: "sg-01", typ: "mc", frage: "Welche Aussage zur öffentlichen Ordnung trifft zu?", optionen: ["Sie wird immer zuerst geprüft, vor der öffentlichen Sicherheit", "Sie ist ein Auffangbegriff für ungeschriebene Anstandsregeln und wird nur subsidiär geprüft, wenn die öffentliche Sicherheit nicht greift", "Sie umfasst ausschließlich geschriebene Gesetze", "Sie spielt im Ordnungsrecht keine Rolle mehr"], loesung: 1, erlaeuterung: "Die öffentliche Ordnung erfasst ungeschriebene, für das geordnete Zusammenleben unerlässliche Regeln und wird nur geprüft, wenn kein Verstoß gegen die (vorrangige) öffentliche Sicherheit vorliegt." },
+      { id: "sg-02", typ: "freitext", frage: "Zu welchen zwei Gruppen gehören die von der öffentlichen Sicherheit geschützten Rechtsgüter, und nenne je ein Beispiel.", musterloesung: "Individualrechtsgüter (z. B. Leben, Gesundheit, Eigentum einzelner Personen) und Gemeinschaftsgüter (z. B. Schutz der Rechtsordnung, Schutz staatlicher Einrichtungen, Schutz von Umwelt/Trinkwasser als Kollektivgut)." },
+      { id: "sg-03", typ: "mc", frage: "Warum verletzt bereits jeder Verstoß gegen eine geschriebene Rechtsnorm die öffentliche Sicherheit?", optionen: ["Weil die Rechtsordnung selbst als Gemeinschaftsgut geschützt ist", "Weil jede Rechtsnorm automatisch auch die öffentliche Ordnung schützt", "Weil Gesetzesverstöße nur die öffentliche Ordnung betreffen", "Das ist falsch – nicht jeder Rechtsverstoß betrifft die öffentliche Sicherheit"], loesung: 0, erlaeuterung: "Die geschriebene Rechtsordnung selbst ist ein Gemeinschaftsgut im Rahmen der öffentlichen Sicherheit – jeder Verstoß gegen eine Rechtsnorm (Gesetz, Verordnung, Satzung) verletzt sie automatisch." },
+    ],
+  },
+  {
+    id: "zustaendigkeit",
+    titel: "Zuständigkeit (sachlich, instanziell, § 6 OBG)",
+    kurz: "Zuständigkeit",
+    nachschlagen: [
+      { h: "Sachliche Zuständigkeit: Ordnungsbehörde vs. Polizei", t: "Primär sind die Ordnungsbehörden zuständig (§ 1 Abs. 1 OBG) – die Polizei ist gegenüber der Ordnungsbehörde subsidiär (nachrangig). Prüfweg: 1. Spezialzuweisung nach §§ 10–13 POG NRW (z. B. Kriminalitätsbekämpfung, Verkehrsüberwachung)? 2. Liegt eine allgemeine Polizeiaufgabe nach § 1 I PolG vor? 3. Subsidiaritätsprüfung: Kann die Ordnungsbehörde die Verzugsgefahr rechtzeitig selbst abwehren? Nur wenn nein, ist die Polizei zuständig ('Recht des ersten Zugriffs')." },
+      { h: "Verzugsgefahr", t: "Ein Zustand, in dem in kürzester Zeit ein Schaden an einem bedeutsamen Rechtsgut (Leben, Gesundheit, Freiheit, wichtige Gemeinschaftsgüter) droht und ein Abwarten den Erfolg der Gefahrenabwehr vereiteln würde." },
+      { h: "Instanzielle Zuständigkeit – die Pyramide (§ 5 OBG)", t: "Dreistufiger Aufbau: örtliche Ordnungsbehörden (Regelzuständigkeit, § 5 Abs. 1 OBG, ca. 396 Behörden) bilden die breite Basis; Kreisordnungsbehörden (§ 5 Abs. 2 OBG, 52) und Landesordnungsbehörden (§ 5 Abs. 2 OBG, 5) sind nur zuständig, wenn ihnen Aufgaben durch Spezialgesetz ausdrücklich übertragen wurden. Merksatz: Im Zweifel ist die örtliche Ordnungsbehörde zuständig." },
+      { h: "Außerordentliche Zuständigkeit (§ 6 OBG)", t: "Vertikaler Bypass (§ 6 Abs. 1 OBG): Eine höhere Instanz darf bei Gefahr im Verzug (zeitlicher Engpass) Aufgaben einer niederen Instanz übernehmen. Ursprungsprinzip (§ 6 Abs. 2 OBG): Bei bezirksübergreifenden Gefahren bleibt die Behörde zuständig, in deren Bezirk die Gefahr entstanden ist. Wer im Eilfall handelt, trägt zunächst selbst die Kosten – kein automatischer Erstattungsanspruch gegen die eigentlich zuständige Behörde." },
+      { h: "Die drei goldenen Regeln", t: "1. Instanzielle Prüfung: Wer ist laut Plan dran (LOB, KOB, örtliche OB)? 2. Eilkompetenz prüfen (§ 6 Abs. 1): Liegt Gefahr im Verzug vor? 3. Ursprung klären (§ 6 Abs. 2): Wo hat die Gefahr angefangen?" },
+    ],
+    fragen: [
+      { id: "zu-01", typ: "mc", frage: "Welche Behörde ist nach dem Regelfall grundsätzlich für die Gefahrenabwehr zuständig?", optionen: ["Immer die Polizei", "Die örtliche Ordnungsbehörde (Regelzuständigkeit nach § 5 Abs. 1 OBG)", "Immer die Landesordnungsbehörde", "Es gibt keine feste Regelzuständigkeit"], loesung: 1, erlaeuterung: "Die örtliche Ordnungsbehörde bildet die breite Basis der Zuständigkeitspyramide und ist im Zweifel zuständig. Kreis- und Landesordnungsbehörden greifen nur bei spezialgesetzlicher Zuweisung." },
+      { id: "zu-02", typ: "freitext", frage: "Wann darf die Polizei anstelle der eigentlich zuständigen Ordnungsbehörde tätig werden?", musterloesung: "Wenn eine Verzugsgefahr vorliegt (in kürzester Zeit droht ein Schaden an einem bedeutsamen Rechtsgut) UND die Ordnungsbehörde die Gefahr nicht rechtzeitig selbst abwehren kann. Die Polizei handelt dann im Wege des 'Rechts des ersten Zugriffs', bis die Ordnungsbehörde übernehmen kann." },
+      { id: "zu-03", typ: "mc", frage: "Was regelt das Ursprungsprinzip nach § 6 Abs. 2 OBG?", optionen: ["Welche Behörde bei einer bezirksübergreifenden Gefahr zuständig bleibt (die des Ursprungsbezirks)", "Wer die Kosten einer Eilmaßnahme trägt", "Die Reihenfolge der Ermächtigungsgrundlagen", "Den Unterschied zwischen Anscheinsgefahr und Scheingefahr"], loesung: 0, erlaeuterung: "Bei Gefahren, die sich über mehrere Bezirke ausbreiten, bleibt die Behörde zuständig, in deren Bezirk die Gefahr ursprünglich entstanden ist." },
+      { id: "zu-04", typ: "freitext", frage: "Muss eine Behörde, die im Eilfall nach § 6 Abs. 1 OBG anstelle einer anderen handelt, sich die Kosten von der eigentlich zuständigen Behörde erstatten lassen können?", musterloesung: "Nein – wer im Eilfall handelt, trägt zunächst selbst die Kosten. Es besteht kein automatischer Erstattungsanspruch gegen die eigentlich zuständige Behörde." },
+    ],
+  },
+  {
+    id: "ermessen",
+    titel: "Rechtsfolge: Ermessen",
+    kurz: "Ermessen",
+    nachschlagen: [
+      { h: "Opportunitätsprinzip", t: "Sind Gefahr und Schutzgut (Tatbestand) bejaht, folgt daraus noch nicht automatisch 'die Behörde muss handeln'. Nach dem Opportunitätsprinzip (Zweckmäßigkeitsprinzip) entscheidet die Behörde grundsätzlich nach pflichtgemäßem Ermessen, ob und wie sie eingreift." },
+      { h: "Entschließungsermessen und Auswahlermessen", t: "Entschließungsermessen ('Ob'): Wird überhaupt eingeschritten? Auswahlermessen ('Wie'): Welche konkrete Maßnahme wird gewählt? Sie muss geeignet, erforderlich und angemessen sein (Grundsatz der Verhältnismäßigkeit, § 15 OBG)." },
+      { h: "Ermessensreduzierung auf Null", t: "In bestimmten Fällen (z. B. Gefahr im Verzug, hochrangiges bedrohtes Rechtsgut wie Leben, Selbstbindung der Verwaltung durch ständige Praxis) verengt sich der Ermessensspielraum so weit, dass nur noch eine einzige vertretbare Entscheidung übrigbleibt – die Behörde MUSS dann einschreiten (gebundene Entscheidung). Jede andere Entscheidung wäre ein Ermessensfehler." },
+      { h: "Rechtsstellung des Bürgers", t: "Ein Bürger hat grundsätzlich keinen Anspruch darauf, dass die Behörde tatsächlich einschreitet – nur einen Anspruch auf eine ermessensfehlerfreie Entscheidung. Eine Ausnahme gilt, wenn die verletzte Norm auch private (drittschützende) Interessen schützt, z. B. nachbarschützende Vorschriften." },
+    ],
+    fragen: [
+      { id: "erm-01", typ: "freitext", frage: "Was ist der Unterschied zwischen Entschließungsermessen und Auswahlermessen?", musterloesung: "Entschließungsermessen betrifft die Frage 'Ob' überhaupt eingeschritten wird. Auswahlermessen betrifft die Frage 'Wie', also welche konkrete Maßnahme unter mehreren geeigneten Optionen gewählt wird." },
+      { id: "erm-02", typ: "mc", frage: "Wann liegt eine Ermessensreduzierung auf Null vor?", optionen: ["Immer, wenn der Tatbestand einer Norm erfüllt ist", "Wenn in der konkreten Lage nur noch eine einzige vertretbare Entscheidung übrigbleibt und jede andere ein Ermessensfehler wäre", "Nur bei Verkehrsordnungswidrigkeiten", "Wenn die Behörde sich weigert, überhaupt tätig zu werden"], loesung: 1, erlaeuterung: "Ermessensreduzierung auf Null bedeutet, dass sich der Entscheidungsspielraum so weit verengt, dass aus dem 'Kann' faktisch ein 'Muss' wird." },
+      { id: "erm-03", typ: "freitext", frage: "Hat ein Bürger grundsätzlich einen Anspruch darauf, dass eine Behörde bei einer erkannten Gefahr tatsächlich einschreitet? Nenne die Ausnahme.", musterloesung: "Grundsätzlich nein – nur ein Anspruch auf eine ermessensfehlerfreie Entscheidung. Ausnahme: wenn die verletzte Norm auch private Interessen schützt (drittschützende, z. B. nachbarschützende Vorschriften) oder eine Ermessensreduzierung auf Null vorliegt." },
+      { id: "erm-04", typ: "mc", frage: "Welche drei Voraussetzungen muss eine gewählte Maßnahme im Rahmen des Auswahlermessens nach dem Verhältnismäßigkeitsgrundsatz erfüllen?", optionen: ["Billig, schnell, unbürokratisch", "Geeignet, erforderlich, angemessen", "Gesetzlich, mündlich, schriftlich", "Freiwillig, kostenlos, anonym"], loesung: 1, erlaeuterung: "Nach § 15 OBG muss die gewählte Maßnahme geeignet, erforderlich und angemessen (verhältnismäßig im engeren Sinne) sein." },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------
+   Fachbereich: Auslegungsmethoden – Allgemeines Verwaltungsrecht (R2)
+------------------------------------------------------------------- */
+const TOPICS_AVR = [
+  {
+    id: "grundlagen",
+    titel: "Begriff und Grundlagen der Auslegung",
+    kurz: "Grundlagen",
+    nachschlagen: [
+      { h: "Hierarchieverhältnis (Art. 20 Abs. 3 GG)", t: "Der Gesetzgeber ist für die Interessenabwägung zuständig, der Gesetzesanwender (Verwaltung, Gerichte) setzt dessen Vorgaben im Rahmen der Subsumtion um. Eigene Interessenabwägungen darf der Anwender nur bei Ermessensvorschriften vornehmen." },
+      { h: "Warum wird ausgelegt?", t: "Normen sind oft abstrakt formuliert. Der Gesetzesanwender muss daher den objektivierten Willen des Gesetzgebers ermitteln – das ist die Aufgabe der Auslegung. Im Gutachtenstil gehört sie zur Definition des Tatbestands. Ziel ist nicht nur der 'Normzweck', sondern die Gesamtschau aller anerkannten Methoden (BVerwG)." },
+      { h: "Maßstab des BVerfG", t: "Maßgebend ist der in der Norm zum Ausdruck kommende objektivierte Wille des Gesetzgebers, wie er sich aus Wortlaut und Sinnzusammenhang ergibt (st. Rspr., z. B. BVerfGE 1, 299; 11, 126; 105, 135). Die anerkannten Methoden (Wortlaut, Systematik, Sinn und Zweck, Entstehungsgeschichte) ergänzen sich gegenseitig – keine hat einen unbedingten Vorrang." },
+      { h: "Wichtigster Grundsatz", t: "Die Auslegung darf nie gegen den klaren Wortlaut oder den klar erkennbaren Willen des Gesetzgebers verstoßen. Der Richter/Anwender darf die intendierte Regelungskonzeption nicht verfehlen oder verfälschen und keine eigene an deren Stelle setzen (BVerfGE 78, 20). Die Methoden sind gleichrangig – starre Rangfolgen gibt es nicht." },
+    ],
+    fragen: [
+      { id: "avr-gr-01", typ: "mc", frage: "Wann darf der Gesetzesanwender eigene Interessenabwägungen vornehmen?", optionen: ["Immer, wenn ihm die gesetzliche Regelung nicht gefällt", "Nur bei Ermessensvorschriften", "Nur bei Strafgesetzen", "Nie, das ist ausschließlich Aufgabe des Gesetzgebers"], loesung: 1, erlaeuterung: "Nach Art. 20 Abs. 3 GG ist der Gesetzgeber für die Interessenabwägung zuständig; der Anwender setzt dessen Vorgaben im Rahmen der Subsumtion um. Eine eigene Interessenabwägung ist ihm nur dort erlaubt, wo das Gesetz selbst Ermessen einräumt." },
+      { id: "avr-gr-02", typ: "freitext", frage: "Gibt es eine feste Rangfolge zwischen den anerkannten Auslegungsmethoden? Wo liegt trotzdem eine Grenze?", musterloesung: "Nein, es gibt keine starre Rangfolge – Wortlaut, Systematik, Sinn und Zweck sowie Entstehungsgeschichte ergänzen sich gegenseitig und sind grundsätzlich gleichrangig. Die Grenze liegt dort, wo die Auslegung gegen den klaren Wortlaut oder den klar erkennbaren Willen des Gesetzgebers verstoßen würde." },
+      { id: "avr-gr-03", typ: "mc", frage: "Was ist nach dem BVerfG bei der Auslegung maßgeblich?", optionen: ["Der subjektive Wunsch des Rechtsanwenders", "Der in der Norm zum Ausdruck kommende objektivierte Wille des Gesetzgebers, wie er sich aus Wortlaut und Sinnzusammenhang ergibt", "Ausschließlich die neueste Kommentarliteratur", "Die praktischste Lösung für den Einzelfall, unabhängig vom Gesetzestext"], loesung: 1, erlaeuterung: "Ständige Rechtsprechung des BVerfG: maßgeblich ist der objektivierte Wille des Gesetzgebers, wie er sich aus Wortlaut und Sinnzusammenhang der Norm ergibt." },
+    ],
+  },
+  {
+    id: "wortlaut",
+    titel: "1. Wortlautauslegung",
+    kurz: "Wortlaut",
+    nachschlagen: [
+      { h: "Was ist das?", t: "Die sprachliche Bedeutung des geschriebenen Textes wird interpretiert. Definierte Begriffe im Gesetz haben Vorrang; ansonsten ist auf den allgemeinen juristischen Sprachgebrauch abzustellen (ggf. Duden oder Fachliteratur). Der Wortlaut setzt die äußerste Grenze der Auslegung." },
+      { h: "Drei Fallgruppen", t: "Positiv: Der Sachverhalt wird eindeutig vom Wortlaut erfasst → Norm anwendbar. Neutral: nicht ganz klar → weitere Methoden nötig. Negativ: unzweifelhaft nicht erfasst → Norm nicht anwendbar." },
+      { h: "Beispiele", t: "Hundesteuerverordnung erfasst nach reinem Wortlaut keine Katzenbesitzer (negativer Fall). Art. 54 Abs. 2 S. 2 GG: 'anschließende' Wiederwahl (bewusst gewählter Begriff, nicht 'spätere') – nach Unterbrechung durch anderen Kandidaten ist erneute Wahl möglich. Reichsgericht (RGZ 158, 388): Bienen sind keine 'Haustiere' i. S. d. § 833 S. 2 BGB, da sie sich nicht durch Erziehung/Gewöhnung an die Aufsicht des Halters gewöhnen lassen." },
+      { h: "Grenze im Strafrecht", t: "Im Strafrecht gilt ein striktes Verbot der Erweiterung zu Lasten des Täters (Art. 103 Abs. 2 GG – nulla poena sine lege): keine Analogie zu Lasten des Täters über den Wortlaut hinaus." },
+    ],
+    fragen: [
+      { id: "avr-wl-01", typ: "mc", frage: "Eine Hundesteuerverordnung erfasst nach ihrem Wortlaut ausdrücklich nur Hundehalter. Wie ist der Fall eines Katzenbesitzers einzuordnen?", optionen: ["Positiver Fall – die Verordnung ist anwendbar", "Neutraler Fall – weitere Auslegungsmethoden sind zwingend nötig", "Negativer Fall – die Verordnung ist eindeutig nicht anwendbar", "Die Verordnung muss automatisch auf alle Haustiere ausgeweitet werden"], loesung: 2, erlaeuterung: "Der Wortlaut erfasst unzweifelhaft nur Hunde – ein Katzenbesitzer fällt eindeutig nicht darunter (negativer Fall)." },
+      { id: "avr-wl-02", typ: "freitext", frage: "Warum entschied das Reichsgericht, dass Bienen keine 'Haustiere' im Sinne des § 833 S. 2 BGB sind?", musterloesung: "Weil Bienen sich weder durch Erziehung noch durch Gewöhnung an die Aufsicht des Halters gewöhnen lassen – der Begriff 'Haustier' wurde nach dem gewöhnlichen Sprachgebrauch ausgelegt, den Bienen nicht erfüllen." },
+      { id: "avr-wl-03", typ: "mc", frage: "Was gilt im Strafrecht als besondere Grenze der Wortlautauslegung?", optionen: ["Es gibt keine besonderen Grenzen im Strafrecht", "Das Verbot der Analogie zu Lasten des Täters (Art. 103 Abs. 2 GG, nulla poena sine lege)", "Der Wortlaut spielt im Strafrecht keine Rolle", "Nur der Bundesgerichtshof darf Strafnormen auslegen"], loesung: 1, erlaeuterung: "Art. 103 Abs. 2 GG verbietet eine über den Wortlaut hinausgehende Erweiterung von Strafnormen zu Lasten des Täters." },
+    ],
+  },
+  {
+    id: "systematisch",
+    titel: "2. Systematische Auslegung",
+    kurz: "Systematisch",
+    nachschlagen: [
+      { h: "Was ist das?", t: "Die Norm wird nicht isoliert, sondern in der Gesamtschau mit anderen Normen des Gesetzes und der gesamten Rechtsordnung betrachtet ('Einheit der Rechtsordnung'). Grundsätzlich wird von einheitlicher Terminologie ausgegangen (nicht zwingend). Bei Widersprüchen ist richtlinien- und verfassungskonform auszulegen." },
+      { h: "Systematische Analysefragen", t: "In welchem Kontext steht die Norm (weitere Absätze, Nachbarnormen)? Was sagt die Überschrift des Gesetzes/Abschnitts (echte Überschrift vs. unechte in eckigen Klammern, oft vom Herausgeber)? Wird der Begriff bereits in anderen Normen desselben Gesetzes verwendet? Welche Stellung hat die Norm (Ausnahmevorschrift oder Grundregel)?" },
+      { h: "Beispiele", t: "§ 42 VwVfG NRW: Der Wortlaut allein sagt nicht, dass ein Rechenfehler 'offenbar' sein muss – erst aus der Systematik (Überschrift, Gesamtzusammenhang) ergibt sich, dass nur offenbar fehlerhafte Verwaltungsakte berichtigt werden können. Wahlrecht für Ausländer: 'Deutsches Volk' in Art. 20 Abs. 2, Art. 28 Abs. 1 S. 2 GG wird systematisch (Präambel, Art. 1 Abs. 2, Art. 146 GG) so verstanden, dass Ausländer bei Bundestags-/Landtagswahlen grundsätzlich ausgeschlossen sind; bei Kommunalwahlen sind EG-Ausländer dagegen wegen Art. 28 Abs. 1 S. 3 GG i. V. m. Art. 22 AEUV wahlberechtigt." },
+    ],
+    fragen: [
+      { id: "avr-sy-01", typ: "freitext", frage: "Nenne zwei typische Analysefragen der systematischen Auslegung.", musterloesung: "Z. B.: In welchem Kontext steht die Norm (Nachbarnormen, weitere Absätze)? Was sagt die Überschrift des Gesetzes/Abschnitts? Wird derselbe Begriff bereits an anderer Stelle im Gesetz verwendet? Welche Stellung hat die Norm im Regelungsgefüge (Ausnahme oder Grundregel)?" },
+      { id: "avr-sy-02", typ: "mc", frage: "Warum sind bei Bundestags- und Landtagswahlen EU-Ausländer grundsätzlich nicht wahlberechtigt, bei Kommunalwahlen aber EG-Ausländer schon?", optionen: ["Weil es dazu keine gesetzliche Regelung gibt", "Wegen unterschiedlicher systematischer Auslegung: Art. 20 II, 28 I 2 GG sprechen (im Systemzusammenhang mit Präambel, Art. 1 II, 146 GG) vom 'deutschen Volk', während Art. 28 I 3 GG i. V. m. Art. 22 AEUV eine Sonderregelung für Kommunalwahlen trifft", "Weil das Grundgesetz Ausländer generell von jeder Wahl ausschließt", "Weil dies allein von der jeweiligen Gemeinde frei entschieden werden kann"], loesung: 1, erlaeuterung: "Die systematische Auslegung im Kontext von Präambel, Art. 1 Abs. 2 und Art. 146 GG führt zum Ausschluss von Nicht-Deutschen bei Bundestags-/Landtagswahlen, während Art. 28 Abs. 1 S. 3 GG i. V. m. Art. 22 AEUV EG-Ausländern das Kommunalwahlrecht einräumt." },
+      { id: "avr-sy-03", typ: "freitext", frage: "Worin liegt der Unterschied zwischen einer 'echten' und einer 'unechten' Überschrift bei der systematischen Auslegung?", musterloesung: "Echte Überschriften stammen vom Gesetzgeber selbst und können bei der systematischen Auslegung herangezogen werden. Unechte Überschriften (oft in eckigen Klammern) stammen dagegen vom Herausgeber/Verleger und haben keine eigenständige Aussagekraft für den gesetzgeberischen Willen." },
+    ],
+  },
+  {
+    id: "historisch",
+    titel: "3. Historische Auslegung",
+    kurz: "Historisch",
+    nachschlagen: [
+      { h: "Was ist das?", t: "Herangezogen werden die Vorgeschichte des Gesetzes, Gesetzesbegründungen, Protokolle der Gesetzgebungsverhandlungen, frühere Entwürfe und Änderungen des Wortlauts während des Verfahrens. Hat der Gesetzgeber den Wortlaut bewusst in eine bestimmte Richtung verändert, kann dies bei der Auslegung berücksichtigt werden." },
+      { h: "Drei Argumenttypen nach Muthorst (JA 2013)", t: "Abstammungsgeschichte: Jede Norm knüpft an einen früheren Rechtszustand an (was soll bewahrt, was geändert werden?). Schöpfungsgeschichte: Die Norm entsteht aus einem Verfahren, in dem Regelungsbedarf, Programm und Alternativen erwogen wurden. 'Kind seiner Zeit': Das Gesetz wurde unter bestimmten historischen Umständen erlassen – auch das kann für eine Auslegung sprechen." },
+      { h: "Beispiel: Allgemeine Handlungsfreiheit (Art. 2 Abs. 1 GG)", t: "Der reine Wortlaut ließe eine enge 'Persönlichkeitskerntheorie' zu. Historisch zeigt sich: Der Verfassungsgeber wollte ursprünglich 'Jeder kann tun und lassen, was er will', wählte dann nur die elegantere Formulierung des Art. 2 Abs. 1 GG, ohne inhaltlich etwas anderes auszusagen. Ergebnis: Schutz der allgemeinen Handlungsfreiheit (subsidiär, wenn kein spezielleres Grundrecht einschlägig ist)." },
+    ],
+    fragen: [
+      { id: "avr-hi-01", typ: "freitext", frage: "Nenne die drei Argumenttypen der historischen Auslegung nach Muthorst.", musterloesung: "Abstammungsgeschichte (Anknüpfung an einen früheren Rechtszustand), Schöpfungsgeschichte (Entstehung aus einem Verfahren mit Regelungsbedarf, Programm und Alternativen) und 'Kind seiner Zeit' (historische Umstände der Entstehung)." },
+      { id: "avr-hi-02", typ: "mc", frage: "Zu welchem Ergebnis kam die historische Auslegung im Fall des Reiters R, der Art. 2 Abs. 1 GG für sich reklamierte?", optionen: ["Art. 2 Abs. 1 GG schützt nur den 'Kern der Persönlichkeit', Reiten im Wald ist nicht geschützt", "Art. 2 Abs. 1 GG schützt die allgemeine Handlungsfreiheit, weil der Verfassungsgeber inhaltlich 'Jeder kann tun und lassen, was er will' meinte, nur eleganter formuliert", "Art. 2 Abs. 1 GG ist auf Reiten im Wald überhaupt nicht anwendbar", "Die Frage wurde nie höchstrichterlich entschieden"], loesung: 1, erlaeuterung: "Historisch zeigt sich, dass der Verfassungsgeber mit der eleganteren Formulierung inhaltlich nichts anderes aussagen wollte als die ursprüngliche Formel 'Jeder kann tun und lassen, was er will' – daher schützt Art. 2 Abs. 1 GG die allgemeine Handlungsfreiheit." },
+      { id: "avr-hi-03", typ: "freitext", frage: "Wann ist die historische Auslegung nach der Zusammenfassung besonders nützlich?", musterloesung: "Besonders nützlich, wenn der Wortlaut mehrdeutig ist oder die Regelungskonzeption unklar bleibt – dann helfen Gesetzesmaterialien (z. B. BT-Drucksachen, Protokolle), oft in Kombination mit der teleologischen Auslegung." },
+    ],
+  },
+  {
+    id: "teleologisch",
+    titel: "4. Teleologische Auslegung (Sinn und Zweck)",
+    kurz: "Teleologisch",
+    nachschlagen: [
+      { h: "Was ist das?", t: "Es wird hinterfragt, welchen Zweck das Gesetz bzw. die Vorschrift verfolgt. Die Norm wird so ausgelegt, dass Sinn und Zweck am ehesten verwirklicht werden. Jede Rechtsnorm ist Ausdruck eines Interessenkonflikts, den der Gesetzgeber bewertet hat, um bestimmte Folgen zu erreichen oder zu vermeiden." },
+      { h: "Gefahr der Methode", t: "Muthorst warnt: 'Die Frage nach dem Zweck löst jeden juristischen Begriff wie flüssiges Wachs auf.' Der Auslegende kann leicht eigene Zielvorstellungen statt der des Gesetzes zugrunde legen. Deshalb wird die teleologische häufig mit der historischen Auslegung kombiniert: Zweck aus den Materialien ableiten, dann prüfen, welche Auslegung diesem Regelungskonzept am besten gerecht wird." },
+      { h: "Beispiel: Gefährliche Körperverletzung (§ 224 Abs. 1 Nr. 4 StGB)", t: "Ein Anstifter A, der T zum Zuschlagen anstiftet, aber selbst nicht am Tatort erscheint – hat T 'gemeinschaftlich mit einem anderen Beteiligten' gehandelt? Wortlaut und Systematik helfen nicht eindeutig weiter. Teleologisch: Zweck der Norm ist es, die erhöhte Gefährlichkeit gemeinsamen Handelns vor Ort härter zu bestrafen. Ein nicht anwesender Anstifter macht die Tat nicht gefährlicher am Tatort → keine gefährliche Körperverletzung nach dieser Alternative." },
+    ],
+    fragen: [
+      { id: "avr-te-01", typ: "freitext", frage: "Warum kam die teleologische Auslegung im Beispiel des § 224 Abs. 1 Nr. 4 StGB zu dem Ergebnis, dass keine gefährliche Körperverletzung vorliegt?", musterloesung: "Weil der Zweck der Norm darin besteht, die erhöhte Gefährlichkeit zu bestrafen, die dadurch entsteht, dass mehrere gemeinsam vor Ort handeln. Ein Anstifter, der nicht am Tatort erscheint, erhöht diese konkrete Gefährlichkeit nicht – der Normzweck ist nicht erfüllt." },
+      { id: "avr-te-02", typ: "mc", frage: "Welche Gefahr birgt die teleologische Auslegung nach Muthorst?", optionen: ["Sie ist immer eindeutig und objektiv, deshalb ungefährlich", "Der Auslegende kann leicht eigene Zielvorstellungen statt der des Gesetzgebers zugrunde legen", "Sie darf im deutschen Recht gar nicht angewendet werden", "Sie widerspricht immer dem Wortlaut"], loesung: 1, erlaeuterung: "Muthorsts Bild vom 'flüssigen Wachs' beschreibt die Gefahr, dass jeder Begriff beliebig nach dem vermeintlichen Zweck geformt werden kann – deshalb wird sie meist mit der historischen Auslegung kombiniert, um den tatsächlichen gesetzgeberischen Zweck zu ermitteln." },
+      { id: "avr-te-03", typ: "freitext", frage: "Mit welcher anderen Auslegungsmethode wird die teleologische Auslegung häufig kombiniert, und warum?", musterloesung: "Mit der historischen Auslegung: Aus den Gesetzesmaterialien wird der tatsächliche Zweck der Norm abgeleitet, um zu vermeiden, dass der Auslegende eigene Zielvorstellungen statt der des Gesetzgebers zugrunde legt." },
+    ],
+  },
+  {
+    id: "ergaenzend",
+    titel: "5. Ergänzende Rechtsfindungsinstrumente",
+    kurz: "Ergänzend",
+    nachschlagen: [
+      { h: "Analogie", t: "Ergänzt einen zu eng gefassten Wortlaut. Greift nur bei einer planwidrigen Regelungslücke (der Gesetzgeber hat die Lücke nicht bewusst gewollt). Im Strafrecht ist eine Analogie zu Lasten des Täters verboten (Art. 103 Abs. 2 GG). Beispiel: § 80 Abs. 2 Nr. 2 VwGO (Wegfall der aufschiebenden Wirkung bei VA von Polizeibeamten) wird analog auf Verkehrszeichen angewendet." },
+      { h: "Teleologische Reduktion", t: "Das Gegenstück zur Analogie: grenzt eine zu weit gefasste Vorschrift ein, damit ihr Zweck nicht überschritten wird. Beispiel: § 212 StGB ('wer einen anderen tötet') könnte wortlautgemäß auch Selbstmord erfassen – teleologisch wird die Norm auf 'einen anderen' reduziert, da ihr Zweck der Schutz fremden Lebens ist. Selbstmord bleibt straflos." },
+      { h: "Erst-Recht-Schluss (a maiore ad minus)", t: "Ist eine belastendere Maßnahme ausdrücklich erlaubt/geregelt, muss erst recht die weniger belastende Maßnahme möglich sein. Beispiel: Wenn Art. 9 Abs. 2 GG das Verbot verfassungsfeindlicher Vereinigungen gestattet (schwereres Mittel), ist erst recht die weniger belastende geheimdienstliche Beobachtung zulässig." },
+      { h: "Umkehrschluss (argumentum e contrario)", t: "Regelt ein Gesetz abschließend, unter welchen Voraussetzungen etwas nicht gilt/versagt wird, gilt es in allen anderen Fällen. Beispiel: § 4 GastG regelt abschließend die Versagungsgründe für eine Gaststättenerlaubnis – liegt keiner davon vor, wird die Erlaubnis im Umkehrschluss erteilt." },
+    ],
+    fragen: [
+      { id: "avr-eg-01", typ: "mc", frage: "Was ist die zentrale Voraussetzung dafür, dass eine Analogie überhaupt zulässig ist?", optionen: ["Der Gesetzgeber muss die Lücke bewusst gewollt haben", "Es muss eine planwidrige Regelungslücke vorliegen – der Gesetzgeber hat die Lücke nicht bewusst gewollt", "Analogie ist im deutschen Recht generell unzulässig", "Sie ist nur im Zivilrecht, nie im öffentlichen Recht zulässig"], loesung: 1, erlaeuterung: "Eine Analogie setzt eine planwidrige, also vom Gesetzgeber nicht beabsichtigte Regelungslücke voraus. Im Strafrecht ist sie zudem zu Lasten des Täters ausgeschlossen (Art. 103 Abs. 2 GG)." },
+      { id: "avr-eg-02", typ: "freitext", frage: "Worin unterscheiden sich Analogie und teleologische Reduktion?", musterloesung: "Die Analogie erweitert eine zu eng gefasste Vorschrift auf einen vom Wortlaut nicht erfassten, aber vom Zweck erfassten Fall. Die teleologische Reduktion grenzt umgekehrt eine zu weit gefasste Vorschrift ein, damit ihr Zweck nicht über das gebotene Maß hinaus angewendet wird." },
+      { id: "avr-eg-03", typ: "mc", frage: "§ 4 GastG regelt abschließend die Versagungsgründe für eine Gaststättenerlaubnis. Liegt keiner dieser Gründe vor, wird die Erlaubnis erteilt. Welche Argumentationsform liegt hier vor?", optionen: ["Analogie", "Teleologische Reduktion", "Erst-Recht-Schluss", "Umkehrschluss (argumentum e contrario)"], loesung: 3, erlaeuterung: "Da das Gesetz abschließend regelt, wann die Erlaubnis versagt wird, folgt im Umkehrschluss, dass sie in allen anderen Fällen erteilt wird." },
+      { id: "avr-eg-04", typ: "freitext", frage: "Erkläre den Erst-Recht-Schluss am Beispiel: Das Grundgesetz gestattet das Verbot verfassungsfeindlicher Vereinigungen. Was folgt daraus für die weniger einschneidende geheimdienstliche Beobachtung?", musterloesung: "Wenn schon das schwerere Mittel (vollständiges Verbot) gestattet ist, muss erst recht das mildere, weniger belastende Mittel (Beobachtung) zulässig sein – a maiore ad minus." },
+    ],
+  },
+];
+
+const SUBJECTS = [
+  { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR },
+  { id: "sgb2", kurz: "SGB II", titel: "Grundsicherung für Arbeitsuchende (SGB II)", az: "SGB II", topics: TOPICS_SGB2 },
+  { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
+  { id: "avr", kurz: "Auslegung", titel: "Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)", az: "R2", topics: TOPICS_AVR },
+];
+
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');`;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function alleFragenMitThema(subject) {
+  const out = [];
+  subject.topics.forEach((top) => {
+    top.fragen.forEach((f) => out.push({ ...f, thema: top.titel, themaId: top.id }));
+  });
+  return out;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ---------------- App-Status (nur im Speicher dieser Sitzung, kein Server, kein Login) ----------------
+const state = {
+  screen: "home",
+  fach: SUBJECTS[0].id,
+  themaId: null,
+  index: 0,
+  ergebnisse: {}, // key: "fachId:themaId" -> { fragenId: {status} }
+  pruefungAktiv: false,
+  pruefungsfragen: [],
+  pruefungIndex: 0,
+  pruefungsErgebnisse: {},
+  anzahl: 10,
+  cardState: {}, // pro Frage: { auswahl, geprueft, geloest }
+};
+
+function aktuellesFach() { return SUBJECTS.find(s => s.id === state.fach); }
+function aktuellesThema() {
+  const f = aktuellesFach();
+  return f ? f.topics.find(t => t.id === state.themaId) : null;
+}
+function ergebnisKey() { return state.fach + ":" + state.themaId; }
+function ergebnisseFuerThema() { return state.ergebnisse[ergebnisKey()] || {}; }
+
+function gehezuHome() { state.screen = "home"; state.pruefungAktiv = false; render(); }
+function gehezuFach(id) { state.fach = id; state.screen = "subject"; state.pruefungAktiv = false; render(); }
+function gehezuThema(id) { state.themaId = id; state.screen = "topic"; state.index = 0; state.cardState = {}; render(); }
+function gehezuPruefung() { state.screen = "exam"; state.pruefungAktiv = false; render(); }
+
+function starteNeuePruefung() {
+  const pool = alleFragenMitThema(aktuellesFach());
+  const n = Math.min(state.anzahl, pool.length);
+  state.pruefungsfragen = shuffle(pool).slice(0, n);
+  state.pruefungsErgebnisse = {};
+  state.pruefungIndex = 0;
+  state.pruefungAktiv = true;
+  state.cardState = {};
+  render();
+}
+
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ---------------- Bausteine ----------------
+function stempel(status) {
+  const cfg = { richtig: "RICHTIG", teilweise: "TEILWEISE", falsch: "NICHT KORREKT" }[status];
+  if (!cfg) return "";
+  return `<div class="stamp ${status}">${cfg}</div>`;
+}
+
+function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered) {
+  const cs = state.cardState[frage.id] || { auswahl: null, geprueft: !!ergebnisseObj[frage.id] };
+  state.cardState[frage.id] = cs;
+  const gespeichert = ergebnisseObj[frage.id];
+  const geprueft = cs.geprueft || !!gespeichert;
+  const status = gespeichert ? gespeichert.status : cs.status;
+
+  let inner = "";
+  if (frage.typ === "mc") {
+    inner += `<div>`;
+    frage.optionen.forEach((opt, i) => {
+      const istGewaehlt = cs.auswahl === i;
+      const zeigeRichtig = geprueft && i === frage.loesung;
+      const zeigeFalsch = geprueft && istGewaehlt && i !== frage.loesung;
+      let cls = "opt";
+      if (zeigeRichtig) cls += " correct";
+      else if (zeigeFalsch) cls += " wrong";
+      else if (istGewaehlt) cls += " selected";
+      inner += `<button class="${cls}" ${geprueft ? "disabled" : ""} onclick="waehleOption('${frage.id}', ${i})">${esc(opt)}</button>`;
+    });
+    if (!geprueft) {
+      inner += `<button class="primary" ${cs.auswahl === null ? "disabled" : ""} onclick="pruefeMC('${frage.id}', ${index}, ${JSON.stringify(zeigeThema)})">Prüfen</button>`;
+    }
+    inner += `</div>`;
+  } else {
+    inner += `<textarea id="ft-${frage.id}" rows="4" placeholder="Deine Antwort..." ${geprueft ? "disabled" : ""}>${cs.freitext || ""}</textarea>`;
+    if (!geprueft) {
+      inner += `<div style="margin-top:10px;"><button class="primary" onclick="zeigeLoesung('${frage.id}')">Lösung anzeigen</button></div>
+        <p class="hinweis" style="margin-top:8px;">Diese Version läuft ohne Claude-Konto – die Freitextantwort wird nicht automatisch bewertet. Vergleiche selbst mit der Musterlösung und markiere dein Ergebnis.</p>`;
+    }
+  }
+
+  let solutionBlock = "";
+  if (geprueft) {
+    solutionBlock = `<div class="solution">
+      <div style="margin-bottom:10px;">${stempel(status)}</div>
+      <div class="solution-box">
+        <div class="lbl">${frage.typ === "mc" ? "LÖSUNG" : "MUSTERLÖSUNG"}</div>
+        <p class="body-text">${esc(frage.typ === "mc" ? frage.erlaeuterung : frage.musterloesung)}</p>
+      </div>
+    </div>`;
+  } else if (frage.typ === "freitext" && cs.zeigeLoesung) {
+    solutionBlock = `<div class="solution">
+      <div class="solution-box">
+        <div class="lbl">MUSTERLÖSUNG</div>
+        <p class="body-text">${esc(frage.musterloesung)}</p>
+      </div>
+      <div class="self-grade">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);align-self:center;">Deine Selbsteinschätzung:</span>
+        <button class="richtig-btn" onclick="selbstBewertung('${frage.id}', 'richtig', ${index}, ${JSON.stringify(zeigeThema)})">Richtig</button>
+        <button class="teilweise-btn" onclick="selbstBewertung('${frage.id}', 'teilweise', ${index}, ${JSON.stringify(zeigeThema)})">Teilweise</button>
+        <button class="falsch-btn" onclick="selbstBewertung('${frage.id}', 'falsch', ${index}, ${JSON.stringify(zeigeThema)})">Nicht korrekt</button>
+      </div>
+    </div>`;
+  }
+
+  return `<div class="karte">
+    <div class="perf"></div>
+    <div class="toprow">
+      <span>Az. ${frage.id.toUpperCase()}${zeigeThema && frage.thema ? " · " + esc(frage.thema) : ""}</span>
+      <span>${index + 1} / ${total}</span>
+    </div>
+    <h3>${esc(frage.frage)}</h3>
+    ${inner}
+    ${solutionBlock}
+  </div>`;
+}
+
+function waehleOption(fid, i) {
+  const cs = state.cardState[fid];
+  if (cs.geprueft) return;
+  cs.auswahl = i;
+  render();
+}
+
+function pruefeMC(fid, index, imExamen) {
+  const cs = state.cardState[fid];
+  if (cs.auswahl === null || cs.auswahl === undefined) return;
+  const frage = findFrage(fid);
+  const status = cs.auswahl === frage.loesung ? "richtig" : "falsch";
+  cs.geprueft = true;
+  cs.status = status;
+  speichereErgebnis(fid, { status }, imExamen);
+  render();
+}
+
+function zeigeLoesung(fid) {
+  const cs = state.cardState[fid];
+  cs.freitext = document.getElementById("ft-" + fid) ? document.getElementById("ft-" + fid).value : (cs.freitext || "");
+  cs.zeigeLoesung = true;
+  render();
+}
+
+function selbstBewertung(fid, status, index, imExamen) {
+  const cs = state.cardState[fid];
+  cs.geprueft = true;
+  cs.status = status;
+  speichereErgebnis(fid, { status }, imExamen);
+  render();
+}
+
+function findFrage(fid) {
+  if (state.pruefungAktiv) {
+    return state.pruefungsfragen.find(f => f.id === fid);
+  }
+  const t = aktuellesThema();
+  return t ? t.fragen.find(f => f.id === fid) : null;
+}
+
+function speichereErgebnis(fid, ergebnis, imExamen) {
+  if (imExamen) {
+    state.pruefungsErgebnisse[fid] = ergebnis;
+  } else {
+    const key = ergebnisKey();
+    if (!state.ergebnisse[key]) state.ergebnisse[key] = {};
+    state.ergebnisse[key][fid] = ergebnis;
+  }
+}
+
+function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
+  return `<div class="progressbar">${fragen.map((f, i) => {
+    const r = ergebnisseObj[f.id];
+    const cls = r ? r.status : "";
+    return `<span class="${cls} ${i === aktuellerIndex ? "active" : ""}" title="Frage ${i + 1}" onclick="${onJump}(${i})"></span>`;
+  }).join("")}</div>`;
+}
+
+function breadcrumb(teile) {
+  return `<div class="breadcrumb">${teile.map((t, i) => {
+    const sep = i > 0 ? '<span class="sep">/</span>' : "";
+    const el = t.onClick ? `<button onclick="${t.onClick}">${esc(t.label)}</button>` : `<span class="current">${esc(t.label)}</span>`;
+    return sep + el;
+  }).join("")}</div>`;
+}
+
+function ordnerkachel(titel, unterzeile, onClick, opts) {
+  opts = opts || {};
+  const cls = "tile" + (opts.gross ? " gross" : "") + (opts.akzent ? " akzent" : "") + (opts.dashed ? " dashed" : "");
+  const clickAttr = opts.dashed ? "" : ` onclick="${onClick}"`;
+  return `<button class="${cls}"${clickAttr}><div class="tab"></div><div class="ttl">${esc(titel)}</div>${unterzeile ? `<div class="meta">${esc(unterzeile)}</div>` : ""}</button>`;
+}
+
+function kopf(ueberschrift, unterzeile) {
+  return `<header style="margin-bottom:22px;">
+    <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
+    <h1>${esc(ueberschrift)}</h1>
+    ${unterzeile ? `<div class="sub">${esc(unterzeile)}</div>` : ""}
+  </header>`;
+}
+
+// ---------------- Navigation innerhalb Thema/Prüfung ----------------
+function themaWeiter() { const t = aktuellesThema(); state.index = Math.min(t.fragen.length - 1, state.index + 1); render(); }
+function themaZurueck() { state.index = Math.max(0, state.index - 1); render(); }
+function themaSpringe(i) { state.index = i; render(); }
+function examWeiter() { state.pruefungIndex = Math.min(state.pruefungsfragen.length - 1, state.pruefungIndex + 1); render(); }
+function examZurueck() { state.pruefungIndex = Math.max(0, state.pruefungIndex - 1); render(); }
+function examSpringe(i) { state.pruefungIndex = i; render(); }
+function examAbbrechen() { state.pruefungAktiv = false; render(); }
+function setAnzahl(v) { state.anzahl = Number(v); }
+
+// ---------------- Screens ----------------
+function renderHome() {
+  let html = kopf("Lernkartei", "Az. Übersicht · Fachbereiche");
+  html += `<div class="section-label">FACHBEREICHE</div>`;
+  SUBJECTS.forEach(s => {
+    const pool = alleFragenMitThema(s);
+    html += ordnerkachel(s.titel, `Az. ${s.az} · ${s.topics.length} Themengebiete · ${pool.length} Fragen`, `gehezuFach('${s.id}')`, { gross: true });
+  });
+  html += ordnerkachel("+ weitere Fachbereiche", "folgen, sobald Skripte hochgeladen sind", "", { gross: true, dashed: true });
+  return html;
+}
+
+function renderSubject() {
+  const f = aktuellesFach();
+  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz }]);
+  html += kopf(f.titel, `Az. ${f.az}`);
+  html += `<div class="section-label">PRÜFUNG</div>`;
+  html += ordnerkachel("Prüfung – alle Themen gemischt", "bei jedem Start neu zufällig zusammengestellt", "gehezuPruefung()", { akzent: true });
+  html += `<div class="section-label" style="margin-top:14px;">THEMENGEBIETE ZUM NACHSCHLAGEN</div>`;
+  f.topics.forEach(t => {
+    html += ordnerkachel(t.titel, `${t.fragen.length} Übungsfragen`, `gehezuThema('${t.id}')`);
+  });
+  return html;
+}
+
+function renderTopic() {
+  const f = aktuellesFach();
+  const t = aktuellesThema();
+  let html = breadcrumb([
+    { label: "Start", onClick: "gehezuHome()" },
+    { label: f.kurz, onClick: `gehezuFach('${f.id}')` },
+    { label: t.kurz },
+  ]);
+  html += `<h2>${esc(t.titel)}</h2>`;
+  t.nachschlagen.forEach((block, i) => {
+    html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4><p class="body-text">${esc(block.t)}</p></div>`;
+  });
+
+  const fragen = t.fragen;
+  if (fragen.length > 0) {
+    const erg = ergebnisseFuerThema();
+    const richtig = fragen.filter(f2 => erg[f2.id]?.status === "richtig").length;
+    html += `<div class="section-label">ÜBUNGSFRAGEN · ${richtig}/${fragen.length} richtig</div>`;
+    html += fortschrittsleiste(fragen, erg, state.index, "themaSpringe");
+    const frage = fragen[state.index];
+    html += karteikarte(frage, state.index, fragen.length, erg, false, null);
+    html += `<div class="navrow">
+      <button class="ghost" ${state.index === 0 ? "disabled" : ""} onclick="themaZurueck()">← Zurück</button>
+      <button class="ghost" ${state.index === fragen.length - 1 ? "disabled" : ""} onclick="themaWeiter()">Weiter →</button>
+    </div>`;
+  }
+  return html;
+}
+
+function renderExamSetup() {
+  const f = aktuellesFach();
+  const pool = alleFragenMitThema(f);
+  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }, { label: "Prüfung" }]);
+  const optionen = [5, 10, 15, pool.length].filter((v, i, a) => a.indexOf(v) === i && v <= pool.length);
+  html += `<div class="center-card">
+    <h2 style="font-size:20px;">Prüfung starten</h2>
+    <p class="body-text" style="margin-bottom:18px;">Fragen aus allen Themengebieten von ${esc(f.titel)} werden zufällig gemischt. Jede neue Prüfung stellt eine neue, willkürliche Auswahl und Reihenfolge zusammen.</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;">
+      <label style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);">Anzahl Fragen:</label>
+      <select onchange="setAnzahl(this.value)">
+        ${optionen.map(n => `<option value="${n}" ${n === state.anzahl ? "selected" : ""}>${n === pool.length ? `alle (${n})` : n}</option>`).join("")}
+      </select>
+    </div>
+    <button class="danger" onclick="starteNeuePruefung()">Prüfung starten</button>
+  </div>`;
+  return html;
+}
+
+function renderExamActive() {
+  const f = aktuellesFach();
+  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }, { label: "Prüfung" }]);
+  const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
+  const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
+  html += `<div class="section-label">PRÜFUNG · ${beantwortet}/${state.pruefungsfragen.length} beantwortet · ${richtig} richtig</div>`;
+  html += fortschrittsleiste(state.pruefungsfragen, state.pruefungsErgebnisse, state.pruefungIndex, "examSpringe");
+  const frage = state.pruefungsfragen[state.pruefungIndex];
+  html += karteikarte(frage, state.pruefungIndex, state.pruefungsfragen.length, state.pruefungsErgebnisse, true, true);
+  html += `<div class="navrow">
+    <button class="ghost" ${state.pruefungIndex === 0 ? "disabled" : ""} onclick="examZurueck()">← Zurück</button>
+    <button class="ghost" ${state.pruefungIndex === state.pruefungsfragen.length - 1 ? "disabled" : ""} onclick="examWeiter()">Weiter →</button>
+  </div>
+  <button onclick="examAbbrechen()" style="margin-top:16px;background:transparent;border:none;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;text-decoration:underline;">Prüfung abbrechen</button>`;
+  return html;
+}
+
+function renderExamDone() {
+  const f = aktuellesFach();
+  const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
+  let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }, { label: "Prüfung" }]);
+  html += `<div class="center-card">
+    <div style="margin-bottom:10px;">${stempel(richtig === state.pruefungsfragen.length ? "richtig" : "teilweise")}</div>
+    <h2 style="margin:10px 0 6px 0;">${richtig} von ${state.pruefungsfragen.length} richtig</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 20px 0;">Jede neue Prüfung mischt Auswahl und Reihenfolge erneut zufällig.</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="danger" onclick="starteNeuePruefung()">Neue Prüfung</button>
+      <button class="ghost" onclick="examAbbrechen()">Zurück</button>
+    </div>
+  </div>`;
+  return html;
+}
+
+function render() {
+  let html = "";
+  if (state.screen === "home") html = renderHome();
+  else if (state.screen === "subject") html = renderSubject();
+  else if (state.screen === "topic") html = renderTopic();
+  else if (state.screen === "exam") {
+    if (!state.pruefungAktiv) html = renderExamSetup();
+    else {
+      const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
+      const fertig = beantwortet === state.pruefungsfragen.length && state.pruefungsfragen.length > 0;
+      html = fertig ? renderExamDone() : renderExamActive();
+    }
+  }
+  document.getElementById("app").innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>
