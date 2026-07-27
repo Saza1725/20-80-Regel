@@ -92,16 +92,22 @@ button.danger:hover{background:#A85224;}
 .self-grade button.falsch-btn{border-color:var(--red);color:var(--red);}
 .hinweis{font-size:13px;color:var(--muted);margin:0 0 18px 0;font-style:italic;}
 select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
+.dino-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:14px 0;padding:16px;background:var(--bg);border-radius:14px;}
+.dino-caption{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);text-align:center;}
+.welcome-screen{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:26px;padding:20px;}
+.welcome-screen .eyebrow{margin-bottom:0;}
+.welcome-quote{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--ink);max-width:420px;line-height:1.4;}
+.welcome-sub{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);}
 </style>
 </head>
 <body>
 <div class="wrap"><div id="app"></div></div>
 <script>
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: Kosten- und Leistungsrechnung (KLR) – Modul Vfal90
 ------------------------------------------------------------------- */
- 
+
 const TOPICS_KLR = [
   {
     id: "grundbegriffe",
@@ -182,7 +188,7 @@ const TOPICS_KLR = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: SGB II – Grundsicherung für Arbeitsuchende (Bürgergeld)
 ------------------------------------------------------------------- */
@@ -265,7 +271,7 @@ const TOPICS_SGB2 = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: Recht der Gefahrenabwehr NRW
 ------------------------------------------------------------------- */
@@ -373,7 +379,7 @@ const TOPICS_GA = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: Auslegungsmethoden – Allgemeines Verwaltungsrecht (R2)
 ------------------------------------------------------------------- */
@@ -473,7 +479,7 @@ const TOPICS_AVR = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Zusatzordner innerhalb KLR: Grundlagen des Rechnungswesens
    (unabhängig von den bisherigen Prüfungs-Themen TOPICS_KLR).
@@ -557,7 +563,7 @@ const TOPICS_KLR_GRUNDLAGEN = [
     ],
   },
 ];
- 
+
 /* ==================================================================
    FACH: Kommunales Haushaltsrecht (KHR)
    Zweistufige Struktur: Fach -> Kapitel (eigener Ordner, eigene
@@ -565,7 +571,7 @@ const TOPICS_KLR_GRUNDLAGEN = [
    Aus den hochgeladenen KHR-Skripten und Übungsaufgaben (Tobias
    Röbbecke) zusammengestellt.
 ================================================================== */
- 
+
 /* ---------------- Kapitel 1: Allgemeine Systematik und Ziele der kommunalen Finanzwirtschaft ---------------- */
 const KHR_K1_TOPICS = [
   {
@@ -607,7 +613,7 @@ const KHR_K1_TOPICS = [
     ],
   },
 ];
- 
+
 /* ---------------- Kapitel 2: Ermittlung der Grund- und Gewerbesteuer ---------------- */
 const KHR_K2_TOPICS = [
   {
@@ -660,7 +666,7 @@ const KHR_K2_TOPICS = [
     ],
   },
 ];
- 
+
 /* ---------------- Kapitel 3: Begriffspaare des Rechnungswesens ----------------
    Inhaltlich identisch mit dem Thema "Begriffspaare" im KLR-Zusatzordner
    (Abgrenzung der Begriffspaare) – hier als eigenes Kapitel im Fach KHR
@@ -686,7 +692,7 @@ const KHR_K3_TOPICS = [
     ],
   },
 ];
- 
+
 /* ---------------- Kapitel 4: Haushaltssatzung, Haushaltsplan & Haushaltskreislauf ----------------
    Hinweis: Aus dem aktuellen Upload liegt bislang nur Material zu den
    Grundlagen der Haushaltssatzung vor. Inhalte zu Haushaltsplan und
@@ -710,9 +716,9 @@ const KHR_K4_TOPICS = [
     ],
   },
 ];
- 
+
 const KHR_TOPICS_ALL = [...KHR_K1_TOPICS, ...KHR_K2_TOPICS, ...KHR_K3_TOPICS, ...KHR_K4_TOPICS];
- 
+
 /* Zusätzliche Fragen aus der Präsentation, um die Themen ausführlicher abzudecken */
 KHR_TOPICS_ALL.find(t => t.id === "khr-k1-rechtsgrundlagen").fragen.push(
   { id: "khrk1-11", typ: "freitext", frage: "Nenne die vier Komponenten des 'Magischen Vierecks' aus § 1 Stabilitäts- und Wachstumsgesetz.", musterloesung: "Preisstabilität, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht und stetiges Wirtschaftswachstum." },
@@ -739,7 +745,7 @@ KHR_TOPICS_ALL.find(t => t.id === "khr-k2-gewerbesteuer").fragen.push(
   { id: "khrk2-20", typ: "mc", frage: "Nach welchem Kriterium wird der Gewerbesteuermessbetrag zerlegt, wenn ein Betrieb Betriebsstätten in mehreren Gemeinden hat?", optionen: ["Nach der Einwohnerzahl der Gemeinden", "Nach dem Verhältnis der Arbeitslöhne", "Nach dem Umsatz je Betriebsstätte", "Nach der Fläche der Betriebsstätten"], loesung: 1, erlaeuterung: "Maßgeblich für die Zerlegung ist gemäß § 29 Abs. 1 Nr. 1 GewStG das Verhältnis der in den einzelnen Betriebsstätten gezahlten Arbeitslöhne." },
   { id: "khrk2-21", typ: "freitext", frage: "Nenne je zwei Beispiele für Personengesellschaften und Kapitalgesellschaften als Rechtsformen von Betrieben.", musterloesung: "Personengesellschaften: z. B. GbR, oHG, KG, Einzelkaufmann (e. K.). Kapitalgesellschaften: z. B. GmbH, AG, UG." }
 );
- 
+
 const TOPICS_KHR_PARAGRAPHEN = [
   {
     id: "khr-paragrafen",
@@ -786,7 +792,7 @@ const TOPICS_KHR_PARAGRAPHEN = [
     fragen: [],
   },
 ];
- 
+
 const SUBJECTS = [
   { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR, extra: TOPICS_KLR_GRUNDLAGEN },
   { id: "khr", kurz: "KHR", titel: "Kommunales Haushaltsrecht", az: "KHR", topics: KHR_TOPICS_ALL, extra: TOPICS_KHR_PARAGRAPHEN },
@@ -794,9 +800,9 @@ const SUBJECTS = [
   { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
   { id: "avr", kurz: "Auslegung", titel: "Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)", az: "R2", topics: TOPICS_AVR },
 ];
- 
+
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');`;
- 
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -805,7 +811,7 @@ function shuffle(arr) {
   }
   return a;
 }
- 
+
 function alleFragenMitThema(subject) {
   const out = [];
   subject.topics.forEach((top) => {
@@ -813,7 +819,7 @@ function alleFragenMitThema(subject) {
   });
   return out;
 }
- 
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -822,10 +828,10 @@ function shuffle(arr) {
   }
   return a;
 }
- 
+
 // ---------------- App-Status (nur im Speicher dieser Sitzung, kein Server, kein Login) ----------------
 const state = {
-  screen: "home",
+  screen: "welcome",
   fach: SUBJECTS[0].id,
   kapitelId: null,
   themaId: null,
@@ -838,7 +844,7 @@ const state = {
   anzahl: 10,
   cardState: {}, // pro Frage: { auswahl, geprueft, geloest }
 };
- 
+
 function aktuellesFach() { return SUBJECTS.find(s => s.id === state.fach); }
 function aktuellesKapitel() {
   const f = aktuellesFach();
@@ -855,13 +861,13 @@ function aktuellesThema() {
 }
 function ergebnisKey() { return state.fach + ":" + (state.kapitelId || "") + ":" + state.themaId; }
 function ergebnisseFuerThema() { return state.ergebnisse[ergebnisKey()] || {}; }
- 
+
 function gehezuHome() { state.screen = "home"; state.pruefungAktiv = false; render(); }
 function gehezuFach(id) { state.fach = id; state.screen = "subject"; state.pruefungAktiv = false; render(); }
 function gehezuKapitel(id) { state.kapitelId = id; state.screen = "kapitel"; state.pruefungAktiv = false; render(); }
 function gehezuThema(id) { state.themaId = id; state.screen = "topic"; state.index = 0; state.cardState = {}; render(); }
 function gehezuPruefung() { state.screen = "exam"; state.pruefungAktiv = false; render(); }
- 
+
 function examPool() {
   const f = aktuellesFach();
   if (!f) return [];
@@ -871,7 +877,7 @@ function examPool() {
   }
   return alleFragenMitThema(f);
 }
- 
+
 function starteNeuePruefung() {
   const pool = examPool();
   const n = Math.min(state.anzahl, pool.length);
@@ -882,13 +888,13 @@ function starteNeuePruefung() {
   state.cardState = {};
   render();
 }
- 
+
 function esc(s) {
   const d = document.createElement("div");
   d.textContent = s;
   return d.innerHTML;
 }
- 
+
 // Erkennt wiederkehrende "Begriff: Erklärung."-Strukturen in einem Nachschlagen-Text
 // und rendert sie als scannbare Liste (wie beim Paragrafen-Glossar). Texte ohne
 // diese Struktur bleiben als normaler, aber schmaler gesetzter Absatz erhalten.
@@ -910,21 +916,50 @@ function formatBody(text) {
   }
   return `<p class="body-text">${esc(text)}</p>`;
 }
- 
+
 // ---------------- Bausteine ----------------
+// Schielender Dino mit Brille – erscheint bei falschen Antworten
+function dinoBild() {
+  return `
+  <div class="dino-wrap">
+    <svg viewBox="0 0 220 180" width="150" height="123" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="110" cy="168" rx="70" ry="9" fill="#000" opacity="0.08"/>
+      <path d="M40 150 C20 140 15 110 30 95 C18 90 10 75 20 60 C14 45 25 25 45 22 C55 8 80 4 95 15 C110 2 140 4 152 20 C172 20 188 38 182 58 C196 65 200 85 186 98 C192 115 180 138 158 140 C155 155 138 165 120 158 C108 168 85 168 75 158 C58 162 45 158 40 150 Z" fill="#7FB069"/>
+      <path d="M60 25 L68 5 L78 22 Z" fill="#7FB069"/>
+      <path d="M85 15 L92 -2 L101 14 Z" fill="#7FB069"/>
+      <path d="M110 12 L116 -4 L126 11 Z" fill="#7FB069"/>
+      <ellipse cx="150" cy="90" rx="10" ry="7" fill="#5C8F4A"/>
+      <circle cx="146" cy="88" r="2" fill="#3E6635"/>
+      <circle cx="154" cy="88" r="2" fill="#3E6635"/>
+      <path d="M96 118 Q112 128 130 116" stroke="#3E6635" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="83" cy="78" rx="19" ry="17" fill="#fff" stroke="#2E2417" stroke-width="4"/>
+      <ellipse cx="133" cy="78" rx="19" ry="17" fill="#fff" stroke="#2E2417" stroke-width="4"/>
+      <line x1="102" y1="76" x2="114" y2="76" stroke="#2E2417" stroke-width="4"/>
+      <line x1="64" y1="72" x2="50" y2="66" stroke="#2E2417" stroke-width="4"/>
+      <line x1="152" y1="72" x2="166" y2="66" stroke="#2E2417" stroke-width="4"/>
+      <circle cx="91" cy="80" r="7" fill="#2E2417"/>
+      <circle cx="125" cy="80" r="7" fill="#2E2417"/>
+      <circle cx="93" cy="78" r="2" fill="#fff"/>
+      <circle cx="127" cy="78" r="2" fill="#fff"/>
+    </svg>
+    <div class="dino-caption">Ups – das war leider nicht ganz richtig!</div>
+  </div>`;
+}
+
+
 function stempel(status) {
   const cfg = { richtig: "RICHTIG", teilweise: "TEILWEISE", falsch: "NICHT KORREKT" }[status];
   if (!cfg) return "";
   return `<div class="stamp ${status}">${cfg}</div>`;
 }
- 
+
 function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered) {
   const cs = state.cardState[frage.id] || { auswahl: null, geprueft: !!ergebnisseObj[frage.id] };
   state.cardState[frage.id] = cs;
   const gespeichert = ergebnisseObj[frage.id];
   const geprueft = cs.geprueft || !!gespeichert;
   const status = gespeichert ? gespeichert.status : cs.status;
- 
+
   let inner = "";
   if (frage.typ === "mc") {
     inner += `<div>`;
@@ -949,11 +984,12 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
         <p class="hinweis" style="margin-top:8px;">Diese Version läuft ohne Claude-Konto – die Freitextantwort wird nicht automatisch bewertet. Vergleiche selbst mit der Musterlösung und markiere dein Ergebnis.</p>`;
     }
   }
- 
+
   let solutionBlock = "";
   if (geprueft) {
     solutionBlock = `<div class="solution">
       <div style="margin-bottom:10px;">${stempel(status)}</div>
+      ${status === "falsch" ? dinoBild() : ""}
       <div class="solution-box">
         <div class="lbl">${frage.typ === "mc" ? "LÖSUNG" : "MUSTERLÖSUNG"}</div>
         <p class="body-text">${esc(frage.typ === "mc" ? frage.erlaeuterung : frage.musterloesung)}</p>
@@ -973,7 +1009,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
       </div>
     </div>`;
   }
- 
+
   return `<div class="karte">
     <div class="perf"></div>
     <div class="toprow">
@@ -985,14 +1021,14 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
     ${solutionBlock}
   </div>`;
 }
- 
+
 function waehleOption(fid, i) {
   const cs = state.cardState[fid];
   if (cs.geprueft) return;
   cs.auswahl = i;
   render();
 }
- 
+
 function pruefeMC(fid, index, imExamen) {
   const cs = state.cardState[fid];
   if (cs.auswahl === null || cs.auswahl === undefined) return;
@@ -1003,14 +1039,14 @@ function pruefeMC(fid, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
- 
+
 function zeigeLoesung(fid) {
   const cs = state.cardState[fid];
   cs.freitext = document.getElementById("ft-" + fid) ? document.getElementById("ft-" + fid).value : (cs.freitext || "");
   cs.zeigeLoesung = true;
   render();
 }
- 
+
 function selbstBewertung(fid, status, index, imExamen) {
   const cs = state.cardState[fid];
   cs.geprueft = true;
@@ -1018,7 +1054,7 @@ function selbstBewertung(fid, status, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
- 
+
 function findFrage(fid) {
   if (state.pruefungAktiv) {
     return state.pruefungsfragen.find(f => f.id === fid);
@@ -1026,7 +1062,7 @@ function findFrage(fid) {
   const t = aktuellesThema();
   return t ? t.fragen.find(f => f.id === fid) : null;
 }
- 
+
 function speichereErgebnis(fid, ergebnis, imExamen) {
   if (imExamen) {
     state.pruefungsErgebnisse[fid] = ergebnis;
@@ -1036,7 +1072,7 @@ function speichereErgebnis(fid, ergebnis, imExamen) {
     state.ergebnisse[key][fid] = ergebnis;
   }
 }
- 
+
 function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
   return `<div class="progressbar">${fragen.map((f, i) => {
     const r = ergebnisseObj[f.id];
@@ -1044,7 +1080,7 @@ function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
     return `<span class="${cls} ${i === aktuellerIndex ? "active" : ""}" title="Frage ${i + 1}" onclick="${onJump}(${i})"></span>`;
   }).join("")}</div>`;
 }
- 
+
 function breadcrumb(teile) {
   return `<div class="breadcrumb">${teile.map((t, i) => {
     const sep = i > 0 ? '<span class="sep">/</span>' : "";
@@ -1052,14 +1088,14 @@ function breadcrumb(teile) {
     return sep + el;
   }).join("")}</div>`;
 }
- 
+
 function ordnerkachel(titel, unterzeile, onClick, opts) {
   opts = opts || {};
   const cls = "tile" + (opts.gross ? " gross" : "") + (opts.akzent ? " akzent" : "") + (opts.dashed ? " dashed" : "");
   const clickAttr = opts.dashed ? "" : ` onclick="${onClick}"`;
   return `<button class="${cls}"${clickAttr}><div class="tab"></div><div class="ttl">${esc(titel)}</div>${unterzeile ? `<div class="meta">${esc(unterzeile)}</div>` : ""}</button>`;
 }
- 
+
 function kopf(ueberschrift, unterzeile) {
   return `<header style="margin-bottom:22px;">
     <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
@@ -1067,7 +1103,7 @@ function kopf(ueberschrift, unterzeile) {
     ${unterzeile ? `<div class="sub">${esc(unterzeile)}</div>` : ""}
   </header>`;
 }
- 
+
 // ---------------- Navigation innerhalb Thema/Prüfung ----------------
 function themaWeiter() { const t = aktuellesThema(); state.index = Math.min(t.fragen.length - 1, state.index + 1); render(); }
 function themaZurueck() { state.index = Math.max(0, state.index - 1); render(); }
@@ -1077,7 +1113,7 @@ function examZurueck() { state.pruefungIndex = Math.max(0, state.pruefungIndex -
 function examSpringe(i) { state.pruefungIndex = i; render(); }
 function examAbbrechen() { state.pruefungAktiv = false; render(); }
 function setAnzahl(v) { state.anzahl = Number(v); }
- 
+
 // ---------------- Screens ----------------
 function alleThemenCount(f) {
   if (f.kapitel) return f.kapitel.reduce((s, k) => s + k.topics.length, 0);
@@ -1087,7 +1123,18 @@ function alleFragenCountFach(f) {
   if (f.kapitel) return f.kapitel.reduce((s, k) => s + alleFragenMitThema(k).length, 0);
   return alleFragenMitThema(f).length;
 }
- 
+
+function startApp() { state.screen = "home"; render(); }
+
+function renderWelcome() {
+  return `<div class="welcome-screen">
+    <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
+    <div class="welcome-quote">„Denk immer dran – Du bist gut genug :-)"</div>
+    <button class="danger" onclick="startApp()">Los geht's →</button>
+    <div class="welcome-sub">Az. Übersicht · Fachbereiche</div>
+  </div>`;
+}
+
 function renderHome() {
   let html = kopf("Lernkartei", "Az. Übersicht · Fachbereiche");
   html += `<div class="section-label">FACHBEREICHE</div>`;
@@ -1098,12 +1145,12 @@ function renderHome() {
   html += ordnerkachel("+ weitere Fachbereiche", "folgen, sobald Skripte hochgeladen sind", "", { gross: true, dashed: true });
   return html;
 }
- 
+
 function renderSubject() {
   const f = aktuellesFach();
   let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz }]);
   html += kopf(f.titel, `Az. ${f.az}`);
- 
+
   if (f.kapitel) {
     html += `<div class="section-label">KAPITEL</div>`;
     f.kapitel.forEach(k => {
@@ -1112,7 +1159,7 @@ function renderSubject() {
     });
     return html;
   }
- 
+
   html += `<div class="section-label">PRÜFUNG</div>`;
   html += ordnerkachel("Prüfung – alle Themen gemischt", "bei jedem Start neu zufällig zusammengestellt", "gehezuPruefung()", { akzent: true });
   html += `<div class="section-label" style="margin-top:14px;">THEMENGEBIETE ZUM NACHSCHLAGEN</div>`;
@@ -1128,7 +1175,7 @@ function renderSubject() {
   }
   return html;
 }
- 
+
 function renderKapitel() {
   const f = aktuellesFach();
   const k = aktuellesKapitel();
@@ -1146,7 +1193,7 @@ function renderKapitel() {
   });
   return html;
 }
- 
+
 function renderTopic() {
   const f = aktuellesFach();
   const t = aktuellesThema();
@@ -1161,7 +1208,7 @@ function renderTopic() {
   t.nachschlagen.forEach((block, i) => {
     html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4>${formatBody(block.t)}</div>`;
   });
- 
+
   const fragen = t.fragen;
   if (fragen.length > 0) {
     const erg = ergebnisseFuerThema();
@@ -1177,7 +1224,7 @@ function renderTopic() {
   }
   return html;
 }
- 
+
 function examBreadcrumb(letzterLabel) {
   const f = aktuellesFach();
   const crumbs = [{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }];
@@ -1188,7 +1235,7 @@ function examBreadcrumb(letzterLabel) {
   crumbs.push({ label: letzterLabel });
   return breadcrumb(crumbs);
 }
- 
+
 function renderExamSetup() {
   const f = aktuellesFach();
   const pool = examPool();
@@ -1208,7 +1255,7 @@ function renderExamSetup() {
   </div>`;
   return html;
 }
- 
+
 function renderExamActive() {
   let html = examBreadcrumb("Prüfung");
   const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
@@ -1224,7 +1271,7 @@ function renderExamActive() {
   <button onclick="examAbbrechen()" style="margin-top:16px;background:transparent;border:none;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;text-decoration:underline;">Prüfung abbrechen</button>`;
   return html;
 }
- 
+
 function renderExamDone() {
   const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
   let html = examBreadcrumb("Prüfung");
@@ -1239,10 +1286,11 @@ function renderExamDone() {
   </div>`;
   return html;
 }
- 
+
 function render() {
   let html = "";
-  if (state.screen === "home") html = renderHome();
+  if (state.screen === "welcome") html = renderWelcome();
+  else if (state.screen === "home") html = renderHome();
   else if (state.screen === "subject") html = renderSubject();
   else if (state.screen === "kapitel") html = renderKapitel();
   else if (state.screen === "topic") html = renderTopic();
@@ -1256,9 +1304,8 @@ function render() {
   }
   document.getElementById("app").innerHTML = html;
 }
- 
+
 render();
 </script>
 </body>
 </html>
- 
