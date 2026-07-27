@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -46,7 +46,10 @@ h4{font-family:'Fraunces',serif;font-weight:600;font-size:16.5px;margin:0 0 8px 
 .tile.akzent .meta{color:var(--accent);}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(46,36,23,0.04);}
 .num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:7px;font-weight:600;}
-.body-text{margin:0;font-size:14.5px;color:#4A3E2C;line-height:1.65;}
+.body-text{margin:0;font-size:14.5px;color:#4A3E2C;line-height:1.7;max-width:64ch;}
+.def-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+.def-list li{font-size:14.5px;color:#4A3E2C;line-height:1.6;padding-left:14px;border-left:2px solid var(--border);max-width:64ch;}
+.def-list .def-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.03em;color:var(--accent);margin-bottom:3px;}
 .karte{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px 32px 28px;position:relative;box-shadow:0 4px 14px rgba(46,36,23,0.06);margin-bottom:18px;}
 .karte .perf{display:none;}
 .karte .toprow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
@@ -886,6 +889,28 @@ function esc(s) {
   return d.innerHTML;
 }
  
+// Erkennt wiederkehrende "Begriff: Erklärung."-Strukturen in einem Nachschlagen-Text
+// und rendert sie als scannbare Liste (wie beim Paragrafen-Glossar). Texte ohne
+// diese Struktur bleiben als normaler, aber schmaler gesetzter Absatz erhalten.
+function formatBody(text) {
+  const re = /(^|(?<=[.)]\s))([A-ZÄÖÜ][A-Za-zÄÖÜäöüß0-9()§ \/\-]{1,48}):\s/g;
+  const matches = [...text.matchAll(re)];
+  if (matches.length >= 2) {
+    const items = [];
+    for (let i = 0; i < matches.length; i++) {
+      const label = matches[i][2].trim();
+      const start = matches[i].index + matches[i][0].length;
+      const end = i + 1 < matches.length ? matches[i + 1].index : text.length;
+      const content = text.slice(start, end).trim();
+      if (content) items.push({ label, content });
+    }
+    if (items.length >= 2) {
+      return `<ul class="def-list">${items.map(it => `<li><span class="def-label">${esc(it.label)}</span>${esc(it.content)}</li>`).join("")}</ul>`;
+    }
+  }
+  return `<p class="body-text">${esc(text)}</p>`;
+}
+ 
 // ---------------- Bausteine ----------------
 function stempel(status) {
   const cfg = { richtig: "RICHTIG", teilweise: "TEILWEISE", falsch: "NICHT KORREKT" }[status];
@@ -1134,7 +1159,7 @@ function renderTopic() {
   let html = breadcrumb(crumbs);
   html += `<h2>${esc(t.titel)}</h2>`;
   t.nachschlagen.forEach((block, i) => {
-    html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4><p class="body-text">${esc(block.t)}</p></div>`;
+    html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4>${formatBody(block.t)}</div>`;
   });
  
   const fragen = t.fragen;
