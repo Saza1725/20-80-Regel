@@ -97,10 +97,16 @@ button.danger:hover{background:#A85224;}
 select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
  
 /* ---------------- Mindmap-Navigation (Home & Fachbereichs-Seite) ---------------- */
-.mm-outer{background:radial-gradient(circle at 30% 20%, #1a2438 0%, #0a0e18 65%);border-radius:20px;padding:26px 10px 30px;margin-top:6px;box-shadow:inset 0 0 0 1px #23304a;}
-.mindmap-wrap{position:relative;width:100%;max-width:600px;margin:0 auto;}
+.mm-outer{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:1100px;box-sizing:border-box;background:radial-gradient(circle at 30% 20%, #1a2438 0%, #0a0e18 65%);border-radius:20px;padding:26px 16px 34px;margin-top:6px;box-shadow:inset 0 0 0 1px #23304a;}
+.mindmap-wrap{position:relative;width:100%;margin:0 auto;}
 .mm-svg{position:absolute;top:0;left:0;width:100%;height:100%;}
-.mm-node{position:absolute;width:230px;box-sizing:border-box;background:#131c2e;border:1.5px solid #3d5372;border-radius:10px;padding:10px 14px;cursor:pointer;transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;}
+.mm-node{position:absolute;box-sizing:border-box;background:#131c2e;border:1.5px solid #3d5372;border-radius:10px;padding:12px 16px;cursor:pointer;transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;}
+@media (max-width:640px){
+  .mm-node{padding:9px 11px;}
+  .mm-node-label{font-size:12.5px !important;}
+  .mm-node-sub{font-size:9.5px !important;}
+  .mm-outer{padding:20px 8px 26px;border-radius:14px;}
+}
 .mm-node:hover{border-color:#7fa8d9;box-shadow:0 0 0 3px rgba(127,168,217,0.15);transform:translateX(2px);}
 .mm-node.mm-central{background:#1e2c22;border-color:#4f7a5b;cursor:default;left:0 !important;}
 .mm-node.mm-central:hover{transform:none;box-shadow:none;}
@@ -115,6 +121,8 @@ select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-
 .news-item{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink);margin-bottom:4px;}
 .news-item:last-child{margin-bottom:0;}
 .news-item .mm-badge-neu{position:static;box-shadow:none;}
+.nav-buttons{display:flex;gap:10px;margin-bottom:16px;}
+.nav-buttons button{font-size:12.5px;padding:7px 14px;}
 .dino-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:14px 0;padding:16px;background:var(--bg);border-radius:14px;}
 .dino-caption{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);text-align:center;}
 .welcome-screen{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:26px;padding:20px;}
@@ -1224,20 +1232,22 @@ function renderWelcome() {
  
 // Zeichnet eine Mindmap: zentraler Knoten links, verbundene Knoten rechts,
 // mit geschwungenen SVG-Linien dazwischen (analog zur Gliederungs-Mindmap-Optik).
+// Positionen sind prozentual (bzw. virtuelle 0-1000-Einheiten für die SVG-Linien),
+// damit sich die Mindmap auf jeder Bildschirmgröße voll auf die Breite skaliert.
 function renderMindmap(central, nodes) {
-  const nodeH = 58, gap = 16, nodeW = 230, centralW = 190;
-  const totalH = Math.max(nodeH + 40, nodes.length * (nodeH + gap));
-  const svgW = centralW + 90 + nodeW;
-  const centralX = 0, centralY = totalH / 2;
-  const nodeX = centralW + 90;
+  const nodeH = 64, gap = 16;
+  const centralWPct = 32, nodeXPct = 46, nodeWPct = 52;
+  const totalH = Math.max(nodeH + 50, nodes.length * (nodeH + gap) + 20);
+  const centralYpx = totalH / 2;
  
   let paths = "";
   let nodesHtml = "";
   nodes.forEach((n, i) => {
-    const y = i * (nodeH + gap) + nodeH / 2 + Math.max(0, (totalH - nodes.length * (nodeH + gap)) / 2);
-    const cx1 = centralX + centralW + 35, cx2 = nodeX - 35;
-    paths += `<path d="M ${centralX + centralW} ${centralY} C ${cx1} ${centralY} ${cx2} ${y} ${nodeX} ${y}" stroke="#3d5372" stroke-width="1.6" fill="none"/>`;
-    nodesHtml += `<div class="mm-node${n.extra ? " mm-extra" : ""}" style="left:${nodeX}px; top:${y - nodeH / 2}px; width:${nodeW}px;" onclick="${n.onClick}">
+    const y = i * (nodeH + gap) + nodeH / 2 + Math.max(0, (totalH - (nodes.length * (nodeH + gap) - gap)) / 2) - gap / 2;
+    const x0 = centralWPct * 10, x1 = nodeXPct * 10;
+    const cx1 = x0 + 60, cx2 = x1 - 60;
+    paths += `<path d="M ${x0} ${centralYpx} C ${cx1} ${centralYpx} ${cx2} ${y} ${x1} ${y}" stroke="#3d5372" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>`;
+    nodesHtml += `<div class="mm-node${n.extra ? " mm-extra" : ""}" style="left:${nodeXPct}%; top:${y - nodeH / 2}px; width:${nodeWPct}%;" onclick="${n.onClick}">
       ${n.neu ? '<span class="mm-badge-neu">NEU</span>' : ""}
       <div class="mm-node-label">${esc(n.label)}</div>
       ${n.sub ? `<div class="mm-node-sub">${esc(n.sub)}</div>` : ""}
@@ -1245,8 +1255,8 @@ function renderMindmap(central, nodes) {
   });
  
   return `<div class="mm-outer"><div class="mindmap-wrap" style="height:${totalH}px;">
-    <svg class="mm-svg" viewBox="0 0 ${svgW} ${totalH}" preserveAspectRatio="xMinYMid meet">${paths}</svg>
-    <div class="mm-node mm-central" style="top:${centralY - nodeH / 2 - 6}px; width:${centralW}px;">
+    <svg class="mm-svg" viewBox="0 0 1000 ${totalH}" preserveAspectRatio="none">${paths}</svg>
+    <div class="mm-node mm-central" style="left:0; top:${centralYpx - nodeH / 2 - 6}px; width:${centralWPct}%;">
       <div class="mm-node-label">${esc(central.label)}</div>
       ${central.sub ? `<div class="mm-node-sub">${esc(central.sub)}</div>` : ""}
     </div>
@@ -1425,19 +1435,36 @@ function renderExamDone() {
   return html;
 }
  
+function navButtons() {
+  return `<div class="nav-buttons">
+    <button class="ghost" onclick="gehezuZurueck()">← Zurück</button>
+    <button class="ghost" onclick="gehezuHome()">🏠 Startseite</button>
+  </div>`;
+}
+ 
+function gehezuZurueck() {
+  if (state.screen === "topic" || state.screen === "kapitel") { gehezuFach(state.fach); return; }
+  if (state.screen === "exam") {
+    if (state.pruefungAktiv) { examAbbrechen(); return; }
+    gehezuFach(state.fach); return;
+  }
+  if (state.screen === "subject") { gehezuHome(); return; }
+  gehezuHome();
+}
+ 
 function render() {
   let html = "";
   if (state.screen === "welcome") html = renderWelcome();
   else if (state.screen === "home") html = renderHome();
-  else if (state.screen === "subject") html = renderSubject();
-  else if (state.screen === "kapitel") html = renderKapitel();
-  else if (state.screen === "topic") html = renderTopic();
+  else if (state.screen === "subject") html = navButtons() + renderSubject();
+  else if (state.screen === "kapitel") html = navButtons() + renderKapitel();
+  else if (state.screen === "topic") html = navButtons() + renderTopic();
   else if (state.screen === "exam") {
-    if (!state.pruefungAktiv) html = renderExamSetup();
+    if (!state.pruefungAktiv) html = navButtons() + renderExamSetup();
     else {
       const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
       const fertig = beantwortet === state.pruefungsfragen.length && state.pruefungsfragen.length > 0;
-      html = fertig ? renderExamDone() : renderExamActive();
+      html = navButtons() + (fertig ? renderExamDone() : renderExamActive());
     }
   }
   document.getElementById("app").innerHTML = html;
