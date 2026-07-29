@@ -1,3 +1,6 @@
+
+
+Lernkartei public · HTML
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -92,6 +95,26 @@ button.danger:hover{background:#A85224;}
 .self-grade button.falsch-btn{border-color:var(--red);color:var(--red);}
 .hinweis{font-size:13px;color:var(--muted);margin:0 0 18px 0;font-style:italic;}
 select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
+ 
+/* ---------------- Mindmap-Navigation (Home & Fachbereichs-Seite) ---------------- */
+.mm-outer{background:radial-gradient(circle at 30% 20%, #1a2438 0%, #0a0e18 65%);border-radius:20px;padding:26px 10px 30px;margin-top:6px;box-shadow:inset 0 0 0 1px #23304a;}
+.mindmap-wrap{position:relative;width:100%;max-width:600px;margin:0 auto;}
+.mm-svg{position:absolute;top:0;left:0;width:100%;height:100%;}
+.mm-node{position:absolute;width:230px;box-sizing:border-box;background:#131c2e;border:1.5px solid #3d5372;border-radius:10px;padding:10px 14px;cursor:pointer;transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;}
+.mm-node:hover{border-color:#7fa8d9;box-shadow:0 0 0 3px rgba(127,168,217,0.15);transform:translateX(2px);}
+.mm-node.mm-central{background:#1e2c22;border-color:#4f7a5b;cursor:default;left:0 !important;}
+.mm-node.mm-central:hover{transform:none;box-shadow:none;}
+.mm-node.mm-extra{border-style:dashed;border-color:#8a6a3a;background:#20190f;}
+.mm-node-label{font-family:'Fraunces',serif;font-weight:600;font-size:14.5px;color:#EAEFF7;line-height:1.3;}
+.mm-node.mm-central .mm-node-label{font-size:16px;}
+.mm-node-sub{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8FA3C2;margin-top:4px;}
+.mm-badge-neu{position:absolute;top:-9px;right:-8px;background:var(--accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.05em;padding:2px 7px;border-radius:20px;box-shadow:0 0 0 2px #0a0e18;}
+.mm-back{display:inline-block;margin-bottom:14px;background:none;border:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12.5px;cursor:pointer;text-decoration:underline;padding:0;}
+.news-panel{background:var(--accent-soft);border:1.5px dashed var(--accent);border-radius:14px;padding:14px 18px;margin:16px 0 6px;}
+.news-panel .news-title{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin-bottom:8px;}
+.news-item{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink);margin-bottom:4px;}
+.news-item:last-child{margin-bottom:0;}
+.news-item .mm-badge-neu{position:static;box-shadow:none;}
 .dino-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:14px 0;padding:16px;background:var(--bg);border-radius:14px;}
 .dino-caption{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);text-align:center;}
 .welcome-screen{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:26px;padding:20px;}
@@ -103,11 +126,11 @@ select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-
 <body>
 <div class="wrap"><div id="app"></div></div>
 <script>
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: Kosten- und Leistungsrechnung (KLR) – Modul Vfal90
 ------------------------------------------------------------------- */
-
+ 
 const TOPICS_KLR = [
   {
     id: "grundbegriffe",
@@ -188,7 +211,7 @@ const TOPICS_KLR = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: SGB II – Grundsicherung für Arbeitsuchende (Bürgergeld)
 ------------------------------------------------------------------- */
@@ -271,7 +294,7 @@ const TOPICS_SGB2 = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: Recht der Gefahrenabwehr NRW
 ------------------------------------------------------------------- */
@@ -379,7 +402,7 @@ const TOPICS_GA = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Fachbereich: Auslegungsmethoden – Allgemeines Verwaltungsrecht (R2)
 ------------------------------------------------------------------- */
@@ -479,7 +502,7 @@ const TOPICS_AVR = [
     ],
   },
 ];
-
+ 
 /* ------------------------------------------------------------------
    Zusatzordner innerhalb KLR: Grundlagen des Rechnungswesens
    (unabhängig von den bisherigen Prüfungs-Themen TOPICS_KLR).
@@ -563,7 +586,7 @@ const TOPICS_KLR_GRUNDLAGEN = [
     ],
   },
 ];
-
+ 
 /* ==================================================================
    FACH: Kommunales Haushaltsrecht (KHR)
    Zweistufige Struktur: Fach -> Kapitel (eigener Ordner, eigene
@@ -571,7 +594,7 @@ const TOPICS_KLR_GRUNDLAGEN = [
    Aus den hochgeladenen KHR-Skripten und Übungsaufgaben (Tobias
    Röbbecke) zusammengestellt.
 ================================================================== */
-
+ 
 /* ---------------- Kapitel 1: Allgemeine Systematik und Ziele der kommunalen Finanzwirtschaft ---------------- */
 const KHR_K1_TOPICS = [
   {
@@ -613,7 +636,7 @@ const KHR_K1_TOPICS = [
     ],
   },
 ];
-
+ 
 /* ---------------- Kapitel 2: Ermittlung der Grund- und Gewerbesteuer ---------------- */
 const KHR_K2_TOPICS = [
   {
@@ -666,7 +689,7 @@ const KHR_K2_TOPICS = [
     ],
   },
 ];
-
+ 
 /* ---------------- Kapitel 3: Begriffspaare des Rechnungswesens ----------------
    Inhaltlich identisch mit dem Thema "Begriffspaare" im KLR-Zusatzordner
    (Abgrenzung der Begriffspaare) – hier als eigenes Kapitel im Fach KHR
@@ -692,7 +715,7 @@ const KHR_K3_TOPICS = [
     ],
   },
 ];
-
+ 
 /* ---------------- Kapitel 4: Haushaltssatzung, Haushaltsplan & Haushaltskreislauf ----------------
    Hinweis: Aus dem aktuellen Upload liegt bislang nur Material zu den
    Grundlagen der Haushaltssatzung vor. Inhalte zu Haushaltsplan und
@@ -716,9 +739,9 @@ const KHR_K4_TOPICS = [
     ],
   },
 ];
-
+ 
 const KHR_TOPICS_ALL = [...KHR_K1_TOPICS, ...KHR_K2_TOPICS, ...KHR_K3_TOPICS, ...KHR_K4_TOPICS];
-
+ 
 /* Zusätzliche Fragen aus der Präsentation, um die Themen ausführlicher abzudecken */
 KHR_TOPICS_ALL.find(t => t.id === "khr-k1-rechtsgrundlagen").fragen.push(
   { id: "khrk1-11", typ: "freitext", frage: "Nenne die vier Komponenten des 'Magischen Vierecks' aus § 1 Stabilitäts- und Wachstumsgesetz.", musterloesung: "Preisstabilität, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht und stetiges Wirtschaftswachstum." },
@@ -745,7 +768,7 @@ KHR_TOPICS_ALL.find(t => t.id === "khr-k2-gewerbesteuer").fragen.push(
   { id: "khrk2-20", typ: "mc", frage: "Nach welchem Kriterium wird der Gewerbesteuermessbetrag zerlegt, wenn ein Betrieb Betriebsstätten in mehreren Gemeinden hat?", optionen: ["Nach der Einwohnerzahl der Gemeinden", "Nach dem Verhältnis der Arbeitslöhne", "Nach dem Umsatz je Betriebsstätte", "Nach der Fläche der Betriebsstätten"], loesung: 1, erlaeuterung: "Maßgeblich für die Zerlegung ist gemäß § 29 Abs. 1 Nr. 1 GewStG das Verhältnis der in den einzelnen Betriebsstätten gezahlten Arbeitslöhne." },
   { id: "khrk2-21", typ: "freitext", frage: "Nenne je zwei Beispiele für Personengesellschaften und Kapitalgesellschaften als Rechtsformen von Betrieben.", musterloesung: "Personengesellschaften: z. B. GbR, oHG, KG, Einzelkaufmann (e. K.). Kapitalgesellschaften: z. B. GmbH, AG, UG." }
 );
-
+ 
 const TOPICS_KHR_PARAGRAPHEN = [
   {
     id: "khr-paragrafen",
@@ -792,17 +815,81 @@ const TOPICS_KHR_PARAGRAPHEN = [
     fragen: [],
   },
 ];
-
+ 
+/* ==================================================================
+   FACH: § 99 BGB Früchte (Gutachtenstil & -struktur)
+   Aus den hochgeladenen Dateien "Formulierungen-Gutachtenstil.pdf"
+   und "Gutachtenstruktur_Muster.pages" zusammengestellt.
+================================================================== */
+const TOPICS_GUTACHTEN = [
+  {
+    id: "gutachten-formulierungen",
+    titel: "Formulierungen im Gutachtenstil",
+    kurz: "Formulierungen",
+    nachschlagen: [
+      { h: "Obersatz", t: "A könnte einen Anspruch aus § XX gegen B geltend machen. A könnte gegen B einen Anspruch auf Übergabe und Übereignung des/der … aus § XX haben. A könnte gegen B einen Anspruch auf Zahlung von XX € aus § XX haben. Ein solcher Anspruch könnte sich aus § XX ergeben." },
+      { h: "Tatbestandsmerkmale einleiten", t: "Ein solcher Anspruch setzt voraus, dass … Dazu/Hierfür/Dafür müsste zunächst … [TBM] vorliegen/gegeben sein. § XX verlangt/erfordert, dass … vorliegt. Fraglich/Problematisch ist zunächst … Weiterhin/schließlich/außerdem/überdies/ferner/sodann muss noch … [TBM] vorliegen/gegeben sein." },
+      { h: "Definition", t: "Unter … versteht man … … [TBM] liegt vor, wenn/falls/sobald … Diese/r ist gekennzeichnet/charakterisiert/definiert durch … Dies zeichnet sich aus durch …" },
+      { h: "Subsumtion", t: "Indem/als/dadurch, dass A … [Sachverhalt] handelte, hat er … [TBM] erfüllt. Aus … [Handlung] ist auf … [TBM] zu schließen. Hieraus ergibt sich/ist ersichtlich/wird deutlich/erkennbar, dass … Angewendet auf den Sachverhalt bedeutet dies, dass …" },
+      { h: "Problemaufwurf / Gegenargument", t: "Bedenken ergeben sich allerdings hinsichtlich … [TBM]. Ein solcher Anspruch ist jedoch ausgeschlossen, wenn/falls … Einem Anspruch aus § XX könnte aber/jedoch/allerdings entgegenstehen, dass … Der Anspruch könnte aber wegen … erloschen/untergegangen/nichtig sein." },
+      { h: "Schlussfolgerung / Ergebnis", t: "Demnach/Daher/Folglich/Somit/Damit/Mithin/Demzufolge/Also/Infolgedessen/Deswegen/Deshalb/Aus diesem Grund/Dementsprechend … Im Ergebnis kann festgestellt werden … Damit ist im Ergebnis … Es fehlt letztlich an …" },
+    ],
+    fragen: [
+      { id: "gt-01", typ: "mc", frage: "Zu welcher Gutachten-Phase gehört die Formulierung 'Unter … versteht man …'?", optionen: ["Obersatz", "Definition", "Subsumtion", "Ergebnis"], loesung: 1, erlaeuterung: "Formulierungen wie 'Unter … versteht man …' oder '… liegt vor, wenn …' dienen der Definition eines Tatbestandsmerkmals." },
+      { id: "gt-02", typ: "mc", frage: "Welche Formulierung leitet typischerweise die Subsumtion ein?", optionen: ["A könnte gegen B einen Anspruch … haben.", "Indem A … handelte, hat er … [TBM] erfüllt.", "Demnach ist im Ergebnis …", "Fraglich ist zunächst, ob …"], loesung: 1, erlaeuterung: "Die Subsumtion verknüpft den konkreten Sachverhalt mit dem zuvor definierten Tatbestandsmerkmal, typischerweise mit 'Indem/dadurch, dass A … gehandelt hat, hat er … erfüllt.'" },
+      { id: "gt-03", typ: "freitext", frage: "Nenne die vier bzw. fünf klassischen Bausteine eines Gutachtens in der richtigen Reihenfolge.", musterloesung: "1. Obersatz (Anspruch/Frage formulieren), 2. Tatbestandsmerkmale benennen und Definition, 3. Subsumtion (Sachverhalt unter die Definition fassen), 4. ggf. Problemaufwurf/Gegenargument, 5. Schlussfolgerung/Ergebnis." },
+      { id: "gt-04", typ: "mc", frage: "Welche Formulierung gehört zum Obersatz?", optionen: ["A könnte gegen B einen Anspruch auf Zahlung von XX € aus § XX haben.", "Dies zeichnet sich aus durch …", "Aus diesem Umstand geht hervor, dass …", "Es fehlt letztlich an …"], loesung: 0, erlaeuterung: "Der Obersatz formuliert zu Beginn die Anspruchsfrage, z. B. 'A könnte gegen B einen Anspruch auf Zahlung von XX € aus § XX haben.'" },
+      { id: "gt-05", typ: "freitext", frage: "Warum sollte man im Gutachtenstil zunächst die Frage offenlassen ('könnte'), statt das Ergebnis vorwegzunehmen?", musterloesung: "Der Gutachtenstil arbeitet ergebnisoffen: Zunächst wird nur die Möglichkeit eines Anspruchs/einer Rechtsfolge aufgeworfen ('könnte'), die dann Schritt für Schritt anhand der Tatbestandsmerkmale geprüft wird. Erst am Ende steht durch Subsumtion das feststehende Ergebnis – das entspricht der Prüfungslogik und vermeidet vorschnelle Festlegungen." },
+    ],
+  },
+  {
+    id: "gutachten-aufbau",
+    titel: "Aufbau eines Gutachtens (Struktur)",
+    kurz: "Aufbau",
+    nachschlagen: [
+      { h: "Der Gutachtenstil im Überblick", t: "Der Gutachtenstil prüft eine Rechtsfrage in der logischen Reihenfolge: Obersatz (Frage aufwerfen) → Definition der Tatbestandsmerkmale (TBM) → Subsumtion (Sachverhalt unter die TBM fassen) → Ergebnis. Er unterscheidet sich vom Urteilsstil, der das Ergebnis vorwegnimmt und erst danach begründet." },
+      { h: "Schritt 1: Obersatz", t: "Formuliert die zu prüfende Anspruchsgrundlage bzw. Rechtsfrage im Konjunktiv ('könnte'), ohne das Ergebnis vorwegzunehmen, z. B. 'A könnte gegen B einen Anspruch aus § XX haben.'" },
+      { h: "Schritt 2: Tatbestandsmerkmale und Definition", t: "Die Anspruchsnorm wird in ihre einzelnen Tatbestandsmerkmale zerlegt; jedes TBM wird zunächst definiert ('Unter … versteht man …'), bevor geprüft wird, ob es im Sachverhalt erfüllt ist." },
+      { h: "Schritt 3: Subsumtion", t: "Der konkrete Sachverhalt wird unter die zuvor gebildete Definition gefasst: Es wird gezeigt, dass (oder warum nicht) die im Sachverhalt geschilderten Tatsachen die Voraussetzungen der Definition erfüllen." },
+      { h: "Schritt 4: Ergebnis", t: "Abschließend wird festgestellt, ob der Anspruch/die Rechtsfolge besteht oder nicht – mit einer zusammenfassenden Schlussfolgerung ('Demnach …', 'Im Ergebnis …')." },
+    ],
+    fragen: [
+      { id: "gt-06", typ: "mc", frage: "Worin unterscheidet sich der Gutachtenstil grundlegend vom Urteilsstil?", optionen: ["Es gibt keinen Unterschied", "Der Gutachtenstil nimmt das Ergebnis vorweg, der Urteilsstil nicht", "Der Gutachtenstil prüft ergebnisoffen Schritt für Schritt, der Urteilsstil nennt das Ergebnis zuerst und begründet es danach", "Der Urteilsstil wird nur in Hausarbeiten verwendet"], loesung: 2, erlaeuterung: "Im Gutachtenstil wird die Frage zunächst offengelassen und schrittweise über Definition und Subsumtion geprüft; der Urteilsstil nennt das Ergebnis sofort und liefert die Begründung im Anschluss." },
+      { id: "gt-07", typ: "freitext", frage: "Was ist die Funktion der Subsumtion im Gutachtenaufbau?", musterloesung: "Die Subsumtion verbindet die abstrakte Definition eines Tatbestandsmerkmals mit dem konkreten Sachverhalt: Es wird gezeigt, dass (oder warum nicht) die tatsächlichen Umstände die Voraussetzungen der zuvor gebildeten Definition erfüllen." },
+      { id: "gt-08", typ: "mc", frage: "In welcher Reihenfolge laufen die vier Schritte des Gutachtenstils ab?", optionen: ["Ergebnis → Definition → Subsumtion → Obersatz", "Obersatz → Definition → Subsumtion → Ergebnis", "Definition → Obersatz → Ergebnis → Subsumtion", "Subsumtion → Definition → Obersatz → Ergebnis"], loesung: 1, erlaeuterung: "Die klassische Reihenfolge ist: Obersatz (Frage aufwerfen), Definition der Tatbestandsmerkmale, Subsumtion des Sachverhalts, abschließend das Ergebnis." },
+    ],
+  },
+];
+ 
+const TOPICS_GUTACHTEN_SCHEMA = [
+  {
+    id: "gutachten-schema",
+    titel: "Schema: Gutachtenstil & -struktur (Muster)",
+    kurz: "Schema",
+    nachschlagen: [
+      { h: "Muster-Aufbau eines Gutachtens", t: "1. Obersatz: 'A könnte gegen B einen Anspruch auf … aus § XX haben.' 2. Tatbestandsmerkmale: 'Dazu müsste zunächst … [TBM 1] vorliegen. § XX verlangt außerdem … [TBM 2].' 3. Definition je TBM: 'Unter … [TBM] versteht man …' 4. Subsumtion je TBM: 'Indem A … handelte, hat er … [TBM] erfüllt.' 5. Ergebnis: 'Demnach hat A gegen B einen Anspruch auf … aus § XX.'" },
+      { h: "Obersatz – Formulierungen", t: "A könnte einen Anspruch aus § XX gegen B geltend machen. A könnte gegen B einen Anspruch auf Übergabe und Übereignung des/der … aus § XX haben. A könnte gegen B einen Anspruch auf Zahlung von XX € aus § XX haben. A verlangt von B Herausgabe des/der …. Als Anspruchsgrundlage hierfür kommt § XX in Betracht/Frage. Ein solcher Anspruch könnte sich aus § XX ergeben." },
+      { h: "Tatbestandsmerkmale – Formulierungen", t: "Ein solcher Anspruch setzt voraus, dass… Voraussetzung dafür ist… Dazu/Hierfür/Dafür müsste zunächst … [TBM] vorliegen/gegeben sein. § XX verlangt/erfordert, dass … vorliegt. Fraglich/Problematisch ist zunächst… Es stellt sich die Frage, ob… Hierfür kommt es darauf an, ob … [TBM] vorliegt. Das ist der Fall/Dies ist anzunehmen/Dies ist zu bejahen, wenn … [TBM] vorliegt. Weiterhin/schließlich/außerdem/überdies/ferner/sodann muss noch … [TBM] vorliegen/gegeben sein. Bedenken ergeben sich allerdings hinsichtlich … [TBM]. Aber/jedoch/allerdings/dennoch/trotzdem … Ein solcher Anspruch ist jedoch ausgeschlossen, wenn/falls… Einem Anspruch aus § XX könnte aber/jedoch/allerdings entgegenstehen, dass … Der Anspruch könnte aber wegen … erloschen/untergegangen/nichtig sein." },
+      { h: "Definition – Formulierungen", t: "Unter … versteht man … … [TBM] liegt vor, wenn/falls/sobald … Diese/r ist gekennzeichnet/charakterisiert/definiert durch … Dies zeichnet sich aus durch …" },
+      { h: "Subsumtion – Formulierungen", t: "Indem/als/dadurch, dass A … [Sachverhalt] handelte, hat er … [TBM] erfüllt. Aus… [Handlung] ist auf … [TBM] zu schließen. Aus … kann auf … geschlossen werden. Hieraus/Aus diesem Umstand geht hervor, dass… Hieraus ergibt sich/ist ersichtlich/wird deutlich/erkennbar, dass … Daraus lässt sich entnehmen, dass … Angewendet auf den Sachverhalt bedeutet dies, dass ... … [TBM] zeigt sich aus dem Umstand, dass …" },
+      { h: "Schlussfolgerung/Ergebnis – Formulierungen", t: "Demnach/Daher/Folglich/Somit/Damit/Mithin/Demzufolge/Also/Infolgedessen/Deswegen/Deshalb/Aus diesem Grund/Dementsprechend … Im Ergebnis kann festgestellt werden … Damit ist im Ergebnis … Daraus ergibt sich … Es fehlt letztlich an …" },
+      { h: "Quelle", t: "Formulierungen nach: Roland Schimmel, Juristische Klausuren und Hausarbeiten richtig formulieren. Literaturempfehlung: Czerny, Meine erste Zivilrechtsklausur, in: JuS 10/2012, S. 877." },
+    ],
+    fragen: [],
+  },
+];
+ 
 const SUBJECTS = [
   { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR, extra: TOPICS_KLR_GRUNDLAGEN },
+  { id: "gutachtenstil", kurz: "§ 99 BGB", titel: "§ 99 BGB Früchte", az: "§ 99 BGB", topics: TOPICS_GUTACHTEN, extra: TOPICS_GUTACHTEN_SCHEMA, neu: true },
   { id: "khr", kurz: "KHR", titel: "Kommunales Haushaltsrecht", az: "KHR", topics: KHR_TOPICS_ALL, extra: TOPICS_KHR_PARAGRAPHEN },
   { id: "sgb2", kurz: "SGB II", titel: "Grundsicherung für Arbeitsuchende (SGB II)", az: "SGB II", topics: TOPICS_SGB2 },
   { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
   { id: "avr", kurz: "Auslegung", titel: "Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)", az: "R2", topics: TOPICS_AVR },
 ];
-
+ 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');`;
-
+ 
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -811,7 +898,7 @@ function shuffle(arr) {
   }
   return a;
 }
-
+ 
 function alleFragenMitThema(subject) {
   const out = [];
   subject.topics.forEach((top) => {
@@ -819,7 +906,7 @@ function alleFragenMitThema(subject) {
   });
   return out;
 }
-
+ 
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -828,7 +915,7 @@ function shuffle(arr) {
   }
   return a;
 }
-
+ 
 // ---------------- App-Status (nur im Speicher dieser Sitzung, kein Server, kein Login) ----------------
 const state = {
   screen: "welcome",
@@ -844,7 +931,7 @@ const state = {
   anzahl: 10,
   cardState: {}, // pro Frage: { auswahl, geprueft, geloest }
 };
-
+ 
 function aktuellesFach() { return SUBJECTS.find(s => s.id === state.fach); }
 function aktuellesKapitel() {
   const f = aktuellesFach();
@@ -861,13 +948,13 @@ function aktuellesThema() {
 }
 function ergebnisKey() { return state.fach + ":" + (state.kapitelId || "") + ":" + state.themaId; }
 function ergebnisseFuerThema() { return state.ergebnisse[ergebnisKey()] || {}; }
-
+ 
 function gehezuHome() { state.screen = "home"; state.pruefungAktiv = false; render(); }
 function gehezuFach(id) { state.fach = id; state.screen = "subject"; state.pruefungAktiv = false; render(); }
 function gehezuKapitel(id) { state.kapitelId = id; state.screen = "kapitel"; state.pruefungAktiv = false; render(); }
 function gehezuThema(id) { state.themaId = id; state.screen = "topic"; state.index = 0; state.cardState = {}; render(); }
 function gehezuPruefung() { state.screen = "exam"; state.pruefungAktiv = false; render(); }
-
+ 
 function examPool() {
   const f = aktuellesFach();
   if (!f) return [];
@@ -877,7 +964,7 @@ function examPool() {
   }
   return alleFragenMitThema(f);
 }
-
+ 
 function starteNeuePruefung() {
   const pool = examPool();
   const n = Math.min(state.anzahl, pool.length);
@@ -888,13 +975,13 @@ function starteNeuePruefung() {
   state.cardState = {};
   render();
 }
-
+ 
 function esc(s) {
   const d = document.createElement("div");
   d.textContent = s;
   return d.innerHTML;
 }
-
+ 
 // Erkennt wiederkehrende "Begriff: Erklärung."-Strukturen in einem Nachschlagen-Text
 // und rendert sie als scannbare Liste (wie beim Paragrafen-Glossar). Texte ohne
 // diese Struktur bleiben als normaler, aber schmaler gesetzter Absatz erhalten.
@@ -916,7 +1003,7 @@ function formatBody(text) {
   }
   return `<p class="body-text">${esc(text)}</p>`;
 }
-
+ 
 // ---------------- Bausteine ----------------
 // Schielender Dino mit Brille – erscheint bei falschen Antworten
 function dinoBild() {
@@ -945,21 +1032,21 @@ function dinoBild() {
     <div class="dino-caption">Ups – das war leider nicht ganz richtig!</div>
   </div>`;
 }
-
-
+ 
+ 
 function stempel(status) {
   const cfg = { richtig: "RICHTIG", teilweise: "TEILWEISE", falsch: "NICHT KORREKT" }[status];
   if (!cfg) return "";
   return `<div class="stamp ${status}">${cfg}</div>`;
 }
-
+ 
 function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered) {
   const cs = state.cardState[frage.id] || { auswahl: null, geprueft: !!ergebnisseObj[frage.id] };
   state.cardState[frage.id] = cs;
   const gespeichert = ergebnisseObj[frage.id];
   const geprueft = cs.geprueft || !!gespeichert;
   const status = gespeichert ? gespeichert.status : cs.status;
-
+ 
   let inner = "";
   if (frage.typ === "mc") {
     inner += `<div>`;
@@ -984,7 +1071,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
         <p class="hinweis" style="margin-top:8px;">Diese Version läuft ohne Claude-Konto – die Freitextantwort wird nicht automatisch bewertet. Vergleiche selbst mit der Musterlösung und markiere dein Ergebnis.</p>`;
     }
   }
-
+ 
   let solutionBlock = "";
   if (geprueft) {
     solutionBlock = `<div class="solution">
@@ -1009,7 +1096,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
       </div>
     </div>`;
   }
-
+ 
   return `<div class="karte">
     <div class="perf"></div>
     <div class="toprow">
@@ -1021,14 +1108,14 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
     ${solutionBlock}
   </div>`;
 }
-
+ 
 function waehleOption(fid, i) {
   const cs = state.cardState[fid];
   if (cs.geprueft) return;
   cs.auswahl = i;
   render();
 }
-
+ 
 function pruefeMC(fid, index, imExamen) {
   const cs = state.cardState[fid];
   if (cs.auswahl === null || cs.auswahl === undefined) return;
@@ -1039,14 +1126,14 @@ function pruefeMC(fid, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
-
+ 
 function zeigeLoesung(fid) {
   const cs = state.cardState[fid];
   cs.freitext = document.getElementById("ft-" + fid) ? document.getElementById("ft-" + fid).value : (cs.freitext || "");
   cs.zeigeLoesung = true;
   render();
 }
-
+ 
 function selbstBewertung(fid, status, index, imExamen) {
   const cs = state.cardState[fid];
   cs.geprueft = true;
@@ -1054,7 +1141,7 @@ function selbstBewertung(fid, status, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
-
+ 
 function findFrage(fid) {
   if (state.pruefungAktiv) {
     return state.pruefungsfragen.find(f => f.id === fid);
@@ -1062,7 +1149,7 @@ function findFrage(fid) {
   const t = aktuellesThema();
   return t ? t.fragen.find(f => f.id === fid) : null;
 }
-
+ 
 function speichereErgebnis(fid, ergebnis, imExamen) {
   if (imExamen) {
     state.pruefungsErgebnisse[fid] = ergebnis;
@@ -1072,7 +1159,7 @@ function speichereErgebnis(fid, ergebnis, imExamen) {
     state.ergebnisse[key][fid] = ergebnis;
   }
 }
-
+ 
 function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
   return `<div class="progressbar">${fragen.map((f, i) => {
     const r = ergebnisseObj[f.id];
@@ -1080,7 +1167,7 @@ function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
     return `<span class="${cls} ${i === aktuellerIndex ? "active" : ""}" title="Frage ${i + 1}" onclick="${onJump}(${i})"></span>`;
   }).join("")}</div>`;
 }
-
+ 
 function breadcrumb(teile) {
   return `<div class="breadcrumb">${teile.map((t, i) => {
     const sep = i > 0 ? '<span class="sep">/</span>' : "";
@@ -1088,14 +1175,14 @@ function breadcrumb(teile) {
     return sep + el;
   }).join("")}</div>`;
 }
-
+ 
 function ordnerkachel(titel, unterzeile, onClick, opts) {
   opts = opts || {};
   const cls = "tile" + (opts.gross ? " gross" : "") + (opts.akzent ? " akzent" : "") + (opts.dashed ? " dashed" : "");
   const clickAttr = opts.dashed ? "" : ` onclick="${onClick}"`;
   return `<button class="${cls}"${clickAttr}><div class="tab"></div><div class="ttl">${esc(titel)}</div>${unterzeile ? `<div class="meta">${esc(unterzeile)}</div>` : ""}</button>`;
 }
-
+ 
 function kopf(ueberschrift, unterzeile) {
   return `<header style="margin-bottom:22px;">
     <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
@@ -1103,7 +1190,7 @@ function kopf(ueberschrift, unterzeile) {
     ${unterzeile ? `<div class="sub">${esc(unterzeile)}</div>` : ""}
   </header>`;
 }
-
+ 
 // ---------------- Navigation innerhalb Thema/Prüfung ----------------
 function themaWeiter() { const t = aktuellesThema(); state.index = Math.min(t.fragen.length - 1, state.index + 1); render(); }
 function themaZurueck() { state.index = Math.max(0, state.index - 1); render(); }
@@ -1113,7 +1200,7 @@ function examZurueck() { state.pruefungIndex = Math.max(0, state.pruefungIndex -
 function examSpringe(i) { state.pruefungIndex = i; render(); }
 function examAbbrechen() { state.pruefungAktiv = false; render(); }
 function setAnzahl(v) { state.anzahl = Number(v); }
-
+ 
 // ---------------- Screens ----------------
 function alleThemenCount(f) {
   if (f.kapitel) return f.kapitel.reduce((s, k) => s + k.topics.length, 0);
@@ -1123,9 +1210,9 @@ function alleFragenCountFach(f) {
   if (f.kapitel) return f.kapitel.reduce((s, k) => s + alleFragenMitThema(k).length, 0);
   return alleFragenMitThema(f).length;
 }
-
+ 
 function startApp() { state.screen = "home"; render(); }
-
+ 
 function renderWelcome() {
   return `<div class="welcome-screen">
     <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
@@ -1134,48 +1221,99 @@ function renderWelcome() {
     <div class="welcome-sub">Az. Übersicht · Fachbereiche</div>
   </div>`;
 }
-
+ 
+// Zeichnet eine Mindmap: zentraler Knoten links, verbundene Knoten rechts,
+// mit geschwungenen SVG-Linien dazwischen (analog zur Gliederungs-Mindmap-Optik).
+function renderMindmap(central, nodes) {
+  const nodeH = 58, gap = 16, nodeW = 230, centralW = 190;
+  const totalH = Math.max(nodeH + 40, nodes.length * (nodeH + gap));
+  const svgW = centralW + 90 + nodeW;
+  const centralX = 0, centralY = totalH / 2;
+  const nodeX = centralW + 90;
+ 
+  let paths = "";
+  let nodesHtml = "";
+  nodes.forEach((n, i) => {
+    const y = i * (nodeH + gap) + nodeH / 2 + Math.max(0, (totalH - nodes.length * (nodeH + gap)) / 2);
+    const cx1 = centralX + centralW + 35, cx2 = nodeX - 35;
+    paths += `<path d="M ${centralX + centralW} ${centralY} C ${cx1} ${centralY} ${cx2} ${y} ${nodeX} ${y}" stroke="#3d5372" stroke-width="1.6" fill="none"/>`;
+    nodesHtml += `<div class="mm-node${n.extra ? " mm-extra" : ""}" style="left:${nodeX}px; top:${y - nodeH / 2}px; width:${nodeW}px;" onclick="${n.onClick}">
+      ${n.neu ? '<span class="mm-badge-neu">NEU</span>' : ""}
+      <div class="mm-node-label">${esc(n.label)}</div>
+      ${n.sub ? `<div class="mm-node-sub">${esc(n.sub)}</div>` : ""}
+    </div>`;
+  });
+ 
+  return `<div class="mm-outer"><div class="mindmap-wrap" style="height:${totalH}px;">
+    <svg class="mm-svg" viewBox="0 0 ${svgW} ${totalH}" preserveAspectRatio="xMinYMid meet">${paths}</svg>
+    <div class="mm-node mm-central" style="top:${centralY - nodeH / 2 - 6}px; width:${centralW}px;">
+      <div class="mm-node-label">${esc(central.label)}</div>
+      ${central.sub ? `<div class="mm-node-sub">${esc(central.sub)}</div>` : ""}
+    </div>
+    ${nodesHtml}
+  </div></div>`;
+}
+ 
+// Sammelt alle mit neu:true markierten Fächer/Ordner für den "Was gibt's Neues"-Hinweis
+function findNeueEintraege() {
+  const out = [];
+  SUBJECTS.forEach(s => {
+    if (s.neu) out.push({ label: s.titel, ort: "Fachbereich", onClick: `gehezuFach('${s.id}')` });
+    (s.topics || []).forEach(t => { if (t.neu) out.push({ label: t.titel, ort: s.kurz, onClick: `gehezuFach('${s.id}')` }); });
+    (s.extra || []).forEach(t => { if (t.neu) out.push({ label: t.titel, ort: s.kurz + " · Extra", onClick: `gehezuFach('${s.id}')` }); });
+  });
+  return out;
+}
+ 
 function renderHome() {
   let html = kopf("Lernkartei", "Az. Übersicht · Fachbereiche");
+  const neu = findNeueEintraege();
+  if (neu.length) {
+    html += `<div class="news-panel">
+      <div class="news-title">WAS GIBT'S NEUES?</div>
+      ${neu.map(n => `<div class="news-item" onclick="${n.onClick}" style="cursor:pointer;"><span class="mm-badge-neu">NEU</span> ${esc(n.label)} <span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11.5px;">· ${esc(n.ort)}</span></div>`).join("")}
+    </div>`;
+  }
   html += `<div class="section-label">FACHBEREICHE</div>`;
-  SUBJECTS.forEach(s => {
-    const themenLabel = s.kapitel ? `${s.kapitel.length} Kapitel · ${alleThemenCount(s)} Themen` : `${alleThemenCount(s)} Themengebiete`;
-    html += ordnerkachel(s.titel, `Az. ${s.az} · ${themenLabel} · ${alleFragenCountFach(s)} Fragen`, `gehezuFach('${s.id}')`, { gross: true });
-  });
-  html += ordnerkachel("+ weitere Fachbereiche", "folgen, sobald Skripte hochgeladen sind", "", { gross: true, dashed: true });
+  const nodes = SUBJECTS.map(s => ({
+    label: s.titel,
+    sub: `Az. ${s.az} · ${alleThemenCount(s)} Themen · ${alleFragenCountFach(s)} Fragen`,
+    onClick: `gehezuFach('${s.id}')`,
+    neu: !!s.neu,
+  }));
+  html += renderMindmap({ label: "Lernkartei", sub: "Fachbereiche" }, nodes);
   return html;
 }
-
+ 
 function renderSubject() {
   const f = aktuellesFach();
   let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz }]);
   html += kopf(f.titel, `Az. ${f.az}`);
-
-  if (f.kapitel) {
-    html += `<div class="section-label">KAPITEL</div>`;
-    f.kapitel.forEach(k => {
-      const n = alleFragenMitThema(k).length;
-      html += ordnerkachel(k.titel, `${k.topics.length} Themen · ${n} Fragen · eigene Prüfung`, `gehezuKapitel('${k.id}')`, { gross: true });
-    });
-    return html;
-  }
-
   html += `<div class="section-label">PRÜFUNG</div>`;
   html += ordnerkachel("Prüfung – alle Themen gemischt", "bei jedem Start neu zufällig zusammengestellt", "gehezuPruefung()", { akzent: true });
-  html += `<div class="section-label" style="margin-top:14px;">THEMENGEBIETE ZUM NACHSCHLAGEN</div>`;
-  f.topics.forEach(t => {
-    html += ordnerkachel(t.titel, `${t.fragen.length} Übungsfragen`, `gehezuThema('${t.id}')`);
-  });
+  html += `<div class="section-label" style="margin-top:14px;">THEMEN & ORDNER</div>`;
+ 
+  const nodes = f.topics.map(t => ({
+    label: t.titel,
+    sub: `${t.fragen.length} Übungsfragen`,
+    onClick: `gehezuThema('${t.id}')`,
+    neu: !!t.neu,
+  }));
   if (f.extra && f.extra.length) {
-    html += `<div class="section-label" style="margin-top:22px;">EXTRA-ORDNER · GRUNDLAGEN DES RECHNUNGSWESENS</div>
-      <p class="hinweis" style="margin-top:-4px;">Unabhängig von den Prüfungs-Themen oben – reine Nachschlage- und Übungsordner, nicht Teil des gemischten Prüfungsmodus.</p>`;
     f.extra.forEach(t => {
-      html += ordnerkachel(t.titel, `${t.fragen.length} Übungsfragen`, `gehezuThema('${t.id}')`);
+      nodes.push({
+        label: t.titel,
+        sub: t.fragen.length ? `${t.fragen.length} Übungsfragen · Extra-Ordner` : "Reiner Nachschlage-Ordner",
+        onClick: `gehezuThema('${t.id}')`,
+        neu: !!t.neu,
+        extra: true,
+      });
     });
   }
+  html += renderMindmap({ label: f.kurz, sub: "unabhängig verbunden" }, nodes);
   return html;
 }
-
+ 
 function renderKapitel() {
   const f = aktuellesFach();
   const k = aktuellesKapitel();
@@ -1193,7 +1331,7 @@ function renderKapitel() {
   });
   return html;
 }
-
+ 
 function renderTopic() {
   const f = aktuellesFach();
   const t = aktuellesThema();
@@ -1208,7 +1346,7 @@ function renderTopic() {
   t.nachschlagen.forEach((block, i) => {
     html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4>${formatBody(block.t)}</div>`;
   });
-
+ 
   const fragen = t.fragen;
   if (fragen.length > 0) {
     const erg = ergebnisseFuerThema();
@@ -1224,7 +1362,7 @@ function renderTopic() {
   }
   return html;
 }
-
+ 
 function examBreadcrumb(letzterLabel) {
   const f = aktuellesFach();
   const crumbs = [{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }];
@@ -1235,7 +1373,7 @@ function examBreadcrumb(letzterLabel) {
   crumbs.push({ label: letzterLabel });
   return breadcrumb(crumbs);
 }
-
+ 
 function renderExamSetup() {
   const f = aktuellesFach();
   const pool = examPool();
@@ -1255,7 +1393,7 @@ function renderExamSetup() {
   </div>`;
   return html;
 }
-
+ 
 function renderExamActive() {
   let html = examBreadcrumb("Prüfung");
   const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
@@ -1271,7 +1409,7 @@ function renderExamActive() {
   <button onclick="examAbbrechen()" style="margin-top:16px;background:transparent;border:none;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;text-decoration:underline;">Prüfung abbrechen</button>`;
   return html;
 }
-
+ 
 function renderExamDone() {
   const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
   let html = examBreadcrumb("Prüfung");
@@ -1286,7 +1424,7 @@ function renderExamDone() {
   </div>`;
   return html;
 }
-
+ 
 function render() {
   let html = "";
   if (state.screen === "welcome") html = renderWelcome();
@@ -1304,8 +1442,32 @@ function render() {
   }
   document.getElementById("app").innerHTML = html;
 }
-
+ 
 render();
 </script>
 </body>
 </html>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
