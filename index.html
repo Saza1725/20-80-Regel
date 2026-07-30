@@ -1,4 +1,116 @@
 
+Claude hat die Antwort abgeschlossen
+Los geht’s! Wählen Sie eine Artefakt-Kategorie aus oder beginnen Sie ganz von vorn mit Ihrer Idee.
+
+
+Apps und Webseiten
+
+Dokumente und Vorlagen
+
+Spiele
+
+Produktivitätstools
+
+Kreative Projekte
+
+Quiz oder Umfrage
+
+Von Grund auf neu beginnen
+Bildschirmfoto 2026-07-30 um 00.14.07.png
+Das ist zu klein das muss aufm Rechner sich dem Bildschirm groß anpassen und auf Handy ebenso. Es muss auch ein button geben für zurück zum vor programm oder direkt button startseite
+
+
+Optimierend responsive Mindmap-Größen und Textumbruch für alle Bildschirme
+Optimierend responsive Mindmap-Größen und Textumbruch für alle Bildschirme
+Zuerst mache ich das CSS voll responsiv (Full-Bleed auf Desktop, skaliert auf Handy):
+
+
+Integrierte Navigationsschaltflächen-Styling in CSS-Regeln
+Integrierte Navigationsschaltflächen-Styling in CSS-Regeln
+Jetzt renderMindmap() auf prozentuale Positionierung (echte Responsivität) umstellen:
+
+
+SVG-Skalierung und responsive Anpassung analysierend durchdenken
+SVG-Skalierung und responsive Anpassung analysierend durchdenken
+Jetzt die Zurück-/Startseite-Buttons ergänzen:
+
+
+Hat einen Befehl ausgeführt, datei angesehen, hat eine Datei bearbeitet
+Hat einen Befehl ausgeführt, datei angesehen, hat eine Datei bearbeitet
+Jetzt alles verifizieren:
+
+
+2 Befehle ausgeführt, 2 Dateien angesehen
+2 Befehle ausgeführt, 2 Dateien angesehen
+Ich sehe den Duplizierungsfehler — entferne die verwaisten Restzeilen:
+
+
+Hat eine Datei bearbeitet, hat einen Befehl ausgeführt
+Hat eine Datei bearbeitet, hat einen Befehl ausgeführt
+Alles funktioniert. Hier die korrigierte, jetzt voll responsive Version:
+
+
+Presented file
+Presented file
+Behoben:
+
+Mindmap skaliert jetzt voll responsiv: Sie ist nicht mehr auf eine feste Pixelbreite begrenzt, sondern passt sich der tatsächlichen Bildschirmbreite an — auf dem Rechner nutzt sie deutlich mehr Platz (bis ca. 1100px breit, zentriert), auf dem Handy füllt sie die volle Displaybreite mit automatisch verkleinerter Schrift.
+Neue Buttons „← Zurück" und „🏠 Startseite": Erscheinen jetzt oben auf jeder Seite außer Start und Fachbereichs-Übersicht — „Zurück" führt kontextabhängig eine Ebene nach oben (z. B. aus einem Thema zurück zum Fach, aus der Prüfung zurück zur Fachübersicht), „Startseite" springt immer direkt zur Mindmap-Startseite.
+Wie gewohnt: herunterladen und index.html im Repo ersetzen.
+
+
+Lernkartei public
+Code · HTML 
+Bildschirmfoto 2026-07-30 um 15.09.12.png
+Ich hab dir ein Screenshot von der Website gemacht und markiert was ich geändert haben will.
+
+Ich möchte das die gesamte Seite auch alle unter Ordner in der Farbe und komplett ausgefüllt wie die 1 markiert.  Zur Anordnung der hauptseite sowie dann der Ordner und Unter Ordner möchte ich, das es von oben nach unten gelesen wird, angeordnet und strukturiert ist. Heißt die 1 oben mittig der Seite, den Baukasten wenn immer es geht Quadratusch und nicht so langgezogen. Dann müsse die verbindungen unten drunter sein da wo der Pfeil in ROT hinzeigt und die andern Dateien dem Entsprechend dann auch drehen und anordnen sowie in den ganzen unter Ordnern.
+
+Den HauptOrdner SGB II auf der hauptseite Namentlich in Sozialrecht (SGB II) ändern, Auslegungsmethoden in Allgemeines Verwaltungs Recht
+
+Mehr anzeigen
+
+Optimierend SVG-Verbindungen und Knotenstile für vertikales Layout
+Optimierend SVG-Verbindungen und Knotenstile für vertikales Layout
+Jetzt die Mindmap komplett auf vertikale Top-Down-Anordnung mit quadratischeren Kacheln umstellen:
+
+
+Aktuelle renderMindmap-Funktion vollständig ansehen
+Aktuelle renderMindmap-Funktion vollständig ansehen
+Jetzt ersetze ich die gesamte Funktion durch die neue Top-Down-Version:
+
+
+RenderMindmap komplett auf vertikale Top-Down-Anordnung mit quadratischen Kacheln umstellen
+RenderMindmap komplett auf vertikale Top-Down-Anordnung mit quadratischen Kacheln umstellen
+Jetzt das CSS für die Kacheln anpassen (zentriert, quadratischer) und den Dunkel-Bereich randlos „komplett ausgefüllt" gestalten:
+
+
+Regex-Muster verfeinern, um exakte Knotenklassen zu isolieren
+Regex-Muster verfeinern, um exakte Knotenklassen zu isolieren
+Alles funktioniert und die Umbenennungen sind übernommen. Hier die aktualisierte Datei:
+
+
+Presented file
+Presented file
+Umgesetzt:
+
+Von oben nach unten: Der zentrale Knoten steht jetzt oben mittig, die verbundenen Ordner darunter in einem 3-Spalten-Raster mit kompakteren, quadratischeren Kacheln — die Linien laufen jetzt nach unten, genau wie mit dem roten Pfeil markiert. Gilt einheitlich für Start- und alle Fachbereichs-Seiten (Unterordner).
+Dunkler Bereich randloser/vollflächiger: Der Rahmen mit dem sichtbaren Innenrand ist weg, die dunkle Fläche wirkt jetzt durchgängiger ausgefüllt.
+Umbenennungen: „Grundsicherung für Arbeitsuchende (SGB II)" → „Sozialrecht (SGB II)", „Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)" → „Allgemeines Verwaltungsrecht".
+Eine kurze Einschränkung zur Transparenz: Ich habe die dunkle Fläche deutlich vergrößert und randlos gemacht, aber die restliche Seite (Kopfbereich mit „Lernkartei"-Titel, sowie die Lernkarten/Prüfungsansicht) bewusst im hellen Design belassen — falls du die komplette Seite inklusive Lernkarten dunkel haben willst, sag Bescheid, das wäre ein größerer, aber machbarer nächster Schritt.
+
+Wie gewohnt: herunterladen und index.html im Repo ersetzen.
+
+
+Lernkartei public
+Code · HTML 
+
+
+
+
+
+Claude ist eine KI und kann Fehler machen. Bitte überprüfe die Antworten.
+
 
 Lernkartei public · HTML
 <!DOCTYPE html>
@@ -97,10 +209,10 @@ button.danger:hover{background:#A85224;}
 select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
  
 /* ---------------- Mindmap-Navigation (Home & Fachbereichs-Seite) ---------------- */
-.mm-outer{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:1100px;box-sizing:border-box;background:radial-gradient(circle at 30% 20%, #1a2438 0%, #0a0e18 65%);border-radius:20px;padding:26px 16px 34px;margin-top:6px;box-shadow:inset 0 0 0 1px #23304a;}
+.mm-outer{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:1200px;box-sizing:border-box;background:radial-gradient(circle at 30% 15%, #1a2438 0%, #0a0e18 70%);border-radius:6px;padding:40px 16px 44px;margin-top:6px;}
 .mindmap-wrap{position:relative;width:100%;margin:0 auto;}
 .mm-svg{position:absolute;top:0;left:0;width:100%;height:100%;}
-.mm-node{position:absolute;box-sizing:border-box;background:#131c2e;border:1.5px solid #3d5372;border-radius:10px;padding:12px 16px;cursor:pointer;transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;}
+.mm-node{position:absolute;box-sizing:border-box;background:#131c2e;border:1.5px solid #3d5372;border-radius:10px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;}
 @media (max-width:640px){
   .mm-node{padding:9px 11px;}
   .mm-node-label{font-size:12.5px !important;}
@@ -108,7 +220,7 @@ select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-
   .mm-outer{padding:20px 8px 26px;border-radius:14px;}
 }
 .mm-node:hover{border-color:#7fa8d9;box-shadow:0 0 0 3px rgba(127,168,217,0.15);transform:translateX(2px);}
-.mm-node.mm-central{background:#1e2c22;border-color:#4f7a5b;cursor:default;left:0 !important;}
+.mm-node.mm-central{background:#1e2c22;border-color:#4f7a5b;cursor:default;}
 .mm-node.mm-central:hover{transform:none;box-shadow:none;}
 .mm-node.mm-extra{border-style:dashed;border-color:#8a6a3a;background:#20190f;}
 .mm-node-label{font-family:'Fraunces',serif;font-weight:600;font-size:14.5px;color:#EAEFF7;line-height:1.3;}
@@ -891,9 +1003,9 @@ const SUBJECTS = [
   { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR, extra: TOPICS_KLR_GRUNDLAGEN },
   { id: "gutachtenstil", kurz: "§ 99 BGB", titel: "§ 99 BGB Früchte", az: "§ 99 BGB", topics: TOPICS_GUTACHTEN, extra: TOPICS_GUTACHTEN_SCHEMA, neu: true },
   { id: "khr", kurz: "KHR", titel: "Kommunales Haushaltsrecht", az: "KHR", topics: KHR_TOPICS_ALL, extra: TOPICS_KHR_PARAGRAPHEN },
-  { id: "sgb2", kurz: "SGB II", titel: "Grundsicherung für Arbeitsuchende (SGB II)", az: "SGB II", topics: TOPICS_SGB2 },
+  { id: "sgb2", kurz: "SGB II", titel: "Sozialrecht (SGB II)", az: "SGB II", topics: TOPICS_SGB2 },
   { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
-  { id: "avr", kurz: "Auslegung", titel: "Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)", az: "R2", topics: TOPICS_AVR },
+  { id: "avr", kurz: "Auslegung", titel: "Allgemeines Verwaltungsrecht", az: "R2", topics: TOPICS_AVR },
 ];
  
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');`;
@@ -1234,20 +1346,29 @@ function renderWelcome() {
 // mit geschwungenen SVG-Linien dazwischen (analog zur Gliederungs-Mindmap-Optik).
 // Positionen sind prozentual (bzw. virtuelle 0-1000-Einheiten für die SVG-Linien),
 // damit sich die Mindmap auf jeder Bildschirmgröße voll auf die Breite skaliert.
+// Zeichnet eine Mindmap von OBEN nach UNTEN: zentraler Knoten oben mittig,
+// darunter die verbundenen Knoten als quadratische Kacheln in einem festen
+// 3-Spalten-Raster, mit Verbindungslinien die von oben nach unten verlaufen.
 function renderMindmap(central, nodes) {
-  const nodeH = 64, gap = 16;
-  const centralWPct = 32, nodeXPct = 46, nodeWPct = 52;
-  const totalH = Math.max(nodeH + 50, nodes.length * (nodeH + gap) + 20);
-  const centralYpx = totalH / 2;
+  const cols = Math.min(3, Math.max(1, nodes.length));
+  const rows = Math.ceil(nodes.length / cols);
+  const nodeH = 108, gapY = 22, gapXvirt = 4;
+  const centralH = 78, topGap = 56;
+  const colW = 300 / cols;
+  const totalH = centralH + topGap + rows * (nodeH + gapY) - gapY + 8;
+  const centralCX = 150, centralBottomY = centralH;
  
   let paths = "";
   let nodesHtml = "";
   nodes.forEach((n, i) => {
-    const y = i * (nodeH + gap) + nodeH / 2 + Math.max(0, (totalH - (nodes.length * (nodeH + gap) - gap)) / 2) - gap / 2;
-    const x0 = centralWPct * 10, x1 = nodeXPct * 10;
-    const cx1 = x0 + 60, cx2 = x1 - 60;
-    paths += `<path d="M ${x0} ${centralYpx} C ${cx1} ${centralYpx} ${cx2} ${y} ${x1} ${y}" stroke="#3d5372" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>`;
-    nodesHtml += `<div class="mm-node${n.extra ? " mm-extra" : ""}" style="left:${nodeXPct}%; top:${y - nodeH / 2}px; width:${nodeWPct}%;" onclick="${n.onClick}">
+    const col = i % cols, row = Math.floor(i / cols);
+    const cx = col * colW + colW / 2;
+    const rowTopY = centralH + topGap + row * (nodeH + gapY);
+    const midY = (centralBottomY + rowTopY) / 2;
+    paths += `<path d="M ${centralCX} ${centralBottomY} C ${centralCX} ${midY} ${cx} ${midY} ${cx} ${rowTopY}" stroke="#3d5372" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>`;
+    const leftPct = ((col * colW + gapXvirt) / 300) * 100;
+    const widthPct = ((colW - 2 * gapXvirt) / 300) * 100;
+    nodesHtml += `<div class="mm-node${n.extra ? " mm-extra" : ""}" style="left:${leftPct}%; top:${rowTopY}px; width:${widthPct}%; height:${nodeH}px;" onclick="${n.onClick}">
       ${n.neu ? '<span class="mm-badge-neu">NEU</span>' : ""}
       <div class="mm-node-label">${esc(n.label)}</div>
       ${n.sub ? `<div class="mm-node-sub">${esc(n.sub)}</div>` : ""}
@@ -1255,8 +1376,8 @@ function renderMindmap(central, nodes) {
   });
  
   return `<div class="mm-outer"><div class="mindmap-wrap" style="height:${totalH}px;">
-    <svg class="mm-svg" viewBox="0 0 1000 ${totalH}" preserveAspectRatio="none">${paths}</svg>
-    <div class="mm-node mm-central" style="left:0; top:${centralYpx - nodeH / 2 - 6}px; width:${centralWPct}%;">
+    <svg class="mm-svg" viewBox="0 0 300 ${totalH}" preserveAspectRatio="none">${paths}</svg>
+    <div class="mm-node mm-central" style="left:50%; transform:translateX(-50%); top:0; width:44%; height:${centralH}px;">
       <div class="mm-node-label">${esc(central.label)}</div>
       ${central.sub ? `<div class="mm-node-sub">${esc(central.sub)}</div>` : ""}
     </div>
