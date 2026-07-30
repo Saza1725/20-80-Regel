@@ -1,118 +1,3 @@
-
-Claude hat die Antwort abgeschlossen
-Los geht’s! Wählen Sie eine Artefakt-Kategorie aus oder beginnen Sie ganz von vorn mit Ihrer Idee.
-
-
-Apps und Webseiten
-
-Dokumente und Vorlagen
-
-Spiele
-
-Produktivitätstools
-
-Kreative Projekte
-
-Quiz oder Umfrage
-
-Von Grund auf neu beginnen
-Bildschirmfoto 2026-07-30 um 00.14.07.png
-Das ist zu klein das muss aufm Rechner sich dem Bildschirm groß anpassen und auf Handy ebenso. Es muss auch ein button geben für zurück zum vor programm oder direkt button startseite
-
-
-Optimierend responsive Mindmap-Größen und Textumbruch für alle Bildschirme
-Optimierend responsive Mindmap-Größen und Textumbruch für alle Bildschirme
-Zuerst mache ich das CSS voll responsiv (Full-Bleed auf Desktop, skaliert auf Handy):
-
-
-Integrierte Navigationsschaltflächen-Styling in CSS-Regeln
-Integrierte Navigationsschaltflächen-Styling in CSS-Regeln
-Jetzt renderMindmap() auf prozentuale Positionierung (echte Responsivität) umstellen:
-
-
-SVG-Skalierung und responsive Anpassung analysierend durchdenken
-SVG-Skalierung und responsive Anpassung analysierend durchdenken
-Jetzt die Zurück-/Startseite-Buttons ergänzen:
-
-
-Hat einen Befehl ausgeführt, datei angesehen, hat eine Datei bearbeitet
-Hat einen Befehl ausgeführt, datei angesehen, hat eine Datei bearbeitet
-Jetzt alles verifizieren:
-
-
-2 Befehle ausgeführt, 2 Dateien angesehen
-2 Befehle ausgeführt, 2 Dateien angesehen
-Ich sehe den Duplizierungsfehler — entferne die verwaisten Restzeilen:
-
-
-Hat eine Datei bearbeitet, hat einen Befehl ausgeführt
-Hat eine Datei bearbeitet, hat einen Befehl ausgeführt
-Alles funktioniert. Hier die korrigierte, jetzt voll responsive Version:
-
-
-Presented file
-Presented file
-Behoben:
-
-Mindmap skaliert jetzt voll responsiv: Sie ist nicht mehr auf eine feste Pixelbreite begrenzt, sondern passt sich der tatsächlichen Bildschirmbreite an — auf dem Rechner nutzt sie deutlich mehr Platz (bis ca. 1100px breit, zentriert), auf dem Handy füllt sie die volle Displaybreite mit automatisch verkleinerter Schrift.
-Neue Buttons „← Zurück" und „🏠 Startseite": Erscheinen jetzt oben auf jeder Seite außer Start und Fachbereichs-Übersicht — „Zurück" führt kontextabhängig eine Ebene nach oben (z. B. aus einem Thema zurück zum Fach, aus der Prüfung zurück zur Fachübersicht), „Startseite" springt immer direkt zur Mindmap-Startseite.
-Wie gewohnt: herunterladen und index.html im Repo ersetzen.
-
-
-Lernkartei public
-Code · HTML 
-Bildschirmfoto 2026-07-30 um 15.09.12.png
-Ich hab dir ein Screenshot von der Website gemacht und markiert was ich geändert haben will.
-
-Ich möchte das die gesamte Seite auch alle unter Ordner in der Farbe und komplett ausgefüllt wie die 1 markiert.  Zur Anordnung der hauptseite sowie dann der Ordner und Unter Ordner möchte ich, das es von oben nach unten gelesen wird, angeordnet und strukturiert ist. Heißt die 1 oben mittig der Seite, den Baukasten wenn immer es geht Quadratusch und nicht so langgezogen. Dann müsse die verbindungen unten drunter sein da wo der Pfeil in ROT hinzeigt und die andern Dateien dem Entsprechend dann auch drehen und anordnen sowie in den ganzen unter Ordnern.
-
-Den HauptOrdner SGB II auf der hauptseite Namentlich in Sozialrecht (SGB II) ändern, Auslegungsmethoden in Allgemeines Verwaltungs Recht
-
-Mehr anzeigen
-
-Optimierend SVG-Verbindungen und Knotenstile für vertikales Layout
-Optimierend SVG-Verbindungen und Knotenstile für vertikales Layout
-Jetzt die Mindmap komplett auf vertikale Top-Down-Anordnung mit quadratischeren Kacheln umstellen:
-
-
-Aktuelle renderMindmap-Funktion vollständig ansehen
-Aktuelle renderMindmap-Funktion vollständig ansehen
-Jetzt ersetze ich die gesamte Funktion durch die neue Top-Down-Version:
-
-
-RenderMindmap komplett auf vertikale Top-Down-Anordnung mit quadratischen Kacheln umstellen
-RenderMindmap komplett auf vertikale Top-Down-Anordnung mit quadratischen Kacheln umstellen
-Jetzt das CSS für die Kacheln anpassen (zentriert, quadratischer) und den Dunkel-Bereich randlos „komplett ausgefüllt" gestalten:
-
-
-Regex-Muster verfeinern, um exakte Knotenklassen zu isolieren
-Regex-Muster verfeinern, um exakte Knotenklassen zu isolieren
-Alles funktioniert und die Umbenennungen sind übernommen. Hier die aktualisierte Datei:
-
-
-Presented file
-Presented file
-Umgesetzt:
-
-Von oben nach unten: Der zentrale Knoten steht jetzt oben mittig, die verbundenen Ordner darunter in einem 3-Spalten-Raster mit kompakteren, quadratischeren Kacheln — die Linien laufen jetzt nach unten, genau wie mit dem roten Pfeil markiert. Gilt einheitlich für Start- und alle Fachbereichs-Seiten (Unterordner).
-Dunkler Bereich randloser/vollflächiger: Der Rahmen mit dem sichtbaren Innenrand ist weg, die dunkle Fläche wirkt jetzt durchgängiger ausgefüllt.
-Umbenennungen: „Grundsicherung für Arbeitsuchende (SGB II)" → „Sozialrecht (SGB II)", „Auslegungsmethoden (Allgemeines Verwaltungsrecht R2)" → „Allgemeines Verwaltungsrecht".
-Eine kurze Einschränkung zur Transparenz: Ich habe die dunkle Fläche deutlich vergrößert und randlos gemacht, aber die restliche Seite (Kopfbereich mit „Lernkartei"-Titel, sowie die Lernkarten/Prüfungsansicht) bewusst im hellen Design belassen — falls du die komplette Seite inklusive Lernkarten dunkel haben willst, sag Bescheid, das wäre ein größerer, aber machbarer nächster Schritt.
-
-Wie gewohnt: herunterladen und index.html im Repo ersetzen.
-
-
-Lernkartei public
-Code · HTML 
-
-
-
-
-
-Claude ist eine KI und kann Fehler machen. Bitte überprüfe die Antworten.
-
-
-Lernkartei public · HTML
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -207,7 +92,7 @@ button.danger:hover{background:#A85224;}
 .self-grade button.falsch-btn{border-color:var(--red);color:var(--red);}
 .hinweis{font-size:13px;color:var(--muted);margin:0 0 18px 0;font-style:italic;}
 select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink);background:#fff;}
- 
+
 /* ---------------- Mindmap-Navigation (Home & Fachbereichs-Seite) ---------------- */
 .mm-outer{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:1200px;box-sizing:border-box;background:radial-gradient(circle at 30% 15%, #1a2438 0%, #0a0e18 70%);border-radius:6px;padding:40px 16px 44px;margin-top:6px;}
 .mindmap-wrap{position:relative;width:100%;margin:0 auto;}
@@ -246,11 +131,11 @@ select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-
 <body>
 <div class="wrap"><div id="app"></div></div>
 <script>
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: Kosten- und Leistungsrechnung (KLR) – Modul Vfal90
 ------------------------------------------------------------------- */
- 
+
 const TOPICS_KLR = [
   {
     id: "grundbegriffe",
@@ -331,7 +216,7 @@ const TOPICS_KLR = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: SGB II – Grundsicherung für Arbeitsuchende (Bürgergeld)
 ------------------------------------------------------------------- */
@@ -414,7 +299,7 @@ const TOPICS_SGB2 = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: Recht der Gefahrenabwehr NRW
 ------------------------------------------------------------------- */
@@ -522,7 +407,7 @@ const TOPICS_GA = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Fachbereich: Auslegungsmethoden – Allgemeines Verwaltungsrecht (R2)
 ------------------------------------------------------------------- */
@@ -622,7 +507,7 @@ const TOPICS_AVR = [
     ],
   },
 ];
- 
+
 /* ------------------------------------------------------------------
    Zusatzordner innerhalb KLR: Grundlagen des Rechnungswesens
    (unabhängig von den bisherigen Prüfungs-Themen TOPICS_KLR).
@@ -706,7 +591,7 @@ const TOPICS_KLR_GRUNDLAGEN = [
     ],
   },
 ];
- 
+
 /* ==================================================================
    FACH: Kommunales Haushaltsrecht (KHR)
    Zweistufige Struktur: Fach -> Kapitel (eigener Ordner, eigene
@@ -714,7 +599,7 @@ const TOPICS_KLR_GRUNDLAGEN = [
    Aus den hochgeladenen KHR-Skripten und Übungsaufgaben (Tobias
    Röbbecke) zusammengestellt.
 ================================================================== */
- 
+
 /* ---------------- Kapitel 1: Allgemeine Systematik und Ziele der kommunalen Finanzwirtschaft ---------------- */
 const KHR_K1_TOPICS = [
   {
@@ -756,7 +641,7 @@ const KHR_K1_TOPICS = [
     ],
   },
 ];
- 
+
 /* ---------------- Kapitel 2: Ermittlung der Grund- und Gewerbesteuer ---------------- */
 const KHR_K2_TOPICS = [
   {
@@ -809,7 +694,7 @@ const KHR_K2_TOPICS = [
     ],
   },
 ];
- 
+
 /* ---------------- Kapitel 3: Begriffspaare des Rechnungswesens ----------------
    Inhaltlich identisch mit dem Thema "Begriffspaare" im KLR-Zusatzordner
    (Abgrenzung der Begriffspaare) – hier als eigenes Kapitel im Fach KHR
@@ -835,7 +720,7 @@ const KHR_K3_TOPICS = [
     ],
   },
 ];
- 
+
 /* ---------------- Kapitel 4: Haushaltssatzung, Haushaltsplan & Haushaltskreislauf ----------------
    Hinweis: Aus dem aktuellen Upload liegt bislang nur Material zu den
    Grundlagen der Haushaltssatzung vor. Inhalte zu Haushaltsplan und
@@ -859,9 +744,9 @@ const KHR_K4_TOPICS = [
     ],
   },
 ];
- 
+
 const KHR_TOPICS_ALL = [...KHR_K1_TOPICS, ...KHR_K2_TOPICS, ...KHR_K3_TOPICS, ...KHR_K4_TOPICS];
- 
+
 /* Zusätzliche Fragen aus der Präsentation, um die Themen ausführlicher abzudecken */
 KHR_TOPICS_ALL.find(t => t.id === "khr-k1-rechtsgrundlagen").fragen.push(
   { id: "khrk1-11", typ: "freitext", frage: "Nenne die vier Komponenten des 'Magischen Vierecks' aus § 1 Stabilitäts- und Wachstumsgesetz.", musterloesung: "Preisstabilität, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht und stetiges Wirtschaftswachstum." },
@@ -888,7 +773,7 @@ KHR_TOPICS_ALL.find(t => t.id === "khr-k2-gewerbesteuer").fragen.push(
   { id: "khrk2-20", typ: "mc", frage: "Nach welchem Kriterium wird der Gewerbesteuermessbetrag zerlegt, wenn ein Betrieb Betriebsstätten in mehreren Gemeinden hat?", optionen: ["Nach der Einwohnerzahl der Gemeinden", "Nach dem Verhältnis der Arbeitslöhne", "Nach dem Umsatz je Betriebsstätte", "Nach der Fläche der Betriebsstätten"], loesung: 1, erlaeuterung: "Maßgeblich für die Zerlegung ist gemäß § 29 Abs. 1 Nr. 1 GewStG das Verhältnis der in den einzelnen Betriebsstätten gezahlten Arbeitslöhne." },
   { id: "khrk2-21", typ: "freitext", frage: "Nenne je zwei Beispiele für Personengesellschaften und Kapitalgesellschaften als Rechtsformen von Betrieben.", musterloesung: "Personengesellschaften: z. B. GbR, oHG, KG, Einzelkaufmann (e. K.). Kapitalgesellschaften: z. B. GmbH, AG, UG." }
 );
- 
+
 const TOPICS_KHR_PARAGRAPHEN = [
   {
     id: "khr-paragrafen",
@@ -935,7 +820,7 @@ const TOPICS_KHR_PARAGRAPHEN = [
     fragen: [],
   },
 ];
- 
+
 /* ==================================================================
    FACH: § 99 BGB Früchte (Gutachtenstil & -struktur)
    Aus den hochgeladenen Dateien "Formulierungen-Gutachtenstil.pdf"
@@ -980,7 +865,7 @@ const TOPICS_GUTACHTEN = [
     ],
   },
 ];
- 
+
 const TOPICS_GUTACHTEN_SCHEMA = [
   {
     id: "gutachten-schema",
@@ -998,7 +883,7 @@ const TOPICS_GUTACHTEN_SCHEMA = [
     fragen: [],
   },
 ];
- 
+
 const SUBJECTS = [
   { id: "klr", kurz: "KLR", titel: "Kosten- und Leistungsrechnung", az: "Vfal 90", topics: TOPICS_KLR, extra: TOPICS_KLR_GRUNDLAGEN },
   { id: "gutachtenstil", kurz: "§ 99 BGB", titel: "§ 99 BGB Früchte", az: "§ 99 BGB", topics: TOPICS_GUTACHTEN, extra: TOPICS_GUTACHTEN_SCHEMA, neu: true },
@@ -1007,9 +892,9 @@ const SUBJECTS = [
   { id: "gefahrenabwehr", kurz: "Gefahrenabwehr", titel: "Recht der Gefahrenabwehr NRW", az: "OBG / PolG / POG NRW", topics: TOPICS_GA },
   { id: "avr", kurz: "Auslegung", titel: "Allgemeines Verwaltungsrecht", az: "R2", topics: TOPICS_AVR },
 ];
- 
+
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');`;
- 
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -1018,7 +903,7 @@ function shuffle(arr) {
   }
   return a;
 }
- 
+
 function alleFragenMitThema(subject) {
   const out = [];
   subject.topics.forEach((top) => {
@@ -1026,7 +911,7 @@ function alleFragenMitThema(subject) {
   });
   return out;
 }
- 
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -1035,7 +920,7 @@ function shuffle(arr) {
   }
   return a;
 }
- 
+
 // ---------------- App-Status (nur im Speicher dieser Sitzung, kein Server, kein Login) ----------------
 const state = {
   screen: "welcome",
@@ -1051,7 +936,7 @@ const state = {
   anzahl: 10,
   cardState: {}, // pro Frage: { auswahl, geprueft, geloest }
 };
- 
+
 function aktuellesFach() { return SUBJECTS.find(s => s.id === state.fach); }
 function aktuellesKapitel() {
   const f = aktuellesFach();
@@ -1068,13 +953,13 @@ function aktuellesThema() {
 }
 function ergebnisKey() { return state.fach + ":" + (state.kapitelId || "") + ":" + state.themaId; }
 function ergebnisseFuerThema() { return state.ergebnisse[ergebnisKey()] || {}; }
- 
+
 function gehezuHome() { state.screen = "home"; state.pruefungAktiv = false; render(); }
 function gehezuFach(id) { state.fach = id; state.screen = "subject"; state.pruefungAktiv = false; render(); }
 function gehezuKapitel(id) { state.kapitelId = id; state.screen = "kapitel"; state.pruefungAktiv = false; render(); }
 function gehezuThema(id) { state.themaId = id; state.screen = "topic"; state.index = 0; state.cardState = {}; render(); }
 function gehezuPruefung() { state.screen = "exam"; state.pruefungAktiv = false; render(); }
- 
+
 function examPool() {
   const f = aktuellesFach();
   if (!f) return [];
@@ -1084,7 +969,7 @@ function examPool() {
   }
   return alleFragenMitThema(f);
 }
- 
+
 function starteNeuePruefung() {
   const pool = examPool();
   const n = Math.min(state.anzahl, pool.length);
@@ -1095,13 +980,13 @@ function starteNeuePruefung() {
   state.cardState = {};
   render();
 }
- 
+
 function esc(s) {
   const d = document.createElement("div");
   d.textContent = s;
   return d.innerHTML;
 }
- 
+
 // Erkennt wiederkehrende "Begriff: Erklärung."-Strukturen in einem Nachschlagen-Text
 // und rendert sie als scannbare Liste (wie beim Paragrafen-Glossar). Texte ohne
 // diese Struktur bleiben als normaler, aber schmaler gesetzter Absatz erhalten.
@@ -1123,7 +1008,7 @@ function formatBody(text) {
   }
   return `<p class="body-text">${esc(text)}</p>`;
 }
- 
+
 // ---------------- Bausteine ----------------
 // Schielender Dino mit Brille – erscheint bei falschen Antworten
 function dinoBild() {
@@ -1152,21 +1037,21 @@ function dinoBild() {
     <div class="dino-caption">Ups – das war leider nicht ganz richtig!</div>
   </div>`;
 }
- 
- 
+
+
 function stempel(status) {
   const cfg = { richtig: "RICHTIG", teilweise: "TEILWEISE", falsch: "NICHT KORREKT" }[status];
   if (!cfg) return "";
   return `<div class="stamp ${status}">${cfg}</div>`;
 }
- 
+
 function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered) {
   const cs = state.cardState[frage.id] || { auswahl: null, geprueft: !!ergebnisseObj[frage.id] };
   state.cardState[frage.id] = cs;
   const gespeichert = ergebnisseObj[frage.id];
   const geprueft = cs.geprueft || !!gespeichert;
   const status = gespeichert ? gespeichert.status : cs.status;
- 
+
   let inner = "";
   if (frage.typ === "mc") {
     inner += `<div>`;
@@ -1191,7 +1076,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
         <p class="hinweis" style="margin-top:8px;">Diese Version läuft ohne Claude-Konto – die Freitextantwort wird nicht automatisch bewertet. Vergleiche selbst mit der Musterlösung und markiere dein Ergebnis.</p>`;
     }
   }
- 
+
   let solutionBlock = "";
   if (geprueft) {
     solutionBlock = `<div class="solution">
@@ -1216,7 +1101,7 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
       </div>
     </div>`;
   }
- 
+
   return `<div class="karte">
     <div class="perf"></div>
     <div class="toprow">
@@ -1228,14 +1113,14 @@ function karteikarte(frage, index, total, ergebnisseObj, zeigeThema, onAnswered)
     ${solutionBlock}
   </div>`;
 }
- 
+
 function waehleOption(fid, i) {
   const cs = state.cardState[fid];
   if (cs.geprueft) return;
   cs.auswahl = i;
   render();
 }
- 
+
 function pruefeMC(fid, index, imExamen) {
   const cs = state.cardState[fid];
   if (cs.auswahl === null || cs.auswahl === undefined) return;
@@ -1246,14 +1131,14 @@ function pruefeMC(fid, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
- 
+
 function zeigeLoesung(fid) {
   const cs = state.cardState[fid];
   cs.freitext = document.getElementById("ft-" + fid) ? document.getElementById("ft-" + fid).value : (cs.freitext || "");
   cs.zeigeLoesung = true;
   render();
 }
- 
+
 function selbstBewertung(fid, status, index, imExamen) {
   const cs = state.cardState[fid];
   cs.geprueft = true;
@@ -1261,7 +1146,7 @@ function selbstBewertung(fid, status, index, imExamen) {
   speichereErgebnis(fid, { status }, imExamen);
   render();
 }
- 
+
 function findFrage(fid) {
   if (state.pruefungAktiv) {
     return state.pruefungsfragen.find(f => f.id === fid);
@@ -1269,7 +1154,7 @@ function findFrage(fid) {
   const t = aktuellesThema();
   return t ? t.fragen.find(f => f.id === fid) : null;
 }
- 
+
 function speichereErgebnis(fid, ergebnis, imExamen) {
   if (imExamen) {
     state.pruefungsErgebnisse[fid] = ergebnis;
@@ -1279,7 +1164,7 @@ function speichereErgebnis(fid, ergebnis, imExamen) {
     state.ergebnisse[key][fid] = ergebnis;
   }
 }
- 
+
 function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
   return `<div class="progressbar">${fragen.map((f, i) => {
     const r = ergebnisseObj[f.id];
@@ -1287,7 +1172,7 @@ function fortschrittsleiste(fragen, ergebnisseObj, aktuellerIndex, onJump) {
     return `<span class="${cls} ${i === aktuellerIndex ? "active" : ""}" title="Frage ${i + 1}" onclick="${onJump}(${i})"></span>`;
   }).join("")}</div>`;
 }
- 
+
 function breadcrumb(teile) {
   return `<div class="breadcrumb">${teile.map((t, i) => {
     const sep = i > 0 ? '<span class="sep">/</span>' : "";
@@ -1295,14 +1180,14 @@ function breadcrumb(teile) {
     return sep + el;
   }).join("")}</div>`;
 }
- 
+
 function ordnerkachel(titel, unterzeile, onClick, opts) {
   opts = opts || {};
   const cls = "tile" + (opts.gross ? " gross" : "") + (opts.akzent ? " akzent" : "") + (opts.dashed ? " dashed" : "");
   const clickAttr = opts.dashed ? "" : ` onclick="${onClick}"`;
   return `<button class="${cls}"${clickAttr}><div class="tab"></div><div class="ttl">${esc(titel)}</div>${unterzeile ? `<div class="meta">${esc(unterzeile)}</div>` : ""}</button>`;
 }
- 
+
 function kopf(ueberschrift, unterzeile) {
   return `<header style="margin-bottom:22px;">
     <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
@@ -1310,7 +1195,7 @@ function kopf(ueberschrift, unterzeile) {
     ${unterzeile ? `<div class="sub">${esc(unterzeile)}</div>` : ""}
   </header>`;
 }
- 
+
 // ---------------- Navigation innerhalb Thema/Prüfung ----------------
 function themaWeiter() { const t = aktuellesThema(); state.index = Math.min(t.fragen.length - 1, state.index + 1); render(); }
 function themaZurueck() { state.index = Math.max(0, state.index - 1); render(); }
@@ -1320,7 +1205,7 @@ function examZurueck() { state.pruefungIndex = Math.max(0, state.pruefungIndex -
 function examSpringe(i) { state.pruefungIndex = i; render(); }
 function examAbbrechen() { state.pruefungAktiv = false; render(); }
 function setAnzahl(v) { state.anzahl = Number(v); }
- 
+
 // ---------------- Screens ----------------
 function alleThemenCount(f) {
   if (f.kapitel) return f.kapitel.reduce((s, k) => s + k.topics.length, 0);
@@ -1330,9 +1215,9 @@ function alleFragenCountFach(f) {
   if (f.kapitel) return f.kapitel.reduce((s, k) => s + alleFragenMitThema(k).length, 0);
   return alleFragenMitThema(f).length;
 }
- 
+
 function startApp() { state.screen = "home"; render(); }
- 
+
 function renderWelcome() {
   return `<div class="welcome-screen">
     <div class="eyebrow">LERNKARTEI · VERWALTUNG</div>
@@ -1341,7 +1226,7 @@ function renderWelcome() {
     <div class="welcome-sub">Az. Übersicht · Fachbereiche</div>
   </div>`;
 }
- 
+
 // Zeichnet eine Mindmap: zentraler Knoten links, verbundene Knoten rechts,
 // mit geschwungenen SVG-Linien dazwischen (analog zur Gliederungs-Mindmap-Optik).
 // Positionen sind prozentual (bzw. virtuelle 0-1000-Einheiten für die SVG-Linien),
@@ -1357,7 +1242,7 @@ function renderMindmap(central, nodes) {
   const colW = 300 / cols;
   const totalH = centralH + topGap + rows * (nodeH + gapY) - gapY + 8;
   const centralCX = 150, centralBottomY = centralH;
- 
+
   let paths = "";
   let nodesHtml = "";
   nodes.forEach((n, i) => {
@@ -1374,7 +1259,7 @@ function renderMindmap(central, nodes) {
       ${n.sub ? `<div class="mm-node-sub">${esc(n.sub)}</div>` : ""}
     </div>`;
   });
- 
+
   return `<div class="mm-outer"><div class="mindmap-wrap" style="height:${totalH}px;">
     <svg class="mm-svg" viewBox="0 0 300 ${totalH}" preserveAspectRatio="none">${paths}</svg>
     <div class="mm-node mm-central" style="left:50%; transform:translateX(-50%); top:0; width:44%; height:${centralH}px;">
@@ -1384,7 +1269,7 @@ function renderMindmap(central, nodes) {
     ${nodesHtml}
   </div></div>`;
 }
- 
+
 // Sammelt alle mit neu:true markierten Fächer/Ordner für den "Was gibt's Neues"-Hinweis
 function findNeueEintraege() {
   const out = [];
@@ -1395,7 +1280,7 @@ function findNeueEintraege() {
   });
   return out;
 }
- 
+
 function renderHome() {
   let html = kopf("Lernkartei", "Az. Übersicht · Fachbereiche");
   const neu = findNeueEintraege();
@@ -1415,7 +1300,7 @@ function renderHome() {
   html += renderMindmap({ label: "Lernkartei", sub: "Fachbereiche" }, nodes);
   return html;
 }
- 
+
 function renderSubject() {
   const f = aktuellesFach();
   let html = breadcrumb([{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz }]);
@@ -1423,7 +1308,7 @@ function renderSubject() {
   html += `<div class="section-label">PRÜFUNG</div>`;
   html += ordnerkachel("Prüfung – alle Themen gemischt", "bei jedem Start neu zufällig zusammengestellt", "gehezuPruefung()", { akzent: true });
   html += `<div class="section-label" style="margin-top:14px;">THEMEN & ORDNER</div>`;
- 
+
   const nodes = f.topics.map(t => ({
     label: t.titel,
     sub: `${t.fragen.length} Übungsfragen`,
@@ -1444,7 +1329,7 @@ function renderSubject() {
   html += renderMindmap({ label: f.kurz, sub: "unabhängig verbunden" }, nodes);
   return html;
 }
- 
+
 function renderKapitel() {
   const f = aktuellesFach();
   const k = aktuellesKapitel();
@@ -1462,7 +1347,7 @@ function renderKapitel() {
   });
   return html;
 }
- 
+
 function renderTopic() {
   const f = aktuellesFach();
   const t = aktuellesThema();
@@ -1477,7 +1362,7 @@ function renderTopic() {
   t.nachschlagen.forEach((block, i) => {
     html += `<div class="card"><div class="num">${String(i + 1).padStart(2, "0")}</div><h4>${esc(block.h)}</h4>${formatBody(block.t)}</div>`;
   });
- 
+
   const fragen = t.fragen;
   if (fragen.length > 0) {
     const erg = ergebnisseFuerThema();
@@ -1493,7 +1378,7 @@ function renderTopic() {
   }
   return html;
 }
- 
+
 function examBreadcrumb(letzterLabel) {
   const f = aktuellesFach();
   const crumbs = [{ label: "Start", onClick: "gehezuHome()" }, { label: f.kurz, onClick: `gehezuFach('${f.id}')` }];
@@ -1504,7 +1389,7 @@ function examBreadcrumb(letzterLabel) {
   crumbs.push({ label: letzterLabel });
   return breadcrumb(crumbs);
 }
- 
+
 function renderExamSetup() {
   const f = aktuellesFach();
   const pool = examPool();
@@ -1524,7 +1409,7 @@ function renderExamSetup() {
   </div>`;
   return html;
 }
- 
+
 function renderExamActive() {
   let html = examBreadcrumb("Prüfung");
   const beantwortet = Object.keys(state.pruefungsErgebnisse).length;
@@ -1540,7 +1425,7 @@ function renderExamActive() {
   <button onclick="examAbbrechen()" style="margin-top:16px;background:transparent;border:none;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;text-decoration:underline;">Prüfung abbrechen</button>`;
   return html;
 }
- 
+
 function renderExamDone() {
   const richtig = Object.values(state.pruefungsErgebnisse).filter(r => r.status === "richtig").length;
   let html = examBreadcrumb("Prüfung");
@@ -1555,14 +1440,14 @@ function renderExamDone() {
   </div>`;
   return html;
 }
- 
+
 function navButtons() {
   return `<div class="nav-buttons">
     <button class="ghost" onclick="gehezuZurueck()">← Zurück</button>
     <button class="ghost" onclick="gehezuHome()">🏠 Startseite</button>
   </div>`;
 }
- 
+
 function gehezuZurueck() {
   if (state.screen === "topic" || state.screen === "kapitel") { gehezuFach(state.fach); return; }
   if (state.screen === "exam") {
@@ -1572,7 +1457,7 @@ function gehezuZurueck() {
   if (state.screen === "subject") { gehezuHome(); return; }
   gehezuHome();
 }
- 
+
 function render() {
   let html = "";
   if (state.screen === "welcome") html = renderWelcome();
@@ -1590,32 +1475,8 @@ function render() {
   }
   document.getElementById("app").innerHTML = html;
 }
- 
+
 render();
 </script>
 </body>
 </html>
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
