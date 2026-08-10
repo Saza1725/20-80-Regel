@@ -87,6 +87,8 @@ body{
 }
 .timer .label{ font-size:1.3rem; letter-spacing:.14em; margin-bottom:.4rem }
 .timer .value{ font-size:4.9rem; letter-spacing:.06em }
+.timer.final{ border-color:var(--pulse) }
+.timer.final .value{ color:var(--yellow) }
 
 /* ---------- 2 · Course-Data-Spalte rechts ---------- */
 
@@ -189,7 +191,7 @@ body{
 
   <!-- 1 · Hero-Timer -->
   <div class="timer panel chamfer-tl">
-    <div class="label">Elapsed Time</div>
+    <div class="label" id="hero-label">Elapsed Time</div>
     <div class="value" id="hero-timer">00:00:00</div>
   </div>
 
@@ -288,6 +290,7 @@ body{
    ================================================================ */
 const CONFIG = {
   targetKm:   0,        // Zieldistanz in km. 0 = Feld "Remaining" ausblenden
+  durationH:  0,        // Wettkampfdauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
   startAt:    null,     // null = Uhr startet beim Laden. Sonst "2026-08-15T06:00:00"
   title:      "Ultra",  // Text im Signet unten rechts
   subtitle:   "Live",
@@ -303,7 +306,8 @@ const CONFIG = {
   const map = { target:'targetKm', start:'startAt', title:'title', sub:'subtitle',
                 hr:'hyperateId', key:'hyperateKey' };
   for (const [k,v] of Object.entries(map)) if (q.has(k)) CONFIG[v] = q.get(k);
-  if (q.has('target'))  CONFIG.targetKm = parseFloat(q.get('target')) || 0;
+  if (q.has('target'))   CONFIG.targetKm  = parseFloat(String(q.get('target')).replace(',','.')) || 0;
+  if (q.has('duration')) CONFIG.durationH = parseFloat(String(q.get('duration')).replace(',','.')) || 0;
   if (q.has('demo'))    CONFIG.demo    = q.get('demo') !== '0';
   if (q.has('weather')) CONFIG.weather = q.get('weather') !== '0';
 })();
@@ -325,6 +329,7 @@ const state = {
 
 $('badge-title').textContent = CONFIG.title;
 $('badge-sub').textContent   = CONFIG.subtitle;
+if (CONFIG.durationH > 0) $('hero-label').textContent = 'Time Remaining';
 if (!CONFIG.targetKm) $('blk-remaining').style.display = 'none';
 if (!CONFIG.weather)  $('blk-weather').style.display   = 'none';
 
@@ -457,7 +462,13 @@ function render(){
   const now = Date.now();
   const elapsed = now - state.start;
 
-  $('hero-timer').textContent = hms(elapsed);
+  if (CONFIG.durationH > 0){
+    const left = Math.max(0, CONFIG.durationH*3600000 - elapsed);
+    $('hero-timer').textContent = hms(left);
+    document.querySelector('.timer').classList.toggle('final', left <= 600000);
+  } else {
+    $('hero-timer').textContent = hms(elapsed);
+  }
   $('perf-timer').textContent = hm(elapsed);
 
   const t = new Date();
