@@ -66,6 +66,7 @@ body{
 }
 
 .sub{ color:var(--dim); font-weight:600; font-variant-numeric:tabular-nums }
+body:not(.imperial) .imp{ display:none }
 
 .panel{
   background: var(--panel-bg);
@@ -77,7 +78,7 @@ body{
 .chamfer-tl{ clip-path: polygon(var(--chamfer) 0, 100% 0, 100% 100%, 0 100%, 0 var(--chamfer)) }
 .chamfer-br{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer)), calc(100% - var(--chamfer)) 100%, 0 100%) }
 
-/* ---------- 1 · Elapsed-Time-Chip oben links ---------- */
+/* ---------- 1 · Timer-Kachel oben links ---------- */
 
 .timer{
   position:absolute; top:1.8rem; left:1.8rem;
@@ -90,7 +91,7 @@ body{
 .timer.final{ border-color:var(--pulse) }
 .timer.final .value{ color:var(--yellow) }
 
-/* ---------- 2 · Course-Data-Spalte rechts ---------- */
+/* ---------- 2 · Strecken-Daten rechts ---------- */
 
 .course{
   position:absolute; top:0; right:0; bottom:0; width:28.5rem;
@@ -106,7 +107,7 @@ body{
 .course .value{ font-size:2.35rem }
 .course .value + .value{ margin-top:.1rem }
 
-/* ---------- 3 · Performance-Leiste unten ---------- */
+/* ---------- 3 · Leistungs-Leiste unten ---------- */
 
 .perf{
   position:absolute; left:0; right:0; bottom:0; height:13.2rem;
@@ -189,44 +190,44 @@ body{
 <body>
 <div class="stage">
 
-  <!-- 1 · Hero-Timer -->
+  <!-- 1 · Timer -->
   <div class="timer panel chamfer-tl">
-    <div class="label" id="hero-label">Elapsed Time</div>
+    <div class="label" id="hero-label">Laufzeit</div>
     <div class="value" id="hero-timer">00:00:00</div>
   </div>
 
-  <!-- 2 · Course Data -->
+  <!-- 2 · Strecken-Daten -->
   <aside class="course">
-    <h1>Course<br>Data</h1>
+    <h1>Strecken-<br>Daten</h1>
 
     <div class="block">
-      <div class="label">Local Time</div>
+      <div class="label">Uhrzeit</div>
       <div class="value" id="clock">--:--</div>
     </div>
 
     <div class="block" id="blk-weather">
-      <div class="label">Weather</div>
+      <div class="label">Wetter</div>
       <div class="value" id="temp-c">--.- °C</div>
-      <div class="value sub" id="temp-f">--.- °F</div>
+      <div class="value sub imp" id="temp-f">--.- °F</div>
     </div>
 
     <div class="block">
-      <div class="label">Distance Covered</div>
+      <div class="label">Gelaufen</div>
       <div class="value" id="dist-km">0.0 KM</div>
-      <div class="value sub" id="dist-mi">0.0 MI</div>
+      <div class="value sub imp" id="dist-mi">0.0 MI</div>
     </div>
 
     <div class="block" id="blk-remaining">
-      <div class="label">Remaining Distance</div>
+      <div class="label">Rest-Distanz</div>
       <div class="value" id="rem-km">0.0 KM</div>
-      <div class="value sub" id="rem-mi">0.0 MI</div>
+      <div class="value sub imp" id="rem-mi">0.0 MI</div>
     </div>
   </aside>
 
-  <!-- 3 · Performance Data -->
+  <!-- 3 · Leistungs-Daten -->
   <section class="perf">
     <div class="perf-head">
-      <h2>Performance Data</h2>
+      <h2>Leistungs-Daten</h2>
       <div class="status">
         <span class="dot" id="st-gps"><i></i>GPS</span>
         <span class="dot" id="st-hr"><i></i>Puls</span>
@@ -235,30 +236,30 @@ body{
     <div class="metrics">
 
       <div class="metric" id="m-hr">
-        <div class="label">Heart Rate</div>
+        <div class="label">Puls</div>
         <div class="row"><span class="value" id="hr">---</span><span class="unit">BPM</span></div>
       </div>
 
       <div class="metric">
-        <div class="label">Pace</div>
+        <div class="label">Akt. Pace</div>
         <div class="row"><span class="value" id="pace-km">--:--</span><span class="unit">/ KM</span></div>
-        <div class="row"><span class="value sub" id="pace-mi">--:--</span><span class="unit">/ MI</span></div>
+        <div class="row imp"><span class="value sub" id="pace-mi">--:--</span><span class="unit">/ MI</span></div>
       </div>
 
       <div class="metric">
-        <div class="label">Average Pace</div>
+        <div class="label">&Oslash; Pace</div>
         <div class="row"><span class="value" id="apace-km">--:--</span><span class="unit">/ KM</span></div>
-        <div class="row"><span class="value sub" id="apace-mi">--:--</span><span class="unit">/ MI</span></div>
+        <div class="row imp"><span class="value sub" id="apace-mi">--:--</span><span class="unit">/ MI</span></div>
       </div>
 
       <div class="metric">
-        <div class="label">Elevation Gain</div>
+        <div class="label">H&ouml;henmeter</div>
         <div class="row"><span class="value" id="ele-m">0</span><span class="unit">M</span></div>
-        <div class="row"><span class="value sub" id="ele-ft">0</span><span class="unit">FT</span></div>
+        <div class="row imp"><span class="value sub" id="ele-ft">0</span><span class="unit">FT</span></div>
       </div>
 
       <div class="metric">
-        <div class="label">Elapsed Time</div>
+        <div class="label">Laufzeit</div>
         <div class="row"><span class="value" id="perf-timer">00:00</span></div>
       </div>
 
@@ -284,17 +285,18 @@ body{
 
 <script>
 /* ================================================================
-   ⚙️  KONFIGURATION
+   KONFIGURATION
    Alles hier lässt sich auch per URL-Parameter überschreiben,
-   z. B.  overlay.html?target=45&hr=abc123&key=DEIN_KEY&title=6H%20ULTRA
+   z. B.  overlay.html?target=52.5&duration=6&title=6H%20ULTRA
    ================================================================ */
 const CONFIG = {
-  targetKm:   0,        // Zieldistanz in km. 0 = Feld "Remaining" ausblenden
+  targetKm:   0,        // Zieldistanz in km. 0 = Feld "Rest-Distanz" ausblenden
   durationH:  0,        // Wettkampfdauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
   startAt:    null,     // null = Uhr startet beim Laden. Sonst "2026-08-15T06:00:00"
   title:      "Ultra",  // Text im Signet unten rechts
   subtitle:   "Live",
   weather:    true,     // Wetter über Open-Meteo (kein API-Key nötig)
+  imperial:   false,    // true = zusätzlich Meilen und Fuß anzeigen
   hyperateId: "",       // HypeRate Session-ID (App → Settings → Session ID)
   hyperateKey:"",       // HypeRate WebSocket-Key (kostenlos im HypeRate-Discord)
   demo:       false     // true = simulierte Werte zum Testen am Schreibtisch
@@ -308,8 +310,9 @@ const CONFIG = {
   for (const [k,v] of Object.entries(map)) if (q.has(k)) CONFIG[v] = q.get(k);
   if (q.has('target'))   CONFIG.targetKm  = parseFloat(String(q.get('target')).replace(',','.')) || 0;
   if (q.has('duration')) CONFIG.durationH = parseFloat(String(q.get('duration')).replace(',','.')) || 0;
-  if (q.has('demo'))    CONFIG.demo    = q.get('demo') !== '0';
-  if (q.has('weather')) CONFIG.weather = q.get('weather') !== '0';
+  if (q.has('demo'))     CONFIG.demo     = q.get('demo') !== '0';
+  if (q.has('weather'))  CONFIG.weather  = q.get('weather') !== '0';
+  if (q.has('imperial')) CONFIG.imperial = q.get('imperial') !== '0';
 })();
 
 const $ = id => document.getElementById(id);
@@ -329,9 +332,10 @@ const state = {
 
 $('badge-title').textContent = CONFIG.title;
 $('badge-sub').textContent   = CONFIG.subtitle;
-if (CONFIG.durationH > 0) $('hero-label').textContent = 'Time Remaining';
+if (CONFIG.durationH > 0) $('hero-label').textContent = 'Restzeit';
 if (!CONFIG.targetKm) $('blk-remaining').style.display = 'none';
 if (!CONFIG.weather)  $('blk-weather').style.display   = 'none';
+if (CONFIG.imperial)  document.body.classList.add('imperial');
 
 /* ---- Formatierung ---- */
 const pad = n => String(n).padStart(2,'0');
@@ -500,8 +504,8 @@ function render(){
   $('pace-km').textContent = pace(cSec);
   $('pace-mi').textContent = pace(cSec*1.609344);
 
-  $('ele-m').textContent  = Math.round(state.gain).toLocaleString('en-US');
-  $('ele-ft').textContent = Math.round(state.gain*3.28084).toLocaleString('en-US');
+  $('ele-m').textContent  = Math.round(state.gain).toLocaleString('de-DE');
+  $('ele-ft').textContent = Math.round(state.gain*3.28084).toLocaleString('de-DE');
 
   // Puls: nach 20 s ohne neuen Wert als veraltet kennzeichnen
   const live = state.hr && now - state.hrSeen < 20000;
