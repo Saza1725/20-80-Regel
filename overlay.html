@@ -6,194 +6,190 @@
 <title>Race Overlay</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Archivo:wght@600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   KONFIGURATION → siehe <script> ganz unten (CONFIG-Block)
-   Alles hier drin ist reines Design.
+   FARBSCHEMA — eine Zeile tauschen, alles zieht nach
+   Aktuell: Graphit + Acid-Lime
+   Broadcast-Original:  --graphite:#2B1550;  --accent:#FFD400;
+   Weitere Akzente:     Amber #FFB020 · Eisblau #5CE1E6 · Magenta #FF4D8D
    ============================================================ */
 
 :root{
-  --ink:        #150A2E;
-  --violet:     #2B1550;
-  --violet-lo:  #1E0F3C;
-  --edge:       #7B4FC0;
-  --yellow:     #FFD400;
-  --white:      #FFFFFF;
-  --pulse:      #EC1846;
-  --dim:        rgba(255,255,255,.45);
+  --ink:      #0A0D12;
+  --graphite: #141922;
+  --accent:   #D7FF3E;
+  --white:    #FFFFFF;
+  --alert:    #FF4D4D;
+  --dim:      rgba(255,255,255,.45);
 
-  --panel-bg:   linear-gradient(180deg, rgba(43,21,80,.94) 0%, rgba(21,10,46,.94) 100%);
-  --chamfer:    1.6rem;
+  --panel-bg: linear-gradient(180deg, rgba(20,25,34,.93) 0%, rgba(10,13,18,.95) 100%);
+  --hairline: rgba(215,255,62,.32);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
-
-html{
-  /* 1rem = 10px bei 1920px Breite → gesamtes Layout skaliert mit der Streambreite */
-  font-size: calc(100vw / 192);
-}
+html{ font-size: calc(100vw / 192); }     /* 1rem = 10px bei 1920 px Breite */
 
 body{
-  background: transparent;          /* PFLICHT für Overlay-Nutzung */
-  font-family: 'Rajdhani', 'Arial Narrow', Arial, sans-serif;
-  color: var(--white);
-  overflow: hidden;
-  width:100vw; height:100vh;
+  background: transparent;                /* PFLICHT für Overlay-Nutzung */
+  font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+  color:var(--white); overflow:hidden; width:100vw; height:100vh;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
-
 .stage{position:fixed; inset:0}
 
-/* ---------- gemeinsame Bausteine ---------- */
+/* ---------- Bausteine ---------- */
 
 .label{
-  font-family:'Oswald','Arial Narrow',sans-serif;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-  color:var(--yellow);
-  line-height:1;
+  font-family:'Barlow Condensed','Arial Narrow',sans-serif;
+  font-weight:700; text-transform:uppercase;
+  letter-spacing:.10em; color:var(--accent); line-height:1;
 }
-
 .value{
-  font-weight:700;
-  font-variant-numeric: tabular-nums;
-  letter-spacing:.01em;
-  line-height:1;
-  white-space:nowrap;
+  font-weight:700; font-variant-numeric:tabular-nums;
+  letter-spacing:-.01em; line-height:1; white-space:nowrap;
 }
-
 .sub{ color:var(--dim); font-weight:600; font-variant-numeric:tabular-nums }
 body:not(.imperial) .imp{ display:none }
 
-.panel{
-  background: var(--panel-bg);
-  border:.1rem solid rgba(123,79,192,.55);
-  backdrop-filter: blur(2px);
+.card{
+  background:var(--panel-bg);
+  border:.15rem solid var(--hairline);
+  border-left:.3rem solid var(--accent);
 }
 
-/* Abgeschrägte Ecken = Signature-Form der Übertragung */
-.chamfer-tl{ clip-path: polygon(var(--chamfer) 0, 100% 0, 100% 100%, 0 100%, 0 var(--chamfer)) }
-.chamfer-br{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer)), calc(100% - var(--chamfer)) 100%, 0 100%) }
+/* ---------- 1 · Stapel oben links ---------- */
 
-/* ---------- 1 · Timer-Kachel oben links ---------- */
+.stack{ position:absolute; top:1.8rem; left:1.8rem; width:25rem }
 
-.timer{
-  position:absolute; top:1.8rem; left:1.8rem;
-  padding:.8rem 1.9rem 1.2rem;
-  border-color:var(--yellow);
-  border-width:.2rem;
+.timer{ padding:.8rem 1.6rem 1.1rem }
+.timer .label{ font-size:1.2rem; letter-spacing:.18em; margin-bottom:.45rem }
+.timer .value{ font-size:4.4rem; letter-spacing:-.02em }
+.timer.final{ border-color:var(--alert); border-left-color:var(--alert) }
+.timer.final .value{ color:var(--alert) }
+
+.temp{
+  margin-top:.7rem; padding:.8rem 1.6rem 1rem;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
-.timer .label{ font-size:1.3rem; letter-spacing:.14em; margin-bottom:.4rem }
-.timer .value{ font-size:4.9rem; letter-spacing:.06em }
-.timer.final{ border-color:var(--pulse) }
-.timer.final .value{ color:var(--yellow) }
+.temp .label{ font-size:1.2rem; letter-spacing:.18em; margin-bottom:.45rem }
+.temp .value{ font-size:1.9rem }
+.temp .value + .value{ margin-top:.25rem }
+.temp .icon{ width:4.2rem; height:4.2rem; flex:none }
+.temp .icon svg{ width:100%; height:100%; display:block }
+.temp .icon path, .temp .icon circle, .temp .icon line{
+  stroke:var(--accent); stroke-width:1.8; fill:none;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+
+.accent-bar{ height:.55rem; width:62%; background:var(--accent); margin-top:.7rem }
 
 /* ---------- 2 · Strecken-Daten rechts ---------- */
 
 .course{
-  position:absolute; top:0; right:0; bottom:0; width:28.5rem;
-  padding:4.6rem 2.4rem 14rem 2.8rem;
-  background: linear-gradient(90deg, rgba(21,10,46,0) 0%, rgba(21,10,46,.90) 22%, rgba(43,21,80,.94) 100%);
+  position:absolute; top:0; right:0; bottom:0; width:29rem;
+  padding:4.2rem 2rem 14.5rem 2.8rem;
+  border-left:.2rem solid rgba(255,255,255,.85);
+  background: linear-gradient(90deg, rgba(10,13,18,.86) 0%, rgba(10,13,18,.94) 100%);
 }
 .course h1{
-  font-family:'Oswald',sans-serif; font-weight:700; text-transform:uppercase;
-  font-size:3.25rem; letter-spacing:.02em; line-height:1; margin-bottom:2.6rem;
+  font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase;
+  font-size:3.1rem; letter-spacing:.03em; line-height:.95; margin-bottom:2.4rem;
 }
-.course .block{ margin-bottom:2.3rem }
-.course .label{ font-size:1.7rem; margin-bottom:.5rem }
-.course .value{ font-size:2.35rem }
-.course .value + .value{ margin-top:.1rem }
+.course .block{ margin-bottom:2.2rem }
+.course .label{ font-size:1.6rem; margin-bottom:.55rem }
+.course .value{ font-size:2.3rem }
+.course .value + .value{ margin-top:.25rem }
 
 /* ---------- 3 · Leistungs-Leiste unten ---------- */
 
 .perf{
-  position:absolute; left:0; right:0; bottom:0; height:13.2rem;
-  padding:1.3rem 2.6rem 0 2.4rem;
-  background: linear-gradient(180deg, rgba(43,21,80,.93) 0%, rgba(21,10,46,.96) 100%);
-  border-top:.2rem solid var(--yellow);
-  display:flex; flex-direction:column;
+  position:absolute; left:0; right:0; bottom:0; height:13.4rem;
+  padding:1.4rem 0 0 2.6rem;
+  background: linear-gradient(180deg, rgba(20,25,34,.90) 0%, rgba(10,13,18,.96) 100%);
+  border-top:.25rem solid var(--accent);
 }
+.perf-head{ display:flex; align-items:center; gap:2.4rem; margin-bottom:1.2rem }
 .perf h2{
-  font-family:'Oswald',sans-serif; font-weight:700; text-transform:uppercase;
-  font-size:2.6rem; letter-spacing:.02em; line-height:1;
+  font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase;
+  font-size:2.5rem; letter-spacing:.04em; line-height:1;
 }
-.perf-head{ display:flex; align-items:center; justify-content:flex-start;
-            gap:2.4rem; margin-bottom:1.1rem }
-.metrics{ display:flex; align-items:flex-start; gap:0 }
-.metric{ padding:0 2.4rem; border-left:.1rem solid rgba(255,255,255,.22) }
+.metrics{ display:flex; align-items:flex-start; position:relative; z-index:2 }
+.metric{ padding:0 2.4rem; border-left:.1rem solid rgba(255,255,255,.18) }
 .metric:first-child{ padding-left:0; border-left:0 }
-.metric .label{ font-size:1.65rem; margin-bottom:.6rem }
+.metric .label{ font-size:1.55rem; margin-bottom:.7rem }
 .metric .row{ display:flex; align-items:baseline; gap:.7rem }
-.metric .value{ font-size:2.2rem }
-.metric .unit{ font-size:1.45rem; color:var(--dim); font-weight:600; letter-spacing:.08em }
-.metric .row + .row{ margin-top:.15rem }
-
-#m-hr .value{ font-size:2.75rem }
-#m-hr.beating .value{ animation: beat .9s ease-out infinite }
-@keyframes beat{
-  0%{transform:scale(1)} 12%{transform:scale(1.075)} 30%{transform:scale(1)}
+.metric .value{ font-size:2.15rem }
+.metric .unit{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.4rem; color:var(--dim); font-weight:600; letter-spacing:.1em;
 }
+.metric .row + .row{ margin-top:.3rem }
 
-/* ---------- 4 · Wellen-Signet unten rechts ---------- */
+#m-hr .value{ font-size:2.7rem }
+#m-hr.beating .value{ animation:beat .9s ease-out infinite }
+@keyframes beat{ 0%{transform:scale(1)} 12%{transform:scale(1.07)} 30%{transform:scale(1)} }
+
+/* ---------- 4 · Raute + Wellen unten rechts ---------- */
 
 .crest{
-  position:absolute; right:15.5rem; bottom:.6rem;
-  width:21rem; height:11rem; pointer-events:none;
+  position:absolute; right:0; bottom:0; width:44rem; height:13.4rem;
+  pointer-events:none; z-index:1;
 }
 .crest svg{ width:100%; height:100%; display:block }
-.crest .wave{ fill:none; stroke:var(--yellow); stroke-width:1.6; opacity:.55 }
+.crest .wave{ fill:none; stroke:var(--accent); stroke-width:1.3; opacity:.32 }
 
 .badge{
-  position:absolute; right:2.4rem; bottom:1.6rem;
-  width:12.5rem; padding:1.1rem .9rem 1.2rem; text-align:center;
-  font-family:'Oswald',sans-serif; text-transform:uppercase;
-  border:.2rem solid var(--yellow);
-  background: var(--panel-bg);
-  clip-path: polygon(1.4rem 0, 100% 0, 100% calc(100% - 1.4rem), calc(100% - 1.4rem) 100%, 0 100%, 0 1.4rem);
+  position:absolute; right:6rem; bottom:2.6rem;
+  width:11rem; height:11rem; transform:rotate(45deg);
+  border:.25rem solid var(--accent);
+  background:var(--panel-bg);
+  display:flex; align-items:center; justify-content:center; z-index:3;
 }
-.badge .top{
-  font-size:1.95rem; font-weight:700; color:var(--yellow);
-  letter-spacing:.05em; line-height:1.02;
+.badge-inner{
+  transform:rotate(-45deg); text-align:center;
+  font-family:'Barlow Condensed',sans-serif; text-transform:uppercase;
 }
-.badge .bot{
-  font-size:1.05rem; font-weight:500; color:var(--white);
-  letter-spacing:.26em; margin-top:.5rem;
-}
-.badge .rule{
-  height:.18rem; background:var(--yellow); margin:.7rem auto 0; width:62%;
-}
+.badge .top{ font-size:1.8rem; font-weight:700; color:var(--accent); letter-spacing:.04em; line-height:1 }
+.badge .rule{ height:.16rem; background:var(--accent); margin:.55rem auto; width:70% }
+.badge .bot{ font-size:1rem; font-weight:600; color:var(--white); letter-spacing:.3em }
 
-/* ---------- Status-Punkte (Signalqualität) ---------- */
+/* ---------- Statuspunkte ---------- */
 
-.status{ display:flex; gap:1.4rem; align-items:center; padding-bottom:.15rem }
+.status{ display:flex; gap:1.3rem; align-items:center }
 .dot{
   display:flex; align-items:center; gap:.45rem;
-  font-family:'Oswald',sans-serif; font-size:1.2rem; font-weight:500;
-  text-transform:uppercase; letter-spacing:.12em; color:var(--dim);
+  font-family:'Barlow Condensed',sans-serif; font-size:1.15rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.16em; color:var(--dim);
 }
-.dot i{
-  width:.8rem; height:.8rem; border-radius:50%;
-  background:rgba(255,255,255,.25); display:block;
-}
-.dot.ok i{ background:var(--yellow); box-shadow:0 0 .8rem rgba(255,212,0,.8) }
+.dot i{ width:.75rem; height:.75rem; border-radius:50%; background:rgba(255,255,255,.22); display:block }
+.dot.ok i{ background:var(--accent); box-shadow:0 0 .8rem rgba(215,255,62,.75) }
 .dot.ok{ color:var(--white) }
-.dot.err i{ background:var(--pulse) }
+.dot.err i{ background:var(--alert) }
 
-@media (prefers-reduced-motion: reduce){
-  *{animation:none !important}
-}
+@media (prefers-reduced-motion: reduce){ *{animation:none !important} }
 </style>
 </head>
 <body>
 <div class="stage">
 
-  <!-- 1 · Timer -->
-  <div class="timer panel chamfer-tl">
-    <div class="label" id="hero-label">Laufzeit</div>
-    <div class="value" id="hero-timer">00:00:00</div>
+  <!-- 1 · Timer + Temperatur -->
+  <div class="stack">
+    <div class="timer card">
+      <div class="label" id="hero-label">Laufzeit</div>
+      <div class="value" id="hero-timer">00:00:00</div>
+    </div>
+
+    <div class="temp card" id="blk-temp">
+      <div>
+        <div class="label">Temperatur</div>
+        <div class="value" id="temp-c">--.- &deg;C</div>
+        <div class="value sub imp" id="temp-f">--.- &deg;F</div>
+      </div>
+      <div class="icon" id="wx-icon"></div>
+    </div>
+
+    <div class="accent-bar"></div>
   </div>
 
   <!-- 2 · Strecken-Daten -->
@@ -207,8 +203,8 @@ body:not(.imperial) .imp{ display:none }
 
     <div class="block" id="blk-weather">
       <div class="label">Wetter</div>
-      <div class="value" id="temp-c">--.- °C</div>
-      <div class="value sub imp" id="temp-f">--.- °F</div>
+      <div class="value" id="temp-c2">--.- &deg;C</div>
+      <div class="value sub imp" id="temp-f2">--.- &deg;F</div>
     </div>
 
     <div class="block">
@@ -233,8 +229,8 @@ body:not(.imperial) .imp{ display:none }
         <span class="dot" id="st-hr"><i></i>Puls</span>
       </div>
     </div>
-    <div class="metrics">
 
+    <div class="metrics">
       <div class="metric" id="m-hr">
         <div class="label">Puls</div>
         <div class="row"><span class="value" id="hr">---</span><span class="unit">BPM</span></div>
@@ -262,22 +258,23 @@ body:not(.imperial) .imp{ display:none }
         <div class="label">Laufzeit</div>
         <div class="row"><span class="value" id="perf-timer">00:00</span></div>
       </div>
-
     </div>
 
-    <!-- 4 · Signet -->
     <div class="crest">
-      <svg viewBox="0 0 220 95" preserveAspectRatio="none" aria-hidden="true">
-        <path class="wave" d="M0,88 C40,88 55,60 95,60 C135,60 150,88 220,88"/>
-        <path class="wave" d="M0,80 C40,80 58,48 100,48 C142,48 156,80 220,80" opacity=".42"/>
-        <path class="wave" d="M0,72 C42,72 62,34 106,34 C150,34 162,72 220,72" opacity=".30"/>
-        <path class="wave" d="M0,64 C44,64 66,20 112,20 C158,20 168,64 220,64" opacity=".20"/>
+      <svg viewBox="0 0 440 134" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wave" d="M0,126 C80,126 110,86 190,86 C270,86 300,126 440,126"/>
+        <path class="wave" d="M0,112 C80,112 118,66 205,66 C292,66 312,112 440,112" opacity=".24"/>
+        <path class="wave" d="M0,98 C86,98 126,46 218,46 C310,46 326,98 440,98" opacity=".17"/>
+        <path class="wave" d="M0,84 C92,84 134,26 232,26 C330,26 342,84 440,84" opacity=".11"/>
       </svg>
     </div>
+
     <div class="badge">
-      <div class="top" id="badge-title">Ultra</div>
-      <div class="rule"></div>
-      <div class="bot" id="badge-sub">Live</div>
+      <div class="badge-inner">
+        <div class="top" id="badge-title">Ultra</div>
+        <div class="rule"></div>
+        <div class="bot" id="badge-sub">Live</div>
+      </div>
     </div>
   </section>
 
@@ -285,24 +282,22 @@ body:not(.imperial) .imp{ display:none }
 
 <script>
 /* ================================================================
-   KONFIGURATION
-   Alles hier lässt sich auch per URL-Parameter überschreiben,
-   z. B.  overlay.html?target=52.5&duration=6&title=6H%20ULTRA
+   KONFIGURATION — auch per URL-Parameter setzbar, z. B.
+   overlay.html?target=52.5&duration=6&title=6H%20ULTRA
    ================================================================ */
 const CONFIG = {
-  targetKm:   0,        // Zieldistanz in km. 0 = Feld "Rest-Distanz" ausblenden
-  durationH:  0,        // Wettkampfdauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
-  startAt:    null,     // null = Uhr startet beim Laden. Sonst "2026-08-15T06:00:00"
-  title:      "Ultra",  // Text im Signet unten rechts
+  targetKm:   0,        // Zieldistanz in km. 0 = "Rest-Distanz" ausblenden
+  durationH:  0,        // Dauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
+  startAt:    null,     // null = Start beim Laden. Sonst "2026-08-15T06:00:00"
+  title:      "Ultra",  // Text in der Raute
   subtitle:   "Live",
-  weather:    true,     // Wetter über Open-Meteo (kein API-Key nötig)
-  imperial:   false,    // true = zusätzlich Meilen und Fuß anzeigen
-  hyperateId: "",       // HypeRate Session-ID (App → Settings → Session ID)
-  hyperateKey:"",       // HypeRate WebSocket-Key (kostenlos im HypeRate-Discord)
-  demo:       false     // true = simulierte Werte zum Testen am Schreibtisch
+  weather:    true,     // Wetter ueber Open-Meteo (kein API-Key noetig)
+  imperial:   false,    // true = zusaetzlich Meilen und Fuss
+  hyperateId: "",       // HypeRate Session-ID
+  hyperateKey:"",       // HypeRate WebSocket-Key
+  demo:       false     // true = simulierte Werte zum Testen
 };
 
-/* ---- URL-Parameter übernehmen ---- */
 (function(){
   const q = new URLSearchParams(location.search);
   const map = { target:'targetKm', start:'startAt', title:'title', sub:'subtitle',
@@ -317,29 +312,40 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 
-/* ---- Grundzustand ---- */
 const state = {
   start: CONFIG.startAt ? new Date(CONFIG.startAt).getTime() : Date.now(),
-  meters: 0,
-  gain: 0,
-  last: null,        // letzter akzeptierter Fixpunkt
-  baseAlt: null,
-  trail: [],         // [{t, m}] für die aktuelle Pace
-  hr: null,
-  hrSeen: 0,
-  fix: 0
+  meters: 0, gain: 0, last: null, baseAlt: null,
+  trail: [], hr: null, hrSeen: 0, fix: 0
 };
 
 $('badge-title').textContent = CONFIG.title;
 $('badge-sub').textContent   = CONFIG.subtitle;
 if (CONFIG.durationH > 0) $('hero-label').textContent = 'Restzeit';
 if (!CONFIG.targetKm) $('blk-remaining').style.display = 'none';
-if (!CONFIG.weather)  $('blk-weather').style.display   = 'none';
+if (!CONFIG.weather){ $('blk-weather').style.display='none'; $('blk-temp').style.display='none'; }
 if (CONFIG.imperial)  document.body.classList.add('imperial');
+
+/* ---- Wettersymbole ---- */
+const ICONS = {
+  sun:   '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="8"/><line x1="20" y1="3" x2="20" y2="8"/><line x1="20" y1="32" x2="20" y2="37"/><line x1="3" y1="20" x2="8" y2="20"/><line x1="32" y1="20" x2="37" y2="20"/><line x1="8" y1="8" x2="11.5" y2="11.5"/><line x1="28.5" y1="28.5" x2="32" y2="32"/><line x1="32" y1="8" x2="28.5" y2="11.5"/><line x1="11.5" y1="28.5" x2="8" y2="32"/></svg>',
+  cloud: '<svg viewBox="0 0 40 40"><path d="M11 29h18a6 6 0 0 0 .4-12 9 9 0 0 0-17.3 2.2A5.5 5.5 0 0 0 11 29z"/></svg>',
+  rain:  '<svg viewBox="0 0 40 40"><path d="M11 24h18a6 6 0 0 0 .4-12 9 9 0 0 0-17.3 2.2A5.5 5.5 0 0 0 11 24z"/><line x1="14" y1="29" x2="12" y2="35"/><line x1="21" y1="29" x2="19" y2="35"/><line x1="28" y1="29" x2="26" y2="35"/></svg>',
+  snow:  '<svg viewBox="0 0 40 40"><path d="M11 24h18a6 6 0 0 0 .4-12 9 9 0 0 0-17.3 2.2A5.5 5.5 0 0 0 11 24z"/><line x1="13" y1="31" x2="17" y2="31"/><line x1="15" y1="29" x2="15" y2="33"/><line x1="23" y1="31" x2="27" y2="31"/><line x1="25" y1="29" x2="25" y2="33"/></svg>',
+  storm: '<svg viewBox="0 0 40 40"><path d="M11 24h18a6 6 0 0 0 .4-12 9 9 0 0 0-17.3 2.2A5.5 5.5 0 0 0 11 24z"/><path d="M21 27l-5 6h5l-3 5"/></svg>'
+};
+function setIcon(code){
+  let k = 'cloud';
+  if (code <= 1) k = 'sun';
+  else if (code <= 48) k = 'cloud';
+  else if ((code >= 71 && code <= 77) || code === 85 || code === 86) k = 'snow';
+  else if (code >= 95) k = 'storm';
+  else k = 'rain';
+  $('wx-icon').innerHTML = ICONS[k];
+}
+setIcon(3);
 
 /* ---- Formatierung ---- */
 const pad = n => String(n).padStart(2,'0');
-
 function hms(ms){
   const s = Math.max(0, Math.floor(ms/1000));
   return pad(Math.floor(s/3600)) + ':' + pad(Math.floor(s%3600/60)) + ':' + pad(s%60);
@@ -373,8 +379,7 @@ function onFix(p){
   if (state.last){
     const d = distM(state.last, pt);
     const dt = (now - state.last.t)/1000;
-    // Ausreißer filtern: < 4 m ist Jitter, > 12 m/s ist unmöglich beim Laufen
-    if (d >= 4 && dt > 0 && d/dt < 12){
+    if (d >= 4 && dt > 0 && d/dt < 12){              // Jitter- und Ausreisserfilter
       state.meters += d;
       state.trail.push({ t: now, m: state.meters });
       state.last = pt;
@@ -383,7 +388,6 @@ function onFix(p){
     state.last = pt;
   }
 
-  // Höhenmeter mit 4-m-Hysterese gegen GPS-Rauschen
   if (typeof pt.alt === 'number' && !isNaN(pt.alt)){
     if (state.baseAlt === null) state.baseAlt = pt.alt;
     const d = pt.alt - state.baseAlt;
@@ -403,7 +407,7 @@ if (!CONFIG.demo && 'geolocation' in navigator){
   setDot($('st-gps'), 'err');
 }
 
-/* ---- Puls über HypeRate ---- */
+/* ---- Puls ueber HypeRate ---- */
 function connectHR(){
   if (!CONFIG.hyperateId || !CONFIG.hyperateKey) return;
   let ws, beat;
@@ -418,8 +422,7 @@ function connectHR(){
       try{
         const m = JSON.parse(e.data);
         if ((m.event === 'hr_update' || m.event === 'hr_feed') && m.payload && m.payload.hr){
-          state.hr = m.payload.hr;
-          state.hrSeen = Date.now();
+          state.hr = m.payload.hr; state.hrSeen = Date.now();
         }
       }catch(_){}
     };
@@ -430,7 +433,7 @@ function connectHR(){
 }
 connectHR();
 
-/* ---- Wetter (Open-Meteo, ohne Key) ---- */
+/* ---- Wetter ---- */
 let weatherAt = 0;
 async function updateWeather(){
   if (!CONFIG.weather || !state.last) return;
@@ -439,19 +442,22 @@ async function updateWeather(){
   try{
     const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' +
       state.last.lat.toFixed(3) + '&longitude=' + state.last.lon.toFixed(3) +
-      '&current=temperature_2m');
+      '&current=temperature_2m,weather_code');
     const j = await r.json();
     const c = j.current.temperature_2m;
-    $('temp-c').textContent = c.toFixed(1) + ' °C';
-    $('temp-f').textContent = (c*9/5+32).toFixed(1) + ' °F';
-  }catch(_){ weatherAt = Date.now() - 540000; }   // in 60 s erneut versuchen
+    const cs = c.toFixed(1) + ' \u00B0C', fs = (c*9/5+32).toFixed(1) + ' \u00B0F';
+    $('temp-c').textContent = cs;  $('temp-c2').textContent = cs;
+    $('temp-f').textContent = fs;  $('temp-f2').textContent = fs;
+    setIcon(j.current.weather_code);
+  }catch(_){ weatherAt = Date.now() - 540000; }      // in 60 s erneut versuchen
 }
 
-/* ---- Demo-Modus ---- */
+/* ---- Demo ---- */
 if (CONFIG.demo){
   setDot($('st-gps'),'ok'); setDot($('st-hr'),'ok');
-  $('temp-c').textContent = '15.8 °C';
-  $('temp-f').textContent = '60.4 °F';
+  $('temp-c').textContent = '15.8 \u00B0C'; $('temp-c2').textContent = '15.8 \u00B0C';
+  $('temp-f').textContent = '60.4 \u00B0F'; $('temp-f2').textContent = '60.4 \u00B0F';
+  setIcon(0);
   setInterval(() => {
     state.meters += 2.5 + Math.random();
     state.gain   += Math.random() * .6;
@@ -461,7 +467,7 @@ if (CONFIG.demo){
   }, 1000);
 }
 
-/* ---- Render-Schleife ---- */
+/* ---- Render ---- */
 function render(){
   const now = Date.now();
   const elapsed = now - state.start;
@@ -488,7 +494,6 @@ function render(){
     $('rem-mi').textContent = (rk/1.609344).toFixed(1) + ' MI';
   }
 
-  // Durchschnittspace über die gesamte Strecke
   const aSec = km > .05 ? (elapsed/1000)/km : 0;
   $('apace-km').textContent = pace(aSec);
   $('apace-mi').textContent = pace(aSec*1.609344);
@@ -507,7 +512,6 @@ function render(){
   $('ele-m').textContent  = Math.round(state.gain).toLocaleString('de-DE');
   $('ele-ft').textContent = Math.round(state.gain*3.28084).toLocaleString('de-DE');
 
-  // Puls: nach 20 s ohne neuen Wert als veraltet kennzeichnen
   const live = state.hr && now - state.hrSeen < 20000;
   $('hr').textContent = live ? state.hr : '---';
   $('m-hr').classList.toggle('beating', !!live);
@@ -520,7 +524,7 @@ function render(){
 }
 render();
 
-/* ---- Display wach halten, falls die Umgebung es erlaubt ---- */
+/* ---- Display wach halten ---- */
 if ('wakeLock' in navigator){
   const hold = () => navigator.wakeLock.request('screen').catch(()=>{});
   hold();
