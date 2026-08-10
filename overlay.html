@@ -11,240 +11,270 @@
 /* ============================================================
    FARBSCHEMA — eine Zeile tauschen, alles zieht nach
    Aktuell: Graphit + Acid-Lime
-   Alternativen:  Amber #FFB020 · Eisblau #5CE1E6 · Magenta #FF4D8D
-                  Broadcast-Gold #FFD400
+   Broadcast-Original:  --graphite:#2B1550;  --accent:#FFD400;
+   Weitere Akzente:     Amber #FFB020 · Eisblau #5CE1E6 · Magenta #FF4D8D
    ============================================================ */
 
 :root{
-  --accent:  #D7FF3E;
-  --white:   #FFFFFF;
-  --alert:   #FF4D4D;
-  --dim:     rgba(255,255,255,.50);
-  --panel:   linear-gradient(180deg, rgba(18,23,31,.94) 0%, rgba(9,12,17,.96) 100%);
-  --line:    rgba(255,255,255,.16);
+  --ink:      #0A0D12;
+  --graphite: #141922;
+  --accent:   #D7FF3E;
+  --white:    #FFFFFF;
+  --alert:    #FF4D4D;
+  --dim:      rgba(255,255,255,.45);
+
+  --panel-bg: linear-gradient(180deg, rgba(20,25,34,.93) 0%, rgba(10,13,18,.95) 100%);
+  --hairline: rgba(215,255,62,.32);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
-html{
-  /* Skaliert mit der kleineren der beiden Seiten -> haelt die Proportionen
-     auf jedem Seitenverhaeltnis: Handy, Tablet, Laptop, TV. */
-  font-size: min(calc(100vw / 192), calc(100vh / 108));
-}
+html{ font-size: calc(100vw / 192); }     /* 1rem = 10px bei 1920 px Breite */
 
 body{
-  background: transparent;                 /* PFLICHT für Overlay-Nutzung */
+  background: transparent;                /* PFLICHT für Overlay-Nutzung */
   font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
   color:var(--white); overflow:hidden; width:100vw; height:100vh;
   -webkit-font-smoothing: antialiased;
 }
 .stage{position:fixed; inset:0}
 
-/* ---------- Typo-Bausteine ---------- */
+/* ---------- Bausteine ---------- */
 
 .label{
   font-family:'Barlow Condensed','Arial Narrow',sans-serif;
   font-weight:700; text-transform:uppercase;
-  letter-spacing:.14em; color:var(--accent); line-height:1;
+  letter-spacing:.10em; color:var(--accent); line-height:1;
 }
 .value{
   font-weight:700; font-variant-numeric:tabular-nums;
-  letter-spacing:-.015em; line-height:1; white-space:nowrap;
+  letter-spacing:-.01em; line-height:1; white-space:nowrap;
 }
-.unit{
-  font-family:'Barlow Condensed',sans-serif; font-weight:600;
-  color:var(--dim); letter-spacing:.12em; text-transform:uppercase;
-}
-.stale{ opacity:.4 }                        /* kein frisches GPS-Signal */
+.sub{ color:var(--dim); font-weight:600; font-variant-numeric:tabular-nums }
 body:not(.imperial) .imp{ display:none }
 
-/* ---------- 1 · Restzeit oben links ---------- */
-
-.hero{
-  position:absolute; top:2rem; left:2rem;
-  padding:1.1rem 2.6rem 1.5rem 2.2rem;
-  background:var(--panel);
-  border-left:.6rem solid var(--accent);
+.card{
+  background:var(--panel-bg);
+  border:.15rem solid var(--hairline);
+  border-left:.3rem solid var(--accent);
 }
-.hero .label{ font-size:1.6rem; margin-bottom:.7rem }
-.hero .value{ font-size:7.2rem }
-.hero.final{ border-left-color:var(--alert) }
-.hero.final .value{ color:var(--alert) }
 
-/* ---------- 2 · Uhrzeit + Wetter oben rechts ---------- */
+/* ---------- 1 · Stapel oben links ---------- */
 
-.env{
-  position:absolute; top:2rem; right:2rem;
-  display:flex; align-items:stretch;
-  background:var(--panel);
-  border-right:.6rem solid var(--accent);
+.stack{ position:absolute; top:1.8rem; left:1.8rem; width:25rem }
+
+.timer{ padding:.8rem 1.6rem 1.1rem }
+.timer .label{ font-size:1.2rem; letter-spacing:.18em; margin-bottom:.45rem }
+.timer .value{ font-size:4.4rem; letter-spacing:-.02em }
+.timer.final{ border-color:var(--alert); border-left-color:var(--alert) }
+.timer.final .value{ color:var(--alert) }
+
+.temp{
+  margin-top:.7rem; padding:.8rem 1.6rem 1rem;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
-.env .cell{ padding:1.1rem 2rem 1.3rem; border-left:.1rem solid var(--line) }
-.env .cell:first-child{ border-left:0 }
-.env .label{ font-size:1.35rem; margin-bottom:.7rem }
-.env .value{ font-size:2.9rem }
-.env .wx{ display:flex; align-items:center; gap:1.4rem }
-.env .icon{ width:4.4rem; height:4.4rem; flex:none }
-.env .icon svg{ width:100%; height:100% ; display:block }
-.env .icon path, .env .icon circle, .env .icon line{
-  stroke:var(--accent); stroke-width:1.9; fill:none;
+.temp .label{ font-size:1.2rem; letter-spacing:.18em; margin-bottom:.45rem }
+.temp .value{ font-size:1.9rem }
+.temp .value + .value{ margin-top:.25rem }
+.temp .icon{ width:4.2rem; height:4.2rem; flex:none }
+.temp .icon svg{ width:100%; height:100%; display:block }
+.temp .icon path, .temp .icon circle, .temp .icon line{
+  stroke:var(--accent); stroke-width:1.8; fill:none;
   stroke-linecap:round; stroke-linejoin:round;
 }
 
-/* ---------- 3 · Datenleiste unten ---------- */
+.accent-bar{ height:.55rem; width:62%; background:var(--accent); margin-top:.7rem }
 
-.bar{
-  position:absolute; left:0; right:0; bottom:0;
-  background:var(--panel);
-  border-top:.2rem solid rgba(255,255,255,.14);
-}
+/* ---------- 2 · Strecken-Daten rechts ---------- */
 
-.progress{ position:relative; height:.7rem; background:rgba(255,255,255,.10) }
-.progress .fill{
-  position:absolute; left:0; top:0; bottom:0; width:0%;
-  background:var(--accent); transition:width .6s linear;
+.course{
+  position:absolute; top:0; right:0; bottom:0; width:29rem;
+  padding:4.2rem 2rem 14.5rem 2.8rem;
+  border-left:.2rem solid rgba(255,255,255,.85);
+  background: linear-gradient(90deg, rgba(10,13,18,.86) 0%, rgba(10,13,18,.94) 100%);
 }
-
-.grid{
-  display:grid;
-  grid-template-columns: 27rem repeat(6, 1fr);
-  align-items:stretch;
-}
-
-.ident{
-  padding:2rem 2.4rem 2.2rem;
-  background:rgba(215,255,62,.07);
-  border-right:.2rem solid var(--accent);
-}
-.ident .top{
+.course h1{
   font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase;
-  font-size:3.4rem; line-height:1; letter-spacing:.02em; color:var(--accent);
+  font-size:3.1rem; letter-spacing:.03em; line-height:.95; margin-bottom:2.4rem;
 }
-.ident .bot{
-  font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase;
-  font-size:1.4rem; letter-spacing:.34em; color:var(--white); margin-top:.9rem;
+.course .block{ margin-bottom:2.2rem }
+.course .label{ font-size:1.6rem; margin-bottom:.55rem }
+.course .value{ font-size:2.3rem }
+.course .value + .value{ margin-top:.25rem }
+
+/* ---------- 3 · Leistungs-Leiste unten ---------- */
+
+.perf{
+  position:absolute; left:0; right:0; bottom:0; height:13.4rem;
+  padding:1.4rem 0 0 2.6rem;
+  background: linear-gradient(180deg, rgba(20,25,34,.90) 0%, rgba(10,13,18,.96) 100%);
+  border-top:.25rem solid var(--accent);
 }
-
-.cellx{
-  padding:2rem 2rem 2.2rem;
-  border-left:.1rem solid var(--line);
-  display:flex; flex-direction:column; justify-content:space-between;
+.perf-head{ display:flex; align-items:center; gap:2.4rem; margin-bottom:1.2rem }
+.perf h2{
+  font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase;
+  font-size:2.5rem; letter-spacing:.04em; line-height:1;
 }
-.cellx:first-of-type{ border-left:0 }
-.cellx .label{ font-size:1.55rem; margin-bottom:1.1rem }
-.cellx .main{ display:flex; align-items:baseline; gap:.8rem }
-.cellx .value{ font-size:3.6rem }
-.cellx .main .unit{ font-size:1.6rem }
-.cellx .second{ display:flex; align-items:baseline; gap:.6rem; margin-top:.6rem }
-.cellx .second .value{ font-size:1.7rem; color:var(--dim); font-weight:600 }
-.cellx .second .unit{ font-size:1.25rem }
-
-/* ---------- Hochformat / schmale Fenster: Leiste umbrechen ---------- */
-
-@media (max-aspect-ratio: 4/5){
-  html{ font-size: calc(100vw / 62); }
-  .hero{ top:1.4rem; left:1.4rem; padding:.9rem 1.8rem 1.2rem 1.6rem }
-  .hero .value{ font-size:6rem }
-  .env{ top:1.4rem; right:1.4rem }
-  .env .value{ font-size:2.4rem }
-  .env .icon{ width:3.4rem; height:3.4rem }
-  .grid{ grid-template-columns: repeat(3, 1fr) }
-  .ident{
-    grid-column:1 / -1; border-right:0;
-    border-bottom:.2rem solid var(--accent);
-    display:flex; align-items:baseline; gap:1.6rem; padding:1.2rem 1.6rem;
-  }
-  .ident .bot{ margin-top:0 }
-  .cellx{ padding:1.4rem 1.4rem 1.6rem }
-  .cellx:nth-child(3n+2){ border-left:0 }
-  .cellx .label{ font-size:1.5rem; margin-bottom:.8rem }
-  .cellx .value{ font-size:3.1rem }
+.metrics{ display:flex; align-items:flex-start; position:relative; z-index:2 }
+.metric{ padding:0 2.4rem; border-left:.1rem solid rgba(255,255,255,.18) }
+.metric:first-child{ padding-left:0; border-left:0 }
+.metric .label{ font-size:1.55rem; margin-bottom:.7rem }
+.metric .row{ display:flex; align-items:baseline; gap:.7rem }
+.metric .value{ font-size:2.15rem }
+.metric .unit{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.4rem; color:var(--dim); font-weight:600; letter-spacing:.1em;
 }
+.metric .row + .row{ margin-top:.3rem }
 
-@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+#m-hr .value{ font-size:2.7rem }
+#m-hr.beating .value{ animation:beat .9s ease-out infinite }
+@keyframes beat{ 0%{transform:scale(1)} 12%{transform:scale(1.07)} 30%{transform:scale(1)} }
+
+/* ---------- 4 · Raute + Wellen unten rechts ---------- */
+
+.crest{
+  position:absolute; right:0; bottom:0; width:44rem; height:13.4rem;
+  pointer-events:none; z-index:1;
+}
+.crest svg{ width:100%; height:100%; display:block }
+.crest .wave{ fill:none; stroke:var(--accent); stroke-width:1.3; opacity:.32 }
+
+.badge{
+  position:absolute; right:6rem; bottom:2.6rem;
+  width:11rem; height:11rem; transform:rotate(45deg);
+  border:.25rem solid var(--accent);
+  background:var(--panel-bg);
+  display:flex; align-items:center; justify-content:center; z-index:3;
+}
+.badge-inner{
+  transform:rotate(-45deg); text-align:center;
+  font-family:'Barlow Condensed',sans-serif; text-transform:uppercase;
+}
+.badge .top{ font-size:1.8rem; font-weight:700; color:var(--accent); letter-spacing:.04em; line-height:1 }
+.badge .rule{ height:.16rem; background:var(--accent); margin:.55rem auto; width:70% }
+.badge .bot{ font-size:1rem; font-weight:600; color:var(--white); letter-spacing:.3em }
+
+/* ---------- Statuspunkte ---------- */
+
+.status{ display:flex; gap:1.3rem; align-items:center }
+.dot{
+  display:flex; align-items:center; gap:.45rem;
+  font-family:'Barlow Condensed',sans-serif; font-size:1.15rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.16em; color:var(--dim);
+}
+.dot i{ width:.75rem; height:.75rem; border-radius:50%; background:rgba(255,255,255,.22); display:block }
+.dot.ok i{ background:var(--accent); box-shadow:0 0 .8rem rgba(215,255,62,.75) }
+.dot.ok{ color:var(--white) }
+.dot.err i{ background:var(--alert) }
+
+@media (prefers-reduced-motion: reduce){ *{animation:none !important} }
 </style>
 </head>
 <body>
 <div class="stage">
 
-  <!-- 1 · Restzeit -->
-  <div class="hero" id="hero">
-    <div class="label" id="hero-label">Laufzeit</div>
-    <div class="value" id="hero-timer">00:00:00</div>
+  <!-- 1 · Timer + Temperatur -->
+  <div class="stack">
+    <div class="timer card">
+      <div class="label" id="hero-label">Laufzeit</div>
+      <div class="value" id="hero-timer">00:00:00</div>
+    </div>
+
+    <div class="temp card" id="blk-temp">
+      <div>
+        <div class="label">Temperatur</div>
+        <div class="value" id="temp-c">--.- &deg;C</div>
+        <div class="value sub imp" id="temp-f">--.- &deg;F</div>
+      </div>
+      <div class="icon" id="wx-icon"></div>
+    </div>
+
+    <div class="accent-bar"></div>
   </div>
 
-  <!-- 2 · Uhrzeit + Wetter -->
-  <div class="env">
-    <div class="cell">
+  <!-- 2 · Strecken-Daten -->
+  <aside class="course">
+    <h1>Strecken-<br>Daten</h1>
+
+    <div class="block">
       <div class="label">Uhrzeit</div>
       <div class="value" id="clock">--:--</div>
     </div>
-    <div class="cell" id="blk-weather">
+
+    <div class="block" id="blk-weather">
       <div class="label">Wetter</div>
-      <div class="wx">
-        <div class="value" id="temp-c">--.-&deg;</div>
-        <div class="icon" id="wx-icon"></div>
+      <div class="value" id="temp-c2">--.- &deg;C</div>
+      <div class="value sub imp" id="temp-f2">--.- &deg;F</div>
+    </div>
+
+    <div class="block">
+      <div class="label">Gelaufen</div>
+      <div class="value" id="dist-km">0.0 KM</div>
+      <div class="value sub imp" id="dist-mi">0.0 MI</div>
+    </div>
+
+    <div class="block" id="blk-remaining">
+      <div class="label">Rest-Distanz</div>
+      <div class="value" id="rem-km">0.0 KM</div>
+      <div class="value sub imp" id="rem-mi">0.0 MI</div>
+    </div>
+  </aside>
+
+  <!-- 3 · Leistungs-Daten -->
+  <section class="perf">
+    <div class="perf-head">
+      <h2>Leistungs-Daten</h2>
+      <div class="status">
+        <span class="dot" id="st-gps"><i></i>GPS</span>
+        <span class="dot" id="st-hr"><i></i>Puls</span>
       </div>
     </div>
-  </div>
 
-  <!-- 3 · Datenleiste -->
-  <section class="bar">
-    <div class="progress"><div class="fill" id="progress-fill"></div></div>
+    <div class="metrics">
+      <div class="metric" id="m-hr">
+        <div class="label">Puls</div>
+        <div class="row"><span class="value" id="hr">---</span><span class="unit">BPM</span></div>
+      </div>
 
-    <div class="grid">
+      <div class="metric">
+        <div class="label">Akt. Pace</div>
+        <div class="row"><span class="value" id="pace-km">--:--</span><span class="unit">/ KM</span></div>
+        <div class="row imp"><span class="value sub" id="pace-mi">--:--</span><span class="unit">/ MI</span></div>
+      </div>
 
-      <div class="ident">
+      <div class="metric">
+        <div class="label">&Oslash; Pace</div>
+        <div class="row"><span class="value" id="apace-km">--:--</span><span class="unit">/ KM</span></div>
+        <div class="row imp"><span class="value sub" id="apace-mi">--:--</span><span class="unit">/ MI</span></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">H&ouml;henmeter</div>
+        <div class="row"><span class="value" id="ele-m">0</span><span class="unit">M</span></div>
+        <div class="row imp"><span class="value sub" id="ele-ft">0</span><span class="unit">FT</span></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Laufzeit</div>
+        <div class="row"><span class="value" id="perf-timer">00:00</span></div>
+      </div>
+    </div>
+
+    <div class="crest">
+      <svg viewBox="0 0 440 134" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wave" d="M0,126 C80,126 110,86 190,86 C270,86 300,126 440,126"/>
+        <path class="wave" d="M0,112 C80,112 118,66 205,66 C292,66 312,112 440,112" opacity=".24"/>
+        <path class="wave" d="M0,98 C86,98 126,46 218,46 C310,46 326,98 440,98" opacity=".17"/>
+        <path class="wave" d="M0,84 C92,84 134,26 232,26 C330,26 342,84 440,84" opacity=".11"/>
+      </svg>
+    </div>
+
+    <div class="badge">
+      <div class="badge-inner">
         <div class="top" id="badge-title">Ultra</div>
+        <div class="rule"></div>
         <div class="bot" id="badge-sub">Live</div>
       </div>
-
-      <div class="cellx">
-        <div class="label">Gelaufen</div>
-        <div>
-          <div class="main"><span class="value" id="dist-km">0.0</span><span class="unit">km</span></div>
-          <div class="second imp"><span class="value" id="dist-mi">0.0</span><span class="unit">mi</span></div>
-        </div>
-      </div>
-
-      <div class="cellx" id="blk-remaining">
-        <div class="label">Rest-Distanz</div>
-        <div>
-          <div class="main"><span class="value" id="rem-km">0.0</span><span class="unit">km</span></div>
-          <div class="second imp"><span class="value" id="rem-mi">0.0</span><span class="unit">mi</span></div>
-        </div>
-      </div>
-
-      <div class="cellx">
-        <div class="label">Akt. Pace</div>
-        <div>
-          <div class="main"><span class="value" id="pace-km">--:--</span><span class="unit">/ km</span></div>
-          <div class="second imp"><span class="value" id="pace-mi">--:--</span><span class="unit">/ mi</span></div>
-        </div>
-      </div>
-
-      <div class="cellx">
-        <div class="label">&Oslash; Pace</div>
-        <div>
-          <div class="main"><span class="value" id="apace-km">--:--</span><span class="unit">/ km</span></div>
-          <div class="second imp"><span class="value" id="apace-mi">--:--</span><span class="unit">/ mi</span></div>
-        </div>
-      </div>
-
-      <div class="cellx">
-        <div class="label">H&ouml;henmeter</div>
-        <div>
-          <div class="main"><span class="value" id="ele-m">0</span><span class="unit">m</span></div>
-          <div class="second imp"><span class="value" id="ele-ft">0</span><span class="unit">ft</span></div>
-        </div>
-      </div>
-
-      <div class="cellx">
-        <div class="label">Laufzeit</div>
-        <div>
-          <div class="main"><span class="value" id="perf-timer">00:00</span></div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -256,19 +286,22 @@ body:not(.imperial) .imp{ display:none }
    overlay.html?target=52.5&duration=6&title=6H%20ULTRA
    ================================================================ */
 const CONFIG = {
-  targetKm:   0,        // Zieldistanz in km. 0 = Rest-Distanz und Fortschritt aus
+  targetKm:   0,        // Zieldistanz in km. 0 = "Rest-Distanz" ausblenden
   durationH:  0,        // Dauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
   startAt:    null,     // null = Start beim Laden. Sonst "2026-08-15T06:00:00"
-  title:      "Ultra",  // Text links in der Leiste
+  title:      "Ultra",  // Text in der Raute
   subtitle:   "Live",
   weather:    true,     // Wetter ueber Open-Meteo (kein API-Key noetig)
   imperial:   false,    // true = zusaetzlich Meilen und Fuss
+  hyperateId: "",       // HypeRate Session-ID
+  hyperateKey:"",       // HypeRate WebSocket-Key
   demo:       false     // true = simulierte Werte zum Testen
 };
 
 (function(){
   const q = new URLSearchParams(location.search);
-  const map = { target:'targetKm', start:'startAt', title:'title', sub:'subtitle' };
+  const map = { target:'targetKm', start:'startAt', title:'title', sub:'subtitle',
+                hr:'hyperateId', key:'hyperateKey' };
   for (const [k,v] of Object.entries(map)) if (q.has(k)) CONFIG[v] = q.get(k);
   if (q.has('target'))   CONFIG.targetKm  = parseFloat(String(q.get('target')).replace(',','.')) || 0;
   if (q.has('duration')) CONFIG.durationH = parseFloat(String(q.get('duration')).replace(',','.')) || 0;
@@ -281,18 +314,16 @@ const $ = id => document.getElementById(id);
 
 const state = {
   start: CONFIG.startAt ? new Date(CONFIG.startAt).getTime() : Date.now(),
-  meters: 0, gain: 0, last: null, baseAlt: null, trail: [], fix: 0
+  meters: 0, gain: 0, last: null, baseAlt: null,
+  trail: [], hr: null, hrSeen: 0, fix: 0
 };
 
 $('badge-title').textContent = CONFIG.title;
 $('badge-sub').textContent   = CONFIG.subtitle;
 if (CONFIG.durationH > 0) $('hero-label').textContent = 'Restzeit';
-if (!CONFIG.targetKm){
-  $('blk-remaining').style.visibility = 'hidden';
-  document.querySelector('.progress').style.display = 'none';
-}
-if (!CONFIG.weather) $('blk-weather').style.display = 'none';
-if (CONFIG.imperial) document.body.classList.add('imperial');
+if (!CONFIG.targetKm) $('blk-remaining').style.display = 'none';
+if (!CONFIG.weather){ $('blk-weather').style.display='none'; $('blk-temp').style.display='none'; }
+if (CONFIG.imperial)  document.body.classList.add('imperial');
 
 /* ---- Wettersymbole ---- */
 const ICONS = {
@@ -303,7 +334,7 @@ const ICONS = {
   storm: '<svg viewBox="0 0 40 40"><path d="M11 24h18a6 6 0 0 0 .4-12 9 9 0 0 0-17.3 2.2A5.5 5.5 0 0 0 11 24z"/><path d="M21 27l-5 6h5l-3 5"/></svg>'
 };
 function setIcon(code){
-  let k;
+  let k = 'cloud';
   if (code <= 1) k = 'sun';
   else if (code <= 48) k = 'cloud';
   else if ((code >= 71 && code <= 77) || code === 85 || code === 86) k = 'snow';
@@ -327,6 +358,7 @@ function pace(secPerUnit){
   if (!isFinite(secPerUnit) || secPerUnit <= 0 || secPerUnit > 5999) return '--:--';
   return pad(Math.floor(secPerUnit/60)) + ':' + pad(Math.round(secPerUnit%60));
 }
+function setDot(el, mode){ el.className = 'dot' + (mode ? ' ' + mode : ''); }
 
 /* ---- Haversine ---- */
 function distM(a, b){
@@ -337,7 +369,7 @@ function distM(a, b){
   return 2*R*Math.asin(Math.min(1, Math.sqrt(s)));
 }
 
-/* ---- Standort ---- */
+/* ---- GPS ---- */
 function onFix(p){
   const c = p.coords;
   if (c.accuracy > 30) return;                       // unsaubere Fixes verwerfen
@@ -362,13 +394,44 @@ function onFix(p){
     if (d > 4){ state.gain += d; state.baseAlt = pt.alt; }
     else if (d < -4){ state.baseAlt = pt.alt; }
   }
+
   state.fix = Date.now();
+  setDot($('st-gps'), 'ok');
 }
 
 if (!CONFIG.demo && 'geolocation' in navigator){
-  navigator.geolocation.watchPosition(onFix, () => {},
+  navigator.geolocation.watchPosition(onFix,
+    () => setDot($('st-gps'), 'err'),
     { enableHighAccuracy:true, maximumAge:2000, timeout:15000 });
+} else if (!CONFIG.demo){
+  setDot($('st-gps'), 'err');
 }
+
+/* ---- Puls ueber HypeRate ---- */
+function connectHR(){
+  if (!CONFIG.hyperateId || !CONFIG.hyperateKey) return;
+  let ws, beat;
+  const open = () => {
+    ws = new WebSocket('wss://app.hyperate.io/socket/websocket?token=' + encodeURIComponent(CONFIG.hyperateKey));
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ topic:'hr:'+CONFIG.hyperateId, event:'phx_join', payload:{}, ref:0 }));
+      beat = setInterval(() => ws.readyState === 1 &&
+        ws.send(JSON.stringify({ topic:'phoenix', event:'heartbeat', payload:{}, ref:0 })), 10000);
+    };
+    ws.onmessage = e => {
+      try{
+        const m = JSON.parse(e.data);
+        if ((m.event === 'hr_update' || m.event === 'hr_feed') && m.payload && m.payload.hr){
+          state.hr = m.payload.hr; state.hrSeen = Date.now();
+        }
+      }catch(_){}
+    };
+    ws.onclose = () => { clearInterval(beat); setDot($('st-hr'),'err'); setTimeout(open, 4000); };
+    ws.onerror = () => ws.close();
+  };
+  open();
+}
+connectHR();
 
 /* ---- Wetter ---- */
 let weatherAt = 0;
@@ -381,19 +444,25 @@ async function updateWeather(){
       state.last.lat.toFixed(3) + '&longitude=' + state.last.lon.toFixed(3) +
       '&current=temperature_2m,weather_code');
     const j = await r.json();
-    $('temp-c').textContent = j.current.temperature_2m.toFixed(1) + '\u00B0';
+    const c = j.current.temperature_2m;
+    const cs = c.toFixed(1) + ' \u00B0C', fs = (c*9/5+32).toFixed(1) + ' \u00B0F';
+    $('temp-c').textContent = cs;  $('temp-c2').textContent = cs;
+    $('temp-f').textContent = fs;  $('temp-f2').textContent = fs;
     setIcon(j.current.weather_code);
   }catch(_){ weatherAt = Date.now() - 540000; }      // in 60 s erneut versuchen
 }
 
 /* ---- Demo ---- */
 if (CONFIG.demo){
-  $('temp-c').textContent = '15.8\u00B0';
+  setDot($('st-gps'),'ok'); setDot($('st-hr'),'ok');
+  $('temp-c').textContent = '15.8 \u00B0C'; $('temp-c2').textContent = '15.8 \u00B0C';
+  $('temp-f').textContent = '60.4 \u00B0F'; $('temp-f2').textContent = '60.4 \u00B0F';
   setIcon(0);
   setInterval(() => {
     state.meters += 2.5 + Math.random();
     state.gain   += Math.random() * .6;
-    state.fix     = Date.now();
+    state.hr      = 96 + Math.round(Math.sin(Date.now()/9000)*14);
+    state.hrSeen  = Date.now();
     state.trail.push({ t: Date.now(), m: state.meters });
   }, 1000);
 }
@@ -406,7 +475,7 @@ function render(){
   if (CONFIG.durationH > 0){
     const left = Math.max(0, CONFIG.durationH*3600000 - elapsed);
     $('hero-timer').textContent = hms(left);
-    $('hero').classList.toggle('final', left <= 600000);
+    document.querySelector('.timer').classList.toggle('final', left <= 600000);
   } else {
     $('hero-timer').textContent = hms(elapsed);
   }
@@ -415,15 +484,14 @@ function render(){
   const t = new Date();
   $('clock').textContent = pad(t.getHours()) + ':' + pad(t.getMinutes());
 
-  const km = state.meters/1000;
-  $('dist-km').textContent = km.toFixed(1);
-  $('dist-mi').textContent = (km/1.609344).toFixed(1);
+  const km = state.meters/1000, mi = km/1.609344;
+  $('dist-km').textContent = km.toFixed(1) + ' KM';
+  $('dist-mi').textContent = mi.toFixed(1) + ' MI';
 
   if (CONFIG.targetKm){
     const rk = Math.max(0, CONFIG.targetKm - km);
-    $('rem-km').textContent = rk.toFixed(1);
-    $('rem-mi').textContent = (rk/1.609344).toFixed(1);
-    $('progress-fill').style.width = Math.min(100, km/CONFIG.targetKm*100).toFixed(1) + '%';
+    $('rem-km').textContent = rk.toFixed(1) + ' KM';
+    $('rem-mi').textContent = (rk/1.609344).toFixed(1) + ' MI';
   }
 
   const aSec = km > .05 ? (elapsed/1000)/km : 0;
@@ -444,11 +512,12 @@ function render(){
   $('ele-m').textContent  = Math.round(state.gain).toLocaleString('de-DE');
   $('ele-ft').textContent = Math.round(state.gain*3.28084).toLocaleString('de-DE');
 
-  // Ohne frisches Signal werden die Streckenwerte gedimmt statt eingefroren gezeigt
-  const stale = !state.fix || now - state.fix > 25000;
-  document.querySelectorAll('.cellx').forEach((el, i) => {
-    if (i < 5) el.classList.toggle('stale', stale);
-  });
+  const live = state.hr && now - state.hrSeen < 20000;
+  $('hr').textContent = live ? state.hr : '---';
+  $('m-hr').classList.toggle('beating', !!live);
+  if (CONFIG.hyperateId) setDot($('st-hr'), live ? 'ok' : 'err');
+
+  if (state.fix && now - state.fix > 25000) setDot($('st-gps'), 'err');
 
   updateWeather();
   requestAnimationFrame(render);
