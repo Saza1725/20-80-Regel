@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Race Overlay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   KONFIGURATION → siehe <script> ganz unten (CONFIG-Block)
+   Alles hier drin ist reines Design.
+   ============================================================ */
+
+:root{
+  --ink:        #150A2E;
+  --violet:     #2B1550;
+  --violet-lo:  #1E0F3C;
+  --edge:       #7B4FC0;
+  --yellow:     #FFD400;
+  --white:      #FFFFFF;
+  --pulse:      #EC1846;
+  --dim:        rgba(255,255,255,.45);
+
+  --panel-bg:   linear-gradient(180deg, rgba(43,21,80,.94) 0%, rgba(21,10,46,.94) 100%);
+  --chamfer:    1.6rem;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html{
+  /* 1rem = 10px bei 1920px Breite → gesamtes Layout skaliert mit der Streambreite */
+  font-size: calc(100vw / 192);
+}
+
+body{
+  background: transparent;          /* PFLICHT für Overlay-Nutzung */
+  font-family: 'Rajdhani', 'Arial Narrow', Arial, sans-serif;
+  color: var(--white);
+  overflow: hidden;
+  width:100vw; height:100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.stage{position:fixed; inset:0}
+
+/* ---------- gemeinsame Bausteine ---------- */
+
+.label{
+  font-family:'Oswald','Arial Narrow',sans-serif;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--yellow);
+  line-height:1;
+}
+
+.value{
+  font-weight:700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing:.01em;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.sub{ color:var(--dim); font-weight:600; font-variant-numeric:tabular-nums }
+
+.panel{
+  background: var(--panel-bg);
+  border:.1rem solid rgba(123,79,192,.55);
+  backdrop-filter: blur(2px);
+}
+
+/* Abgeschrägte Ecken = Signature-Form der Übertragung */
+.chamfer-tl{ clip-path: polygon(var(--chamfer) 0, 100% 0, 100% 100%, 0 100%, 0 var(--chamfer)) }
+.chamfer-br{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer)), calc(100% - var(--chamfer)) 100%, 0 100%) }
+
+/* ---------- 1 · Elapsed-Time-Chip oben links ---------- */
+
+.timer{
+  position:absolute; top:1.8rem; left:1.8rem;
+  padding:.8rem 1.9rem 1.2rem;
+  border-color:var(--yellow);
+  border-width:.2rem;
+}
+.timer .label{ font-size:1.3rem; letter-spacing:.14em; margin-bottom:.4rem }
+.timer .value{ font-size:4.9rem; letter-spacing:.06em }
+.timer.final{ border-color:var(--pulse) }
+.timer.final .value{ color:var(--yellow) }
+
+/* ---------- 2 · Course-Data-Spalte rechts ---------- */
+
+.course{
+  position:absolute; top:0; right:0; bottom:0; width:28.5rem;
+  padding:4.6rem 2.4rem 14rem 2.8rem;
+  background: linear-gradient(90deg, rgba(21,10,46,0) 0%, rgba(21,10,46,.90) 22%, rgba(43,21,80,.94) 100%);
+}
+.course h1{
+  font-family:'Oswald',sans-serif; font-weight:700; text-transform:uppercase;
+  font-size:3.25rem; letter-spacing:.02em; line-height:1; margin-bottom:2.6rem;
+}
+.course .block{ margin-bottom:2.3rem }
+.course .label{ font-size:1.7rem; margin-bottom:.5rem }
+.course .value{ font-size:2.35rem }
+.course .value + .value{ margin-top:.1rem }
+
+/* ---------- 3 · Performance-Leiste unten ---------- */
+
+.perf{
+  position:absolute; left:0; right:0; bottom:0; height:13.2rem;
+  padding:1.3rem 2.6rem 0 2.4rem;
+  background: linear-gradient(180deg, rgba(43,21,80,.93) 0%, rgba(21,10,46,.96) 100%);
+  border-top:.2rem solid var(--yellow);
+  display:flex; flex-direction:column;
+}
+.perf h2{
+  font-family:'Oswald',sans-serif; font-weight:700; text-transform:uppercase;
+  font-size:2.6rem; letter-spacing:.02em; line-height:1;
+}
+.perf-head{ display:flex; align-items:center; justify-content:flex-start;
+            gap:2.4rem; margin-bottom:1.1rem }
+.metrics{ display:flex; align-items:flex-start; gap:0 }
+.metric{ padding:0 2.4rem; border-left:.1rem solid rgba(255,255,255,.22) }
+.metric:first-child{ padding-left:0; border-left:0 }
+.metric .label{ font-size:1.65rem; margin-bottom:.6rem }
+.metric .row{ display:flex; align-items:baseline; gap:.7rem }
+.metric .value{ font-size:2.2rem }
+.metric .unit{ font-size:1.45rem; color:var(--dim); font-weight:600; letter-spacing:.08em }
+.metric .row + .row{ margin-top:.15rem }
+
+#m-hr .value{ font-size:2.75rem }
+#m-hr.beating .value{ animation: beat .9s ease-out infinite }
+@keyframes beat{
+  0%{transform:scale(1)} 12%{transform:scale(1.075)} 30%{transform:scale(1)}
+}
+
+/* ---------- 4 · Wellen-Signet unten rechts ---------- */
+
+.crest{
+  position:absolute; right:15.5rem; bottom:.6rem;
+  width:21rem; height:11rem; pointer-events:none;
+}
+.crest svg{ width:100%; height:100%; display:block }
+.crest .wave{ fill:none; stroke:var(--yellow); stroke-width:1.6; opacity:.55 }
+
+.badge{
+  position:absolute; right:2.4rem; bottom:1.6rem;
+  width:12.5rem; padding:1.1rem .9rem 1.2rem; text-align:center;
+  font-family:'Oswald',sans-serif; text-transform:uppercase;
+  border:.2rem solid var(--yellow);
+  background: var(--panel-bg);
+  clip-path: polygon(1.4rem 0, 100% 0, 100% calc(100% - 1.4rem), calc(100% - 1.4rem) 100%, 0 100%, 0 1.4rem);
+}
+.badge .top{
+  font-size:1.95rem; font-weight:700; color:var(--yellow);
+  letter-spacing:.05em; line-height:1.02;
+}
+.badge .bot{
+  font-size:1.05rem; font-weight:500; color:var(--white);
+  letter-spacing:.26em; margin-top:.5rem;
+}
+.badge .rule{
+  height:.18rem; background:var(--yellow); margin:.7rem auto 0; width:62%;
+}
+
+/* ---------- Status-Punkte (Signalqualität) ---------- */
+
+.status{ display:flex; gap:1.4rem; align-items:center; padding-bottom:.15rem }
+.dot{
+  display:flex; align-items:center; gap:.45rem;
+  font-family:'Oswald',sans-serif; font-size:1.2rem; font-weight:500;
+  text-transform:uppercase; letter-spacing:.12em; color:var(--dim);
+}
+.dot i{
+  width:.8rem; height:.8rem; border-radius:50%;
+  background:rgba(255,255,255,.25); display:block;
+}
+.dot.ok i{ background:var(--yellow); box-shadow:0 0 .8rem rgba(255,212,0,.8) }
+.dot.ok{ color:var(--white) }
+.dot.err i{ background:var(--pulse) }
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- 1 · Hero-Timer -->
+  <div class="timer panel chamfer-tl">
+    <div class="label" id="hero-label">Elapsed Time</div>
+    <div class="value" id="hero-timer">00:00:00</div>
+  </div>
+
+  <!-- 2 · Course Data -->
+  <aside class="course">
+    <h1>Course<br>Data</h1>
+
+    <div class="block">
+      <div class="label">Local Time</div>
+      <div class="value" id="clock">--:--</div>
+    </div>
+
+    <div class="block" id="blk-weather">
+      <div class="label">Weather</div>
+      <div class="value" id="temp-c">--.- °C</div>
+      <div class="value sub" id="temp-f">--.- °F</div>
+    </div>
+
+    <div class="block">
+      <div class="label">Distance Covered</div>
+      <div class="value" id="dist-km">0.0 KM</div>
+      <div class="value sub" id="dist-mi">0.0 MI</div>
+    </div>
+
+    <div class="block" id="blk-remaining">
+      <div class="label">Remaining Distance</div>
+      <div class="value" id="rem-km">0.0 KM</div>
+      <div class="value sub" id="rem-mi">0.0 MI</div>
+    </div>
+  </aside>
+
+  <!-- 3 · Performance Data -->
+  <section class="perf">
+    <div class="perf-head">
+      <h2>Performance Data</h2>
+      <div class="status">
+        <span class="dot" id="st-gps"><i></i>GPS</span>
+        <span class="dot" id="st-hr"><i></i>Puls</span>
+      </div>
+    </div>
+    <div class="metrics">
+
+      <div class="metric" id="m-hr">
+        <div class="label">Heart Rate</div>
+        <div class="row"><span class="value" id="hr">---</span><span class="unit">BPM</span></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Pace</div>
+        <div class="row"><span class="value" id="pace-km">--:--</span><span class="unit">/ KM</span></div>
+        <div class="row"><span class="value sub" id="pace-mi">--:--</span><span class="unit">/ MI</span></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Average Pace</div>
+        <div class="row"><span class="value" id="apace-km">--:--</span><span class="unit">/ KM</span></div>
+        <div class="row"><span class="value sub" id="apace-mi">--:--</span><span class="unit">/ MI</span></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Elevation Gain</div>
+        <div class="row"><span class="value" id="ele-m">0</span><span class="unit">M</span></div>
+        <div class="row"><span class="value sub" id="ele-ft">0</span><span class="unit">FT</span></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Elapsed Time</div>
+        <div class="row"><span class="value" id="perf-timer">00:00</span></div>
+      </div>
+
+    </div>
+
+    <!-- 4 · Signet -->
+    <div class="crest">
+      <svg viewBox="0 0 220 95" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wave" d="M0,88 C40,88 55,60 95,60 C135,60 150,88 220,88"/>
+        <path class="wave" d="M0,80 C40,80 58,48 100,48 C142,48 156,80 220,80" opacity=".42"/>
+        <path class="wave" d="M0,72 C42,72 62,34 106,34 C150,34 162,72 220,72" opacity=".30"/>
+        <path class="wave" d="M0,64 C44,64 66,20 112,20 C158,20 168,64 220,64" opacity=".20"/>
+      </svg>
+    </div>
+    <div class="badge">
+      <div class="top" id="badge-title">Ultra</div>
+      <div class="rule"></div>
+      <div class="bot" id="badge-sub">Live</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ================================================================
+   ⚙️  KONFIGURATION
+   Alles hier lässt sich auch per URL-Parameter überschreiben,
+   z. B.  overlay.html?target=45&hr=abc123&key=DEIN_KEY&title=6H%20ULTRA
+   ================================================================ */
+const CONFIG = {
+  targetKm:   0,        // Zieldistanz in km. 0 = Feld "Remaining" ausblenden
+  durationH:  0,        // Wettkampfdauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
+  startAt:    null,     // null = Uhr startet beim Laden. Sonst "2026-08-15T06:00:00"
+  title:      "Ultra",  // Text im Signet unten rechts
+  subtitle:   "Live",
+  weather:    true,     // Wetter über Open-Meteo (kein API-Key nötig)
+  hyperateId: "",       // HypeRate Session-ID (App → Settings → Session ID)
+  hyperateKey:"",       // HypeRate WebSocket-Key (kostenlos im HypeRate-Discord)
+  demo:       false     // true = simulierte Werte zum Testen am Schreibtisch
+};
+
+/* ---- URL-Parameter übernehmen ---- */
+(function(){
+  const q = new URLSearchParams(location.search);
+  const map = { target:'targetKm', start:'startAt', title:'title', sub:'subtitle',
+                hr:'hyperateId', key:'hyperateKey' };
+  for (const [k,v] of Object.entries(map)) if (q.has(k)) CONFIG[v] = q.get(k);
+  if (q.has('target'))   CONFIG.targetKm  = parseFloat(String(q.get('target')).replace(',','.')) || 0;
+  if (q.has('duration')) CONFIG.durationH = parseFloat(String(q.get('duration')).replace(',','.')) || 0;
+  if (q.has('demo'))    CONFIG.demo    = q.get('demo') !== '0';
+  if (q.has('weather')) CONFIG.weather = q.get('weather') !== '0';
+})();
+
+const $ = id => document.getElementById(id);
+
+/* ---- Grundzustand ---- */
+const state = {
+  start: CONFIG.startAt ? new Date(CONFIG.startAt).getTime() : Date.now(),
+  meters: 0,
+  gain: 0,
+  last: null,        // letzter akzeptierter Fixpunkt
+  baseAlt: null,
+  trail: [],         // [{t, m}] für die aktuelle Pace
+  hr: null,
+  hrSeen: 0,
+  fix: 0
+};
+
+$('badge-title').textContent = CONFIG.title;
+$('badge-sub').textContent   = CONFIG.subtitle;
+if (CONFIG.durationH > 0) $('hero-label').textContent = 'Time Remaining';
+if (!CONFIG.targetKm) $('blk-remaining').style.display = 'none';
+if (!CONFIG.weather)  $('blk-weather').style.display   = 'none';
+
+/* ---- Formatierung ---- */
+const pad = n => String(n).padStart(2,'0');
+
+function hms(ms){
+  const s = Math.max(0, Math.floor(ms/1000));
+  return pad(Math.floor(s/3600)) + ':' + pad(Math.floor(s%3600/60)) + ':' + pad(s%60);
+}
+function hm(ms){
+  const s = Math.max(0, Math.floor(ms/1000));
+  return pad(Math.floor(s/3600)) + ':' + pad(Math.floor(s%3600/60));
+}
+function pace(secPerUnit){
+  if (!isFinite(secPerUnit) || secPerUnit <= 0 || secPerUnit > 5999) return '--:--';
+  return pad(Math.floor(secPerUnit/60)) + ':' + pad(Math.round(secPerUnit%60));
+}
+function setDot(el, mode){ el.className = 'dot' + (mode ? ' ' + mode : ''); }
+
+/* ---- Haversine ---- */
+function distM(a, b){
+  const R = 6371000, rad = Math.PI/180;
+  const dLat = (b.lat-a.lat)*rad, dLon = (b.lon-a.lon)*rad;
+  const s = Math.sin(dLat/2)**2 +
+            Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.min(1, Math.sqrt(s)));
+}
+
+/* ---- GPS ---- */
+function onFix(p){
+  const c = p.coords;
+  if (c.accuracy > 30) return;                       // unsaubere Fixes verwerfen
+  const now = p.timestamp || Date.now();
+  const pt = { lat:c.latitude, lon:c.longitude, t:now, alt:c.altitude };
+
+  if (state.last){
+    const d = distM(state.last, pt);
+    const dt = (now - state.last.t)/1000;
+    // Ausreißer filtern: < 4 m ist Jitter, > 12 m/s ist unmöglich beim Laufen
+    if (d >= 4 && dt > 0 && d/dt < 12){
+      state.meters += d;
+      state.trail.push({ t: now, m: state.meters });
+      state.last = pt;
+    }
+  } else {
+    state.last = pt;
+  }
+
+  // Höhenmeter mit 4-m-Hysterese gegen GPS-Rauschen
+  if (typeof pt.alt === 'number' && !isNaN(pt.alt)){
+    if (state.baseAlt === null) state.baseAlt = pt.alt;
+    const d = pt.alt - state.baseAlt;
+    if (d > 4){ state.gain += d; state.baseAlt = pt.alt; }
+    else if (d < -4){ state.baseAlt = pt.alt; }
+  }
+
+  state.fix = Date.now();
+  setDot($('st-gps'), 'ok');
+}
+
+if (!CONFIG.demo && 'geolocation' in navigator){
+  navigator.geolocation.watchPosition(onFix,
+    () => setDot($('st-gps'), 'err'),
+    { enableHighAccuracy:true, maximumAge:2000, timeout:15000 });
+} else if (!CONFIG.demo){
+  setDot($('st-gps'), 'err');
+}
+
+/* ---- Puls über HypeRate ---- */
+function connectHR(){
+  if (!CONFIG.hyperateId || !CONFIG.hyperateKey) return;
+  let ws, beat;
+  const open = () => {
+    ws = new WebSocket('wss://app.hyperate.io/socket/websocket?token=' + encodeURIComponent(CONFIG.hyperateKey));
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ topic:'hr:'+CONFIG.hyperateId, event:'phx_join', payload:{}, ref:0 }));
+      beat = setInterval(() => ws.readyState === 1 &&
+        ws.send(JSON.stringify({ topic:'phoenix', event:'heartbeat', payload:{}, ref:0 })), 10000);
+    };
+    ws.onmessage = e => {
+      try{
+        const m = JSON.parse(e.data);
+        if ((m.event === 'hr_update' || m.event === 'hr_feed') && m.payload && m.payload.hr){
+          state.hr = m.payload.hr;
+          state.hrSeen = Date.now();
+        }
+      }catch(_){}
+    };
+    ws.onclose = () => { clearInterval(beat); setDot($('st-hr'),'err'); setTimeout(open, 4000); };
+    ws.onerror = () => ws.close();
+  };
+  open();
+}
+connectHR();
+
+/* ---- Wetter (Open-Meteo, ohne Key) ---- */
+let weatherAt = 0;
+async function updateWeather(){
+  if (!CONFIG.weather || !state.last) return;
+  if (Date.now() - weatherAt < 600000) return;
+  weatherAt = Date.now();
+  try{
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' +
+      state.last.lat.toFixed(3) + '&longitude=' + state.last.lon.toFixed(3) +
+      '&current=temperature_2m');
+    const j = await r.json();
+    const c = j.current.temperature_2m;
+    $('temp-c').textContent = c.toFixed(1) + ' °C';
+    $('temp-f').textContent = (c*9/5+32).toFixed(1) + ' °F';
+  }catch(_){ weatherAt = Date.now() - 540000; }   // in 60 s erneut versuchen
+}
+
+/* ---- Demo-Modus ---- */
+if (CONFIG.demo){
+  setDot($('st-gps'),'ok'); setDot($('st-hr'),'ok');
+  $('temp-c').textContent = '15.8 °C';
+  $('temp-f').textContent = '60.4 °F';
+  setInterval(() => {
+    state.meters += 2.5 + Math.random();
+    state.gain   += Math.random() * .6;
+    state.hr      = 96 + Math.round(Math.sin(Date.now()/9000)*14);
+    state.hrSeen  = Date.now();
+    state.trail.push({ t: Date.now(), m: state.meters });
+  }, 1000);
+}
+
+/* ---- Render-Schleife ---- */
+function render(){
+  const now = Date.now();
+  const elapsed = now - state.start;
+
+  if (CONFIG.durationH > 0){
+    const left = Math.max(0, CONFIG.durationH*3600000 - elapsed);
+    $('hero-timer').textContent = hms(left);
+    document.querySelector('.timer').classList.toggle('final', left <= 600000);
+  } else {
+    $('hero-timer').textContent = hms(elapsed);
+  }
+  $('perf-timer').textContent = hm(elapsed);
+
+  const t = new Date();
+  $('clock').textContent = pad(t.getHours()) + ':' + pad(t.getMinutes());
+
+  const km = state.meters/1000, mi = km/1.609344;
+  $('dist-km').textContent = km.toFixed(1) + ' KM';
+  $('dist-mi').textContent = mi.toFixed(1) + ' MI';
+
+  if (CONFIG.targetKm){
+    const rk = Math.max(0, CONFIG.targetKm - km);
+    $('rem-km').textContent = rk.toFixed(1) + ' KM';
+    $('rem-mi').textContent = (rk/1.609344).toFixed(1) + ' MI';
+  }
+
+  // Durchschnittspace über die gesamte Strecke
+  const aSec = km > .05 ? (elapsed/1000)/km : 0;
+  $('apace-km').textContent = pace(aSec);
+  $('apace-mi').textContent = pace(aSec*1.609344);
+
+  // Aktuelle Pace: gleitendes 90-Sekunden-Fenster
+  while (state.trail.length && now - state.trail[0].t > 90000) state.trail.shift();
+  let cSec = 0;
+  if (state.trail.length > 1){
+    const a = state.trail[0], b = state.trail[state.trail.length-1];
+    const dKm = (b.m - a.m)/1000, dS = (b.t - a.t)/1000;
+    if (dKm > .02) cSec = dS/dKm;
+  }
+  $('pace-km').textContent = pace(cSec);
+  $('pace-mi').textContent = pace(cSec*1.609344);
+
+  $('ele-m').textContent  = Math.round(state.gain).toLocaleString('en-US');
+  $('ele-ft').textContent = Math.round(state.gain*3.28084).toLocaleString('en-US');
+
+  // Puls: nach 20 s ohne neuen Wert als veraltet kennzeichnen
+  const live = state.hr && now - state.hrSeen < 20000;
+  $('hr').textContent = live ? state.hr : '---';
+  $('m-hr').classList.toggle('beating', !!live);
+  if (CONFIG.hyperateId) setDot($('st-hr'), live ? 'ok' : 'err');
+
+  if (state.fix && now - state.fix > 25000) setDot($('st-gps'), 'err');
+
+  updateWeather();
+  requestAnimationFrame(render);
+}
+render();
+
+/* ---- Display wach halten, falls die Umgebung es erlaubt ---- */
+if ('wakeLock' in navigator){
+  const hold = () => navigator.wakeLock.request('screen').catch(()=>{});
+  hold();
+  document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && hold());
+}
+</script>
+</body>
+</html>
