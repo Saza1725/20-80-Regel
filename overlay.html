@@ -158,7 +158,7 @@ body:not(.imperial) .imp{ display:none }
   .cellx .value{ font-size:3.1rem }
 }
 
-/* ---------- 4 · Intro: Standbild, Countdown, Trailer ---------- */
+/* ---------- 4 · Intro: Standbild mit Countdown ---------- */
 
 .intro{
   position:fixed; inset:0; z-index:50;
@@ -193,13 +193,6 @@ body:not(.imperial) .imp{ display:none }
 }
 .intro .rule{ height:.4rem; width:26rem; background:var(--accent); margin-top:3rem }
 
-#trailer{
-  position:fixed; inset:0; z-index:60;
-  width:100%; height:100%; object-fit:cover; background:#000;
-  display:none;
-}
-#trailer.on{ display:block }
-
 .sound-hint{
   position:absolute; left:50%; bottom:8%; transform:translateX(-50%);
   font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase;
@@ -218,7 +211,7 @@ body:not(.imperial) .imp{ display:none }
 
   <!-- 1 · Restzeit -->
   <div class="hero" id="hero">
-    <div class="label" id="hero-label">Laufzeit</div>
+    <div class="label" id="hero-label">Restzeit</div>
     <div class="value" id="hero-timer">00:00:00</div>
   </div>
 
@@ -307,7 +300,6 @@ body:not(.imperial) .imp{ display:none }
     <div class="rule"></div>
   </div>
 
-  <video id="trailer" muted playsinline preload="auto"></video>
   <audio id="intro-audio" loop preload="auto"></audio>
   <div class="sound-hint" id="sound-hint">Zum Aktivieren des Tons antippen</div>
 
@@ -315,31 +307,43 @@ body:not(.imperial) .imp{ display:none }
 
 <script>
 /* ================================================================
-   KONFIGURATION — auch per URL-Parameter setzbar, z. B.
+   KONFIGURATION — auch per URL-Parameter setzbar.
+   Zwei getrennte Zeitpunkte:
+
+   start      = wann das Foto/der Countdown verschwindet und die
+                Kamera sichtbar wird (z. B. Vorlauf, Aufwaermen)
+   racestart  = wann die 6-Stunden-Uhr und alle Streckendaten
+                (km, Pace, Hoehenmeter) tatsaechlich zu zaehlen
+                beginnen (der offizielle Startschuss)
+
+   Beispiel:
    overlay.html?target=52.5&duration=6&title=6H%20ULTRA
-   &start=2026-08-15T06:00:00&image=start.jpg&video=trailer.mp4&audio=musik.mp3
+     &start=2026-09-12T10:00:00%2B02:00
+     &racestart=2026-09-12T10:15:00%2B02:00
+     &image=start.jpg&audio=musik.mp3
    ================================================================ */
 const CONFIG = {
-  targetKm:   0,        // Zieldistanz in km. 0 = Rest-Distanz und Fortschritt aus
-  durationH:  0,        // Dauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
-  startAt:    null,     // null = Start beim Laden. Sonst "2026-08-15T06:00:00"
-  title:      "Ultra",  // Text links in der Leiste / Intro-Titel
-  subtitle:   "Live",
-  weather:    true,     // Wetter ueber Open-Meteo (kein API-Key noetig)
-  imperial:   false,    // true = zusaetzlich Meilen und Fuss
-  demo:       false,    // true = simulierte Werte zum Testen
+  targetKm:    0,        // Zieldistanz in km. 0 = Rest-Distanz und Fortschritt aus
+  durationH:   0,        // Dauer in Stunden. >0 = grosse Uhr laeuft rueckwaerts
+  startAt:     null,     // wann Foto/Countdown endet und die Kamera erscheint
+  raceStartAt: null,     // wann die 6h-Uhr und Streckendaten zu zaehlen beginnen
+  title:       "Ultra",  // Text links in der Leiste / Intro-Titel
+  subtitle:    "Live",
+  weather:     true,     // Wetter ueber Open-Meteo (kein API-Key noetig)
+  imperial:    false,    // true = zusaetzlich Meilen und Fuss
+  demo:        false,    // true = simulierte Werte zum Testen
 
   /* --- Intro vor dem Lauf --- */
-  introImage: "",       // Dateiname des Standbilds, z. B. "start.jpg"
-  introVideo: "",       // Dateiname des Trailers, z. B. "trailer.mp4"
-  introAudio: "",       // Dateiname der Musik waehrend des Countdowns, z. B. "musik.mp3"
-  introKicker:"Live"    // kleine Zeile ueber dem Titel
+  introImage:  "",       // Dateiname des Standbilds, z. B. "start.jpg"
+  introAudio:  "",       // Dateiname der Musik waehrend des Countdowns, z. B. "musik.mp3"
+  introKicker: "Live"    // kleine Zeile ueber dem Titel
 };
 
 (function(){
   const q = new URLSearchParams(location.search);
-  const map = { target:'targetKm', start:'startAt', title:'title', sub:'subtitle',
-                image:'introImage', video:'introVideo', audio:'introAudio', kicker:'introKicker' };
+  const map = { target:'targetKm', start:'startAt', racestart:'raceStartAt',
+                title:'title', sub:'subtitle',
+                image:'introImage', audio:'introAudio', kicker:'introKicker' };
   for (const [k,v] of Object.entries(map)) if (q.has(k)) CONFIG[v] = q.get(k);
   if (q.has('target'))   CONFIG.targetKm  = parseFloat(String(q.get('target')).replace(',','.')) || 0;
   if (q.has('duration')) CONFIG.durationH = parseFloat(String(q.get('duration')).replace(',','.')) || 0;
@@ -350,14 +354,16 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 
+const revealMs = CONFIG.startAt ? new Date(CONFIG.startAt).getTime() : 0;
+// Ohne eigenen racestart-Parameter faellt der Rennstart mit der Kamera-Enthuellung zusammen
+const raceStartMs = CONFIG.raceStartAt ? new Date(CONFIG.raceStartAt).getTime() : (revealMs || Date.now());
+
 const state = {
-  start: CONFIG.startAt ? new Date(CONFIG.startAt).getTime() : Date.now(),
   meters: 0, gain: 0, last: null, baseAlt: null, trail: [], fix: 0
 };
 
 $('badge-title').textContent = CONFIG.title;
 $('badge-sub').textContent   = CONFIG.subtitle;
-if (CONFIG.durationH > 0) $('hero-label').textContent = 'Restzeit';
 if (!CONFIG.targetKm){
   $('blk-remaining').style.visibility = 'hidden';
   document.querySelector('.progress').style.display = 'none';
@@ -410,15 +416,16 @@ function distM(a, b){
 
 /* ---- Standort ---- */
 function onFix(p){
+  if (Date.now() < raceStartMs) return;              // vor dem Rennstart zaehlt nichts
   const c = p.coords;
-  if (c.accuracy > 30) return;
+  if (c.accuracy > 30) return;                        // unsaubere Fixes verwerfen
   const now = p.timestamp || Date.now();
   const pt = { lat:c.latitude, lon:c.longitude, t:now, alt:c.altitude };
 
   if (state.last){
     const d = distM(state.last, pt);
     const dt = (now - state.last.t)/1000;
-    if (d >= 4 && dt > 0 && d/dt < 12){
+    if (d >= 4 && dt > 0 && d/dt < 12){               // Jitter- und Ausreisserfilter
       state.meters += d;
       state.trail.push({ t: now, m: state.meters });
       state.last = pt;
@@ -454,7 +461,7 @@ async function updateWeather(){
     const j = await r.json();
     $('temp-c').textContent = j.current.temperature_2m.toFixed(1) + '\u00B0';
     setIcon(j.current.weather_code);
-  }catch(_){ weatherAt = Date.now() - 540000; }
+  }catch(_){ weatherAt = Date.now() - 540000; }       // in 60 s erneut versuchen
 }
 
 /* ---- Demo ---- */
@@ -462,6 +469,7 @@ if (CONFIG.demo){
   $('temp-c').textContent = '15.8\u00B0';
   setIcon(0);
   setInterval(() => {
+    if (Date.now() < raceStartMs) return;             // vor dem Rennstart zaehlt nichts
     state.meters += 2.5 + Math.random();
     state.gain   += Math.random() * .6;
     state.fix     = Date.now();
@@ -472,12 +480,12 @@ if (CONFIG.demo){
 /* ---- Render ---- */
 function render(){
   const now = Date.now();
-  const elapsed = now - state.start;
+  const elapsed = Math.max(0, now - raceStartMs);     // vor Rennstart konstant 0
 
   if (CONFIG.durationH > 0){
     const left = Math.max(0, CONFIG.durationH*3600000 - elapsed);
     $('hero-timer').textContent = hms(left);
-    $('hero').classList.toggle('final', left <= 600000);
+    $('hero').classList.toggle('final', elapsed > 0 && left <= 600000);
   } else {
     $('hero-timer').textContent = hms(elapsed);
   }
@@ -514,7 +522,7 @@ function render(){
   $('ele-m').textContent  = Math.round(state.gain).toLocaleString('de-DE');
   $('ele-ft').textContent = Math.round(state.gain*3.28084).toLocaleString('de-DE');
 
-  const stale = !state.fix || now - state.fix > 25000;
+  const stale = now >= raceStartMs && (!state.fix || now - state.fix > 25000);
   document.querySelectorAll('.cellx').forEach((el, i) => {
     if (i < 5) el.classList.toggle('stale', stale);
   });
@@ -525,25 +533,21 @@ function render(){
 render();
 
 /* ================================================================
-   INTRO: Standbild + Musik -> Countdown -> Trailer -> Kamerabild
+   INTRO: Standbild + Musik -> Countdown -> Kamerabild
    Nur aktiv, wenn ?start= in der Zukunft liegt.
    ================================================================ */
 (function(){
-  const intro = $('intro'), video = $('trailer'), music = $('intro-audio'), hint = $('sound-hint');
-  const startMs = CONFIG.startAt ? new Date(CONFIG.startAt).getTime() : 0;
+  const intro = $('intro'), music = $('intro-audio'), hint = $('sound-hint');
 
   $('intro-title').textContent  = CONFIG.title;
   $('intro-kicker').textContent = CONFIG.introKicker;
   if (CONFIG.introImage) intro.style.backgroundImage = 'url("' + CONFIG.introImage + '")';
 
-  if (!startMs || Date.now() >= startMs){ intro.classList.add('gone'); return; }
+  if (!revealMs || Date.now() >= revealMs){ intro.classList.add('gone'); return; }
 
-  /* --------------------------------------------------------------
-     TON: iOS erlaubt Audio nur nach einer echten Beruehrung der
-     Seite. Ein einziges Antippen (irgendwo) schaltet fuer den Rest
-     der Sitzung sowohl die Musik als auch spaeter den Trailerton
-     frei. Ohne Antippen laeuft alles stumm weiter -- nichts bricht ab.
-     -------------------------------------------------------------- */
+  /* Ton: iOS erlaubt Audio nur nach einer echten Beruehrung der Seite.
+     Ein einziges Antippen (irgendwo) schaltet die Musik fuer den Rest
+     der Sitzung frei. Ohne Antippen bleibt es stumm -- nichts bricht ab. */
   let unlocked = false;
   function unlock(){
     if (unlocked) return;
@@ -561,36 +565,19 @@ render();
     setTimeout(() => { if (!unlocked) hint.classList.add('show'); }, 1200);
   }
 
-  function finish(){
+  function reveal(){
     music.pause();
-    video.classList.remove('on');
+    hint.classList.remove('show');
     intro.classList.add('hide');
     setTimeout(() => intro.classList.add('gone'), 1000);
   }
 
-  function playTrailer(){
-    hint.classList.remove('show');
-    if (!CONFIG.introVideo){ finish(); return; }
-    video.src = CONFIG.introVideo;
-    video.muted = !unlocked;
-    video.classList.add('on');
-    intro.classList.add('gone');
-    video.onended = finish;
-    video.onerror = finish;
-    const p = video.play();
-    if (p && p.catch) p.catch(() => {
-      video.muted = true;
-      video.play().catch(finish);
-    });
-    video.addEventListener('pointerdown', () => { video.muted = false; }, { once:true });
-  }
-
   const tick = setInterval(() => {
-    const left = startMs - Date.now();
+    const left = revealMs - Date.now();
     if (left <= 0){
       clearInterval(tick);
       $('intro-cd').textContent = '00:00:00';
-      playTrailer();
+      reveal();
       return;
     }
     $('intro-cd').textContent = hms(left);
