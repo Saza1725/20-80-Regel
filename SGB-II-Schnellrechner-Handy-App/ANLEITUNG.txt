@@ -1,0 +1,9 @@
+SGB II Schnellrechner – Handy-App
+
+Die Original-Berechnungslogik und sämtliche Eingabefelder wurden unverändert übernommen.
+
+Installation als App: Den gesamten Ordner auf einen HTTPS-Webserver hochladen (z.B. GitHub Pages oder Netlify). Dann die HTTPS-Adresse auf dem Handy öffnen.
+iPhone: Safari > Teilen > Zum Home-Bildschirm.
+Android: Chrome > Menü > App installieren / Zum Startbildschirm hinzufügen.
+
+Wichtig: Eine lokale HTML-Datei ist direkt im Browser nutzbar, aber für die installierbare Offline-PWA ist eine HTTPS-Adresse (oder localhost) nötig. Die Daten werden durch die Originalfunktion im lokalen Browser-Speicher gespeichert.

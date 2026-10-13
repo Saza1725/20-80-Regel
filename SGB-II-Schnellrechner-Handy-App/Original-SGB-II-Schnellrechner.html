@@ -1,0 +1,251 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>SGB II Schnellrechner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: Ergebnis oben (Summe + Tabelle wie in der Klausur), darunter Eingabekarten je Haushalt/Person */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --fg:#1b2430; --muted:#5d6b7a; --line:#d6dde4;
+  --input:#fff6d6; --input-line:#e6cf7a; --auto:#e8f0f8; --result:#dff0e2; --result-strong:#1f6b35;
+  --head:#2b3540; --head-fg:#ffffff; --warn:#b3261e;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --surface:#1b222a; --fg:#e6ebf0; --muted:#97a4b1; --line:#2f3a45;
+  --input:#3a3320; --input-line:#7a6a32; --auto:#1f2c3a; --result:#1d3324; --result-strong:#7fd49a;
+  --head:#0d1116; --head-fg:#e6ebf0; --warn:#ff8a80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d; --surface:#1b222a; --fg:#e6ebf0; --muted:#97a4b1; --line:#2f3a45;
+  --input:#3a3320; --input-line:#7a6a32; --auto:#1f2c3a; --result:#1d3324; --result-strong:#7fd49a;
+  --head:#0d1116; --head-fg:#e6ebf0; --warn:#ff8a80; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.4}
+.wrap{max-width:720px;margin:0 auto;padding:12px 16px 40px;display:flex;flex-direction:column;gap:14px}
+h1{font-family:var(--cond);font-size:22px;margin:0;letter-spacing:.2px}
+.sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:var(--result);border-radius:10px;padding:12px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;border:1px solid var(--line)}
+.total .lbl{font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.6px}
+.total .val{font-family:var(--cond);font-size:28px;font-weight:700;color:var(--result-strong);font-variant-numeric:tabular-nums}
+.probe{font-size:12px;color:var(--muted)}
+.probe.bad{color:var(--warn);font-weight:600}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-family:var(--cond);font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:5px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+thead th{background:var(--head);color:var(--head-fg);position:sticky;top:0;text-align:right;font-weight:600}
+thead th:first-child{text-align:left}
+td{text-align:right}
+td:first-child{text-align:left;color:var(--fg);position:sticky;left:0;background:var(--surface);padding-right:10px}
+tr.sec td{background:var(--bg);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);text-align:left}
+tr.sum td{font-weight:700}
+tr.res td{background:var(--result);font-weight:700}
+tr.res td:first-child{background:var(--result)}
+tr.span td.v{text-align:right}
+td.z{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.card h2{font-family:var(--cond);font-size:17px;margin:0;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{font-family:var(--sans);font-size:11.5px;font-weight:600;color:var(--muted);background:var(--auto);padding:2px 8px;border-radius:99px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}
+.f{display:flex;flex-direction:column;gap:3px;min-width:0}
+.f label{font-size:12px;color:var(--muted)}
+.f input,.f select{font:inherit;font-size:16px;padding:8px 10px;border-radius:7px;border:1px solid var(--input-line);background:var(--input);color:var(--fg);width:100%;min-width:0}
+.f input::placeholder{color:var(--muted);opacity:.8}
+.f input:focus,.f select:focus{outline:2px solid var(--result-strong);outline-offset:1px}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;padding:6px 0}
+.chk input{width:22px;height:22px;accent-color:var(--result-strong)}
+details{border-top:1px dashed var(--line);padding-top:8px}
+summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);padding:4px 0}
+details .grid{margin-top:8px}
+.bar{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;font-size:14px;font-weight:600;padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+button.pri{background:var(--head);color:var(--head-fg);border-color:var(--head)}
+button:focus-visible{outline:2px solid var(--result-strong);outline-offset:2px}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+@media (max-width:380px){.grid{grid-template-columns:1fr 1fr}.total .val{font-size:24px}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>SGB II Schnellrechner</h1>
+    <div class="sub">Rechtsstand 10/2026 · nur eintippen, was im Sachverhalt steht · leer = Pauschale/Automatik</div>
+  </header>
+
+  <div class="total" aria-live="polite">
+    <div><div class="lbl">BG gesamt</div><div class="probe" id="probe">Probe 0 ✓</div></div>
+    <div class="val" id="total">0,00 €</div>
+  </div>
+
+  <div class="tbl"><table id="tab"><thead></thead><tbody></tbody></table></div>
+
+  <div class="bar">
+    <button class="pri" id="btnClear" type="button">Neuer Fall (alles leeren)</button>
+    <button id="btnEx" type="button">Beispiel Übung 11 laden</button>
+  </div>
+
+  <section class="card" aria-labelledby="hh">
+    <h2 id="hh">Haushalt</h2>
+    <div class="grid">
+      <div class="f"><label for="kalt">Kaltmiete €</label><input id="kalt" inputmode="decimal" autocomplete="off"></div>
+      <div class="f"><label for="nk">Nebenkosten kalt €</label><input id="nk" inputmode="decimal" autocomplete="off"></div>
+      <div class="f"><label for="heiz">Heizkosten €</label><input id="heiz" inputmode="decimal" autocomplete="off"></div>
+      <div class="f"><label for="pers">Personen im Haushalt</label><input id="pers" inputmode="numeric" autocomplete="off"></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="ww"> Warmwasser dezentral (Durchlauferhitzer/Boiler)</label>
+  </section>
+
+  <div id="persons" style="display:flex;flex-direction:column;gap:14px"></div>
+
+  <p class="note">Rolle leer: unter 18 = Kind, sonst Erwachsener. Kind 18–24 bei den Eltern: Rolle „Kind“ → Stufe 3. Mitbewohner außerhalb der BG: Rolle „nicht BG“ (zählt nur beim Kopfteil) oder oben die Personenzahl eintragen.</p>
+  <p class="note">Automatisch: Regelbedarfsstufe aus Alter, Mehrbedarf Alleinerziehende 12–60 %, Warmwasser je Stufe, Kopfteil, Kindergeld 259 € je Kind unter 18, 30 € Versicherungspauschale, 100 € Grundabsetzbetrag oder höherer Einzelnachweis (Brutto über 400 €), Freibetrag stufenweise bis 1.200/1.500 €, Kindergeld-Überhang an die Eltern, 25 € Sofortzuschlag. Werte 2026: RBS 563 · 506 · 451 · 471 · 390 · 357 €.</p>
+</div>
+
+<script>
+const N = 5;
+const RB = [0,563,506,451,471,390,357];
+const WWP = [0,.023,.023,.023,.014,.012,.008];
+const KG = 259, VP = 30, GP = 100, KM = 0.2, SZ = 25;
+const F = [ // key, label, type, more?
+  ["name","Name","text",0],["alter","Alter","int",0],["rolle","Rolle","role",0],
+  ["eb","Erwerb BRUTTO €","num",0],["en","Erwerb netto €","num",0,"leer = brutto"],
+  ["so","Rente / ALG I / Unterhalt erhalten €","num",0],
+  ["schw","schwanger ab 13. SSW","chk",0],
+  ["kg","Kindergeld €","num",1,"auto"],["rbs","Regelbedarfsstufe","int",1,"auto"],
+  ["kfz","Kfz-Haftpflicht pro JAHR €","num",1],["km","km einfache Fahrt","num",1],
+  ["tage","Arbeitstage","int",1,"19"],["wk","Werbungskosten/Gewerkschaft €","num",1],
+  ["ries","Riester mtl. €","num",1],["uhz","Unterhalt gezahlt €","num",1],
+  ["mbs","Mehrbedarf sonst. €","num",1],["but","Bildung/Teilhabe €","num",1]
+];
+const box = document.getElementById("persons");
+for (let i=0;i<N;i++){
+  const main = F.filter(f=>!f[3]), more = F.filter(f=>f[3]);
+  const fld = f => {
+    const id=`p${i}_${f[0]}`;
+    if (f[2]==="chk") return `<label class="chk" style="grid-column:1/-1"><input type="checkbox" id="${id}"> ${f[1]}</label>`;
+    if (f[2]==="role") return `<div class="f"><label for="${id}">${f[1]}</label><select id="${id}"><option value="">auto (Alter)</option><option>Erw.</option><option>Kind</option><option>nicht BG</option></select></div>`;
+    const im = f[2]==="text"?"text":(f[2]==="int"?"numeric":"decimal");
+    return `<div class="f"><label for="${id}">${f[1]}</label><input id="${id}" inputmode="${im}" autocomplete="off" placeholder="${f[4]||""}"></div>`;
+  };
+  const el=document.createElement("section"); el.className="card";
+  el.innerHTML=`<h2>Person ${i+1}<span class="tag" id="tag${i}">leer</span></h2>
+    <div class="grid">${main.map(fld).join("")}</div>
+    <details><summary>Weitere Angaben (nur wenn im Sachverhalt)</summary><div class="grid">${more.map(fld).join("")}</div></details>`;
+  box.appendChild(el);
+}
+
+const $ = id => document.getElementById(id);
+const raw = id => { const e=$(id); return e.type==="checkbox"? e.checked : e.value.trim(); };
+function num(v){ if(v===""||v==null) return ""; let s=String(v).replace(/\s|€/g,"");
+  if(s.includes(",")) s=s.replace(/\./g,"").replace(",",".");
+  else if(/^-?\d{1,3}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,""); const n=parseFloat(s); return isNaN(n)?"":n; }
+const z = v => v===""?0:v;
+const r2 = x => Math.sign(x)*Math.round((Math.abs(x)+1e-9)*100)/100;
+const eur = x => (Math.abs(x)<0.005?"–":x.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}));
+
+function calc(){
+  const P=[];
+  for(let i=0;i<N;i++){
+    const g=k=>raw(`p${i}_${k}`);
+    P.push({name:g("name"),alter:num(g("alter")),rolle:g("rolle"),eb:z(num(g("eb"))),enIn:num(g("en")),so:z(num(g("so"))),
+      schw:g("schw"),kgIn:num(g("kg")),rbsIn:num(g("rbs")),kfz:z(num(g("kfz"))),km:z(num(g("km"))),tageIn:num(g("tage")),
+      wk:z(num(g("wk"))),ries:z(num(g("ries"))),uhz:z(num(g("uhz"))),mbs:z(num(g("mbs"))),but:z(num(g("but")))});
+  }
+  P.forEach(p=>{
+    p.akt = !(p.name==="" && p.alter==="");
+    p.typ = !p.akt?"":(p.rolle||((p.alter!==""&&p.alter<18)?"Kind":"Erw."));
+    p.bg = p.akt && p.typ!=="nicht BG";
+    p.vj = p.alter===""?(p.typ==="Kind"?0:1):(p.alter>=18?1:0);
+  });
+  const nErw=P.filter(p=>p.bg&&p.typ==="Erw.").length;
+  const kids=P.filter(p=>p.typ==="Kind"&&p.alter!==""&&p.alter<18);
+  const k7=kids.filter(p=>p.alter<7).length, k16=kids.filter(p=>p.alter<16).length;
+  const aeq=(nErw===1&&kids.length>0)?Math.min(.6,Math.max((k7>=1||(k16>=2&&k16<=3))?.36:0,.12*kids.length)):0;
+  const warm=z(num(raw("kalt")))+z(num(raw("nk")))+z(num(raw("heiz")));
+  const persAuto=Math.max(1,P.filter(p=>p.akt).length);
+  const persIn=num(raw("pers")); const pers=persIn===""?persAuto:persIn;
+  $("pers").placeholder=`auto: ${persAuto}`;
+  const ww=raw("ww"); const cap=kids.length>0?1500:1200;
+  P.forEach(p=>{
+    p.rbs=!p.bg?0:(p.rbsIn!==""?p.rbsIn:(p.typ==="Kind"?(p.alter===""?3:p.alter<6?6:p.alter<14?5:p.alter<18?4:3):(nErw>=2?2:1)));
+    p.rb=p.rbs?RB[p.rbs]||0:0;
+    const ae=(p.bg&&p.typ==="Erw.")?r2(aeq*RB[1]):0, sw=(p.bg&&p.schw)?r2(.17*p.rb):0;
+    p.mb=Math.min(p.rb,ae+sw); p.mbsV=p.bg?p.mbs:0;
+    p.ww=(p.bg&&ww)?r2(p.rb*(WWP[p.rbs]||0)):0;
+    p.kdu=p.bg?r2(warm/pers):0;
+    p.kg=!p.bg?0:(p.kgIn!==""?p.kgIn:((p.typ==="Kind"&&p.alter!==""&&p.alter<18)?KG:0));
+    const erw=p.bg&&p.eb>0, en=erw?(p.enIn===""?p.eb:p.enIn):0;
+    p.base=p.bg?en+p.so+(p.typ==="Kind"?p.kg:0):0;
+    const vp=(p.vj&&p.base>0)?VP:0;
+    const fahrt=p.km*(p.tageIn===""?19:p.tageIn)*KM;
+    const einz=vp+p.kfz/12+fahrt+p.wk+p.ries;
+    p.abz=r2(!p.bg?0:(erw?(p.eb>400?Math.max(GP,einz):GP):vp+p.kfz/12+p.ries));
+    p.fb=erw?r2(Math.max(0,Math.min(p.eb,520)-100)*.2+Math.max(0,Math.min(p.eb,1000)-520)*.3+Math.max(0,Math.min(p.eb,cap)-1000)*.1):0;
+    p.uhzV=p.bg?p.uhz:0;
+    p.ber=Math.max(0,p.base-p.abz-p.fb-p.uhzV);
+    p.bb=p.bg?p.rb+p.mb+p.mbsV+p.ww+p.kdu:0;
+    p.cov=p.typ==="Kind"?Math.min(p.bb,p.ber):0;
+    p.ueb=p.typ==="Kind"?Math.min(p.kg,p.ber-p.cov):0;
+    p.bed=p.bb-p.cov;
+  });
+  const pool=P.filter(p=>p.bg&&p.typ==="Erw.").reduce((s,p)=>s+p.ber,0)+P.reduce((s,p)=>s+p.ueb,0);
+  const sbed=P.reduce((s,p)=>s+p.bed,0);
+  P.forEach(p=>{
+    p.ant=sbed>0?p.bed/sbed:0;
+    p.eant=r2(Math.min(pool,sbed)*p.ant);
+    p.ea=Math.max(0,p.bed-p.eant);
+    p.sz=(p.bg&&p.rbs>=3&&sbed>pool)?SZ:0;
+    p.butV=p.bg?p.but:0;
+    p.ges=p.ea+p.sz+p.butV;
+  });
+  const total=P.reduce((s,p)=>s+p.ges,0);
+  const probe=r2(P.reduce((s,p)=>s+p.ea,0)-Math.max(0,sbed-pool));
+  return {P,pool,total,probe};
+}
+
+const ROWS=[
+  ["sec","1 Bedarf §§ 19–23"],
+  ["Regelbedarfsstufe",p=>p.bg?`${p.rbs} · ${p.typ}`:"–","txt"],
+  ["Regelbedarf § 20/23","rb"],["Mehrbedarf § 21 (2–3)","mb"],["Mehrbedarf sonst.","mbsV"],
+  ["Warmwasser § 21 (7)","ww"],["Unterkunft § 22 (Kopf)","kdu"],["= Bedarf brutto","bb","sum"],
+  ["sec","2 Einkommen §§ 11, 11b"],
+  ["Einnahmen netto","base"],["./. Abs. 2 / Pauschalen","abz"],["./. Freibetrag Abs. 3","fb"],
+  ["./. Unterhalt gezahlt","uhzV"],["= bereinigt","ber","sum"],["davon Kind für sich","cov"],["KG-Überhang → Eltern","ueb"],
+  ["pool","Einkommen der BG"],
+  ["sec","3 Verteilung und Anspruch § 9 (2)"],
+  ["Bedarf (nach Kind-Eink.)","bed"],["Bedarfsanteil",p=>p.ant?(p.ant*100).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" %":"–","txt"],
+  ["./. Einkommensanteil","eant"],["= Einzelanspruch","ea","sum"],["+ Sofortzuschlag § 72","sz"],
+  ["+ Bildung/Teilhabe § 28","butV"],["= ANSPRUCH","ges","res"]
+];
+
+function render(){
+  const {P,pool,total,probe}=calc();
+  let cols=P.map((p,i)=>i).filter(i=>P[i].akt); if(!cols.length) cols=[0];
+  const th=document.querySelector("#tab thead"), tb=document.querySelector("#tab tbody");
+  th.innerHTML=`<tr><th>€ je Person</th>${cols.map(i=>`<th>${(P[i].name||"P"+(i+1)).slice(0,10)}</th>`).join("")}</tr>`;
+  tb.innerHTML=ROWS.map(r=>{
+    if(r[0]==="sec") return `<tr class="sec"><td colspan="${cols.length+1}">${r[1]}</td></tr>`;
+    if(r[0]==="pool") return `<tr class="sum"><td>${r[1]}</td><td colspan="${cols.length}" style="text-align:left">${eur(pool)} €</td></tr>`;
+    const cls=r[2]==="sum"?"sum":r[2]==="res"?"res":"";
+    return `<tr class="${cls}"><td>${r[0]}</td>${cols.map(i=>{
+      const v=typeof r[1]==="function"?r[1](P[i]):P[i][r[1]];
+      const s=typeof v==="number"?eur(v):v; return `<td class="${s==="–"?"z":""}">${s}</td>`;}).join("")}</tr>`;
+  }).join("");
+  $("total").textContent=total.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+  const pr=$("probe"); pr.textContent=Math.abs(probe)<=0.02?"Probe 0 ✓":`Probe weicht ab: ${eur(probe)}`; pr.className="probe"+(Math.abs(probe)>0.02?" bad":"");
+  P.forEach((p,i)=>{ $(`tag${i}`).textContent=p.akt?(p.bg?`Stufe ${p.rbs} · ${p.typ}`:"nicht BG"):"leer"; });
+  save();
+}
+
+const allIds=()=>[..."kalt nk heiz pers ww".split(" "),...Array.from({length:N},(_,i)=>F.map(f=>`p${i}_${f[0]}`)).flat()];
+function save(){ try{ const o={}; allIds().forEach(id=>{const e=$(id);o[id]=e.type==="checkbox"?e.checked:e.value;}); localStorage.setItem("sgb2fall",JSON.stringify(o)); }catch(e){} }
+function setAll(o){ allIds().forEach(id=>{const e=$(id); if(e.type==="checkbox") e.checked=!!o[id]; else e.value=o[id]??"";}); render(); }
+const EX={kalt:"550",heiz:"50",ww:true,p0_name:"Edith",p0_alter:"39",p0_eb:"600",p1_name:"Ed",p1_alter:"9",p2_name:"Erwin",p2_alter:"5",p3_name:"Mitbewohner",p3_alter:"30",p3_rolle:"nicht BG"};
+$("btnClear").addEventListener("click",()=>{setAll({}); window.scrollTo({top:0});});
+$("btnEx").addEventListener("click",()=>setAll(EX));
+document.addEventListener("input",render); document.addEventListener("change",render);
+let start=EX; try{ const s=localStorage.getItem("sgb2fall"); if(s) start=JSON.parse(s); }catch(e){}
+setAll(start);
+</script>
+
+</body></html>
